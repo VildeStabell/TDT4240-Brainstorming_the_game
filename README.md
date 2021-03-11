@@ -3,8 +3,8 @@
 ## Naming conventions
 - Class names: UpperCamelCase
 - Variable names: lowerCamelCase (Should be descriptive)
-- Commit messages: #<issuenr.> - <what has been done>
-- Branch names: <issuenr.>-<issue-name>
+- Commit messages: #issuenr - What has been done.
+- Branch names: issuenr-issue-name
 
 ## Workflow
 Please comment your code and clearly mark where the architecture/patterns/tactics is used.

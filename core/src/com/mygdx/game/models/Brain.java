@@ -2,9 +2,11 @@ package com.mygdx.game.models;
 
 import java.util.ArrayList;
 
-/** The Brain model stores related ideas
- * @param ideas: the ArrayList ideas contains
- * */
+/**
+ * The Brain model stores related ideas
+ * ideas: an ArrayList containing different ideas
+ * This class implements the MVC pattern.
+ */
 
 public class Brain {
     private ArrayList<Idea> ideas = new ArrayList<>();

@@ -73,15 +73,15 @@ public class EliminationPhase {
         if(!brains.containsKey(brain))
             throw new IllegalArgumentException("Must provide a brain that is already in the list");
 
-        boolean value = brains.get(brain);
+        boolean previousValue = brains.get(brain);
 
-        if(!value && numSelected >= maxSelected && maxSelected != 0)
+        if(!previousValue && numSelected >= maxSelected && maxSelected != 0)
             throw new IllegalArgumentException("Max number of brains have already been selected");
 
-        if(!value)
+        if(!previousValue)
             numSelected++;
         else
             numSelected--;
-        brains.put(brain, !value);
+        brains.put(brain, !previousValue);
     }
 }

@@ -16,10 +16,16 @@ import java.util.HashMap;
  */
 
 public class EliminationPhase {
-    private HashMap<Brain, Boolean> brains; //True indicates a brain is selected
+    private HashMap<Brain, Boolean> brains = new HashMap<>(); //True indicates a brain is selected
     private final int maxSelected; //maxSelected == 0 means that there is no limit
     private int numSelected = 0;
 
+    /**
+     * The constructor that takes in a list of brains to be chosen between,
+     * and how many can be chosen at a time.
+     * @param brains: A list of brains that the player can choose from.
+     * @param maxSelected: How many brains can be selected at a time.
+     */
     public EliminationPhase(ArrayList<Brain> brains, int maxSelected) {
         if(brains.size() <= 0)
             throw new IllegalArgumentException("List of brains cannot be empty");
@@ -33,6 +39,10 @@ public class EliminationPhase {
         this.maxSelected = maxSelected;
     }
 
+    /**
+     * A constructor that sets the maxSelected to a default 0, meaning that there is no limit.
+     * @param brains: A list of brains that the player can choose from.
+     */
     public EliminationPhase(ArrayList<Brain> brains) {
         this(brains, 0);
     }
@@ -54,7 +64,11 @@ public class EliminationPhase {
         return numSelected;
     }
 
-    // Updates the selection value of the provided brain, and the number of currently selected brains
+    /**
+     * Updates the selection value of the provided brain,
+     * and the number of currently selected brains.
+     * @param brain: The brain that should be toggled.
+     */
     public void toggleBrain(Brain brain) {
         if(!brains.containsKey(brain))
             throw new IllegalArgumentException("Must provide a brain that is already in the list");

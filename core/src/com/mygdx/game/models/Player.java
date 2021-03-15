@@ -4,8 +4,8 @@ import java.util.UUID;
 
 /**
  * The Player model represents a player
- * @param playerId: The players unique id. Cannot be changed
- * @param username: The username that will be displayed. Can be changed later.
+ * playerId: The players unique id. Cannot be changed
+ * username: The username that will be displayed. Can be changed later.
  * This class implements the MVC pattern.
  */
 
@@ -14,10 +14,10 @@ public class Player {
     private String username;
 
     public Player(String username) {
-        if(username == null || username == "")
+        if(username == null || username.equals(""))
             throw new IllegalArgumentException("The username cannot be null or an empty string");
 
-        playerId = UUID.randomUUID();
+        this.playerId = UUID.randomUUID();
         this.username = username;
     }
 
@@ -30,7 +30,7 @@ public class Player {
     }
 
     public void setUsername(String username) {
-        if(username == null || username == "")
+        if(username == null || username.equals(""))
             throw new IllegalArgumentException("The username cannot be null or an empty string");
 
         this.username = username;

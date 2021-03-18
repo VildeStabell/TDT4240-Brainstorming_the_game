@@ -12,11 +12,16 @@ public class IdeaTest {
     Idea idea2;
 
     @Before
-    public void setUp() {
-        p1 = new Player("Player 1");
-        p2 = new Player("Player 2");
-        idea1 = new Idea("This is an idea", p1);
-        idea2 = new Idea("This is another idea", p2);
+    public void setUp() throws Exception {
+        try {
+            p1 = new Player("Player 1");
+            p2 = new Player("Player 2");
+            idea1 = new Idea("This is an idea", p1);
+            idea2 = new Idea("This is another idea", p2);
+        }
+        catch (Exception e) {
+            throw new Exception("Failed to setup IdeaTest: ", e);
+        }
     }
 
     @Test

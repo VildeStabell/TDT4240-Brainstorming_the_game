@@ -52,11 +52,12 @@ public class BrainstormingPhase {
      * @param brain: The brain that is being fired.
      * @return True if the wall has fallen, othervice return false.
      */
-    public boolean FireBrain(Brain brain){
+    public boolean fireBrain(Brain brain){
         if (brain == null){
             throw new IllegalArgumentException("Brain can't be nothing");
         }
         brains.add(brain);
         return wall.takeDmg(BRAIN_DAMAGE);
     }
+
 }

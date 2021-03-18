@@ -33,8 +33,10 @@ public class Wall {
      * @return true if the wall is broken by the damage, otherwise returns false
       */
     public boolean takeDmg(int dmg) {
-        if(hitPoints <= 0)
+        if(dmg <= 0)
             throw new IllegalArgumentException("Damage taken has to be above 0");
+        if(hitPoints <= 0)
+            throw new IllegalStateException("Cannot take damage if wall is already destroyed");
 
         if(dmg >= hitPoints) {
             hitPoints = 0;

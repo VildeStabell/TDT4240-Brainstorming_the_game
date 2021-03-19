@@ -28,12 +28,19 @@ public class Wall {
     }
 
     /**
+     * Checks if wall is still standing
+     * */
+    public boolean isStanding() {
+        return hitPoints > 0;
+    }
+
+    /**
      * Reduces the wall's current hitpoints by the specified amount
      * @param dmg: How much to reduce the hitpoints by
      * @return true if the wall is broken by the damage, otherwise returns false
       */
     public boolean takeDmg(int dmg) {
-        if(hitPoints <= 0)
+        if(dmg <= 0)
             throw new IllegalArgumentException("Damage taken has to be above 0");
 
         if(dmg >= hitPoints) {

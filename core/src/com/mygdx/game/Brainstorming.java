@@ -7,9 +7,17 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Brainstorming extends ApplicationAdapter {
+
+	public final static int HEIGHT = 375;
+	public final static int WIDTH = 812;
+
 	SpriteBatch batch;
 	Texture img;
-	
+
+	public final static float V_WIDTH = 12.8f;
+	public final static float V_HEIGHT = 5.76f;
+
+
 	@Override
 	public void create () {
 		batch = new SpriteBatch();

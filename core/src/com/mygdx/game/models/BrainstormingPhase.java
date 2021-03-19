@@ -17,15 +17,17 @@ public class BrainstormingPhase {
     private final int BRAIN_DAMAGE;
     private final Wall wall;
     private ArrayList<Brain> brains = new ArrayList<>();
+    private final Player player;
 
     /**
      * The constructor that takes the hitpointmax of the wall, and
      * how much damage a brain will do
-     * @param wallHitpoints: Walls max HP.
+     * @param maxHitPoints: Walls max HP.
      * @param BRAIN_DAMAGE: The amount of damage one brain does.
      */
-    public BrainstormingPhase(int wallHitpoints, int BRAIN_DAMAGE){
-        this.wall = new Wall(wallHitpoints);
+    public BrainstormingPhase(Player player,int maxHitPoints, int BRAIN_DAMAGE){
+        this.player = player;
+        this.wall = new Wall(maxHitPoints);
         this.BRAIN_DAMAGE = BRAIN_DAMAGE;
     }
 
@@ -37,25 +39,20 @@ public class BrainstormingPhase {
         return wall;
     }
 
-    /**
-     * Updates a given brain with an Idea
-     * @param brain: The brain in question.
-     * @param idea: The idea thats going on the brain.
-     * */
-    public void putIdeaOnBrain(Brain brain, Idea idea){
-        brain.addIdea(idea);
+    public Player getPlayer(){
+        return player;
     }
 
-    /***
-     * Fires a brain towards the wall, adds the brain to the brains-list, and updates
+    /**
+     * Updates a given brain with an Idea. Fires a brain towards the wall,
+     * adds the brain to the brains-list, and updates
      * the wall's HP.
-     * @param brain: The brain that is being fired.
+     * @param brain: The brain in question.
+     * @param idea: The idea thats going on the brain.
      * @return True if the wall has fallen, othervice return false.
-     */
-    public boolean FireBrain(Brain brain){
-        if (brain == null){
-            throw new IllegalArgumentException("Brain can't be nothing");
-        }
+     * */
+    public boolean putIdeaOnBrainAndFire(Brain brain, String idea){
+        brain.addIdea(new Idea(idea, player));
         brains.add(brain);
         return wall.takeDmg(BRAIN_DAMAGE);
     }

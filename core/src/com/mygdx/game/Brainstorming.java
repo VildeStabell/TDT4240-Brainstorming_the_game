@@ -1,33 +1,27 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.mygdx.game.screens.GameScreenManager;
+import com.mygdx.game.screens.MenuScreen;
 
-public class Brainstorming extends ApplicationAdapter {
-	SpriteBatch batch;
-	Texture img;
-	
+public class Brainstorming extends Game {
+	GameScreenManager gsm;
+	public final static int WIDTH = 640;
+	public final static int HEIGHT = 360;
+
 	@Override
 	public void create () {
-		batch = new SpriteBatch();
-		img = new Texture("badlogic.jpg");
+		gsm = new GameScreenManager(this);
 	}
 
 	@Override
-	public void render () {
-		Gdx.gl.glClearColor(1, 0, 0, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		batch.begin();
-		batch.draw(img, 0, 0);
-		batch.end();
-	}
-	
-	@Override
 	public void dispose () {
-		batch.dispose();
-		img.dispose();
+		gsm.dispose();
+		super.dispose();
 	}
 }

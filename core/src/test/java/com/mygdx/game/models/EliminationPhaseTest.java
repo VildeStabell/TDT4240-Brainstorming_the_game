@@ -6,6 +6,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.Assert.*;
@@ -44,10 +45,16 @@ public class EliminationPhaseTest {
                                 maxSelected));
     }
 
+
     @Test
     public void getBrains() {
-        assertEquals(Map.of(b1, false, b2, false, b3, false), ep1.getBrains());
+        HashMap<Brain,Boolean> map = new HashMap<Brain, Boolean>();
+        map.put(b1, false);
+        map.put(b2, false);
+        map.put(b3, false);
+        assertEquals(map, ep1.getBrains());
     }
+
 
     @Test
     public void getSelectedBrains() {

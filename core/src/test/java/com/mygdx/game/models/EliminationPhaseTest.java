@@ -77,21 +77,28 @@ public class EliminationPhaseTest {
         assertEquals("Expected list with b1 but was: " + ep1.getSelectedBrains(),
                 new ArrayList<>(Collections.singletonList(b1)), ep1.getSelectedBrains());
         ep1.toggleBrain(b2);
-        assertEquals("Expected list with b1 and b2 but was: " + ep1.getSelectedBrains(),
-                new ArrayList<>(Arrays.asList(b1, b2)), ep1.getSelectedBrains());
+        assertTrue("Expected list with b1 and b2 but was: " + ep1.getSelectedBrains(),
+                ep1.getSelectedBrains().size() == 2 &&
+                        ep1.getSelectedBrains().contains(b1) &&
+                        ep1.getSelectedBrains().contains(b2));
         assertThrows("Should not be able to select more than maxSelected",
                 IllegalArgumentException.class, () -> ep1.toggleBrain(b3));
         ep1.toggleBrain(b2);
         assertEquals("Expected list with b1 but was: " + ep1.getSelectedBrains(),
                 new ArrayList<>(Collections.singletonList(b1)), ep1.getSelectedBrains());
         ep1.toggleBrain(b3);
-        assertEquals("Expected list with b1 and b3 but was: " + ep1.getSelectedBrains(),
-                new ArrayList<>(Arrays.asList(b1, b3)), ep1.getSelectedBrains());
+        assertTrue("Expected list with b1 and b3 but was: " + ep1.getSelectedBrains(),
+                ep1.getSelectedBrains().size() == 2 &&
+                        ep1.getSelectedBrains().contains(b1) &&
+                        ep1.getSelectedBrains().contains(b3));
 
         ep2.toggleBrain(b1);
         ep2.toggleBrain(b2);
         ep2.toggleBrain(b3);
-        assertEquals("Expected list with b1, b2 and b3 but was: " + ep2.getSelectedBrains(),
-                new ArrayList<>(Arrays.asList(b1, b2, b3)), ep2.getSelectedBrains());
+        assertTrue("Expected list with b1, b2 and b3 but was: " + ep2.getSelectedBrains(),
+                ep2.getSelectedBrains().size() == 3 &&
+                        ep2.getSelectedBrains().contains(b1) &&
+                        ep2.getSelectedBrains().contains(b2) &&
+                        ep2.getSelectedBrains().contains(b3));
     }
 }

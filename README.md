@@ -19,7 +19,11 @@ Never merge directly to main, merge to the development branch first!
 When setting up JUnit with libGDX we've followed [this guide](http://techduke.io/junit-testing-of-libgdx-game-in-android-studio/). 
 
 ### Running tests
-To run the tests click on `run -> All in core`
+To run all tests in a test folder: Right click on the folder and select `Run 'Tests in '<folder name>''`.
+
+To run a single test-file: Right click on the file and select `Run '<file name>'`.
+
+To run a single test: Left click on the green checkmark next to the name of the test in the code, and select `Run '<test name>'`.
 
 ### Writing a new test
 To write a new unit test:

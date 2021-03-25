@@ -22,10 +22,11 @@ public class BrainstormingPhase {
     /**
      * The constructor that takes the hitpointmax of the wall, and
      * how much damage a brain will do
+     * @param player: Which player is brainstorming.
      * @param maxHitPoints: Walls max HP.
      * @param BRAIN_DAMAGE: The amount of damage one brain does.
      */
-    public BrainstormingPhase(Player player,int maxHitPoints, int BRAIN_DAMAGE){
+    public BrainstormingPhase(Player player, int maxHitPoints, int BRAIN_DAMAGE){
         this.player = player;
         this.wall = new Wall(maxHitPoints);
         this.BRAIN_DAMAGE = BRAIN_DAMAGE;
@@ -52,6 +53,9 @@ public class BrainstormingPhase {
      * @return True if the wall has fallen, othervice return false.
      * */
     public boolean putIdeaOnBrainAndFire(Brain brain, String idea){
+        if (brains.contains(brain)){
+            throw new IllegalArgumentException("Brain is already fired");
+        }
         brain.addIdea(new Idea(idea, player));
         brains.add(brain);
         return wall.takeDmg(BRAIN_DAMAGE);

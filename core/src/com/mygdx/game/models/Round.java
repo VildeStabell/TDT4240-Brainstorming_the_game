@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 /**
  * The round keeps track of current players and their
- * BrainstormingPhase, EliminationPhase, Brains being used the round,
+ * BrainstormingPhase, EliminationPhase, Brains,
  * and which brain the player is currently on.
  *
  * players: List of current players
@@ -16,6 +16,7 @@ import java.util.HashMap;
  * maxSelectedBrains: the max nr of selected brains in the eliminationphase
  * inEliminationPhase: A boolean to tell which round is going
  *
+ * This class implements the MVC pattern.
  * */
 
 public class Round {
@@ -34,7 +35,7 @@ public class Round {
      * @param players: List of current players
      * @param brains: List of brains used this round, if round one these brains should contain no ideas
      * @param maxHitPoints: The max HP for the wall
-     * @param BRAIN_DAMAGE: The amound of damage the brain does
+     * @param BRAIN_DAMAGE: The amount of damage the brain does
      * @param maxSelectedBrains: Max selected brains for the eliminationphase
      * */
     public Round(ArrayList<Player> players, ArrayList<Brain> brains, int maxHitPoints, int BRAIN_DAMAGE, int maxSelectedBrains){
@@ -79,17 +80,19 @@ public class Round {
      * */
     public boolean addBrainInBrainstormingPhase(Player player, String idea){
         int currentBrainNr = currentBrainNumbers.get(player);
-        Brain brain = playersBrains.get(player).get(currentBrainNr);
         currentBrainNumbers.put(player, currentBrainNr + 1);
+        Brain brain = playersBrains.get(player).get(currentBrainNr);
         BrainstormingPhase brainstormingPhase = brainstormingPhases.get(player);
         return brainstormingPhase.putIdeaOnBrainAndFire(brain, idea);
     }
-
 
     /**
      * Creates new eliminationPhases for each player
      * */
     public void startEliminationPhase(ArrayList<Brain> brains){
+        if (playersLeft().size() > 0){
+            throw new IllegalStateException("There are still players who have walls left standing");
+        }
         for (Player player : players){
             eliminationPhases.put(player, new EliminationPhase(brains, maxSelectedBrains));
         }

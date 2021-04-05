@@ -17,8 +17,9 @@ import com.mygdx.game.Brainstorming;
  * Note to call the super method of
  * show: for the stage to process inputs,
  * dispose: to avoid rendering it when not in use.
- * render: call this first to clear the screen
- *         and avoid keeping data from last frame for optimalization
+ * render: call this first to clear the screen and avoid keeping data from last frame for optimalization
+ *
+ * Implementing the MVC pattern with Screens being part of the View component.
  */
 
 public abstract class BaseScreen implements Screen {

@@ -30,6 +30,8 @@ public class Brain {
     public void addIdea(Idea idea) {
         if(idea == null)
             throw new IllegalArgumentException("Idea cannot be null");
+        if(ideas.contains(idea))
+            throw new IllegalArgumentException("Cannot add the same idea twice");
 
         ideas.add(idea);
     }

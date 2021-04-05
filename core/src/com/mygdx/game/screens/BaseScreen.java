@@ -7,6 +7,20 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.game.Brainstorming;
 
+/**
+ * Basic abstract screen view implementing the Screen interface
+ *
+ * gsm: game screen manager to control the different screens
+ * stage: processing inputs and managing actors (2D Node Graph object)
+ * @see com.badlogic.gdx.scenes.scene2d.Actor
+ *
+ * Note to call the super method of
+ * show: for the stage to process inputs,
+ * dispose: to avoid rendering it when not in use.
+ * render: call this first to clear the screen
+ *         and avoid keeping data from last frame for optimalization
+ */
+
 public abstract class BaseScreen implements Screen {
 
     protected final GameScreenManager gsm;
@@ -25,7 +39,7 @@ public abstract class BaseScreen implements Screen {
 
     @Override
     public void render(float delta){
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
     }
 
     @Override
@@ -38,6 +52,3 @@ public abstract class BaseScreen implements Screen {
         stage.dispose();
     }
 }
-
-
-

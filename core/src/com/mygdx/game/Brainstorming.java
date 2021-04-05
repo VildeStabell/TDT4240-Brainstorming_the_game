@@ -9,11 +9,20 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class Brainstorming extends ApplicationAdapter {
 	SpriteBatch batch;
 	Texture img;
+	private final FirebaseInterface _FBIC;
+
+	public Brainstorming(FirebaseInterface fbic){
+		_FBIC = fbic;
+	}
 	
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
 		img = new Texture("badlogic.jpg");
+		_FBIC.justSomeFunction();
+		_FBIC.setOnValueChangedListener();
+		_FBIC.setValueInDb("Score", "300");
+
 	}
 
 	@Override

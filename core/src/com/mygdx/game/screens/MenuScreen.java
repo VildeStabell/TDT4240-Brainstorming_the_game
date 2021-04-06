@@ -1,12 +1,10 @@
 package com.mygdx.game.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.mygdx.game.Brainstorming;
 
 /**
  * Menu screen containing different options for the game
@@ -16,10 +14,8 @@ import com.mygdx.game.Brainstorming;
 
 public class MenuScreen extends BaseScreen {
 
-    private Texture background;
-
-    public MenuScreen(GameScreenManager gsm){
-        super(gsm);
+    public MenuScreen(GameScreenManager gsm, String imagePath){
+        super(gsm, imagePath);
     }
 
     /**
@@ -29,7 +25,6 @@ public class MenuScreen extends BaseScreen {
     @Override
     public void show() {
         super.show();
-        background = new Texture("menuScreen.jpg");
         initButtons();
     }
 
@@ -58,18 +53,18 @@ public class MenuScreen extends BaseScreen {
         int MENU_OFFSET = 10;
         int OPTIONS = 3;
         float menuHeight = playButton.getHeight()+exitButton.getHeight()+settingsButton.getHeight()+(OPTIONS-1)*MENU_OFFSET;
-        float margin = (Brainstorming.HEIGHT - menuHeight)/2f;
+        float margin = (Gdx.graphics.getHeight() - menuHeight)/2f;
         // Top button
         playButton.setPosition(
-                (Brainstorming.WIDTH/2f)-(playButton.getWidth()/2f),
-                Brainstorming.HEIGHT - margin - (playButton.getHeight()/2)
+                (Gdx.graphics.getWidth()/2f)-(playButton.getWidth()/2f),
+                Gdx.graphics.getHeight() - margin - (playButton.getHeight()/2)
         );
         settingsButton.setPosition(
-                (Brainstorming.WIDTH/2f)-(settingsButton.getWidth()/2f),
+                (Gdx.graphics.getWidth()/2f)-(settingsButton.getWidth()/2f),
                 playButton.getY() - playButton.getHeight() - MENU_OFFSET
         );
         exitButton.setPosition(
-                (Brainstorming.WIDTH/2f)-(exitButton.getWidth()/2f),
+                (Gdx.graphics.getWidth()/2f)-(exitButton.getWidth()/2f),
                 settingsButton.getY() - settingsButton.getHeight() - MENU_OFFSET
         );
 
@@ -100,16 +95,15 @@ public class MenuScreen extends BaseScreen {
     }
 
     /**
-     *
-     * @param delta:
+     * Rendering the background image first.
+     * Drawing the stage with the buttons afterwards.
+     * @param delta: time difference since last frame
      */
     @Override
     public void render(float delta){
         super.render(delta);
-        stage.getBatch().begin();
-        stage.getBatch().draw(background,0,0);
-        stage.getBatch().end();
         stage.draw();
+
     }
 
     @Override

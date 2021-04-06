@@ -11,8 +11,6 @@ import com.mygdx.game.screens.MenuScreen;
 
 public class Brainstorming extends Game {
 	GameScreenManager gsm;
-	public final static int WIDTH = 640;
-	public final static int HEIGHT = 360;
 
 	@Override
 	public void create () {

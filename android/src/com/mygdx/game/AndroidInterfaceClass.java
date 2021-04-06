@@ -23,11 +23,6 @@ public class AndroidInterfaceClass implements FirebaseInterface {
     }
 
     @Override
-    public void justSomeFunction() {
-        System.out.println("AndroidInterface");
-    }
-
-    @Override
     public void setOnValueChangedListener() {
         myRef.addValueEventListener(new ValueEventListener() {
             @Override

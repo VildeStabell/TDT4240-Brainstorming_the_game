@@ -3,17 +3,8 @@ package com.mygdx.game;
 public class CoreInterfaceClass implements FirebaseInterface {
 
     @Override
-    public void justSomeFunction() {
-        System.out.println("CoreInterface");
-    }
+    public void setOnValueChangedListener() {}
 
     @Override
-    public void setOnValueChangedListener() {
-
-    }
-
-    @Override
-    public void setValueInDb(String target, String value) {
-
-    }
+    public void setValueInDb(String target, String value) {}
 }

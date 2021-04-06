@@ -19,7 +19,6 @@ public class Brainstorming extends ApplicationAdapter {
 	public void create () {
 		batch = new SpriteBatch();
 		img = new Texture("badlogic.jpg");
-		_FBIC.justSomeFunction();
 		_FBIC.setOnValueChangedListener();
 		_FBIC.setValueInDb("Score", "300");
 

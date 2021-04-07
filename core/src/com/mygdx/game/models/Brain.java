@@ -41,6 +41,4 @@ public class Brain {
 
         ideas.add(idea);
     }
-
-
 }

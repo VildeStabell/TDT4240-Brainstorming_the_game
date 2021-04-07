@@ -1,6 +1,5 @@
 package com.mygdx.game.models;
 
-import java.security.cert.TrustAnchor;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -146,5 +145,4 @@ public class Round {
         EliminationPhase eliminationPhase = eliminationPhases.get(player);
         eliminationPhase.toggleBrain(brain);
     }
-
 }

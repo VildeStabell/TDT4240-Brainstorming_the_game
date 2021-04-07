@@ -11,6 +11,12 @@ import java.util.ArrayList;
 public class Brain {
     private ArrayList<Idea> ideas = new ArrayList<>();
 
+    public Brain(){    }
+
+    public Brain (ArrayList<Idea> ideas){
+        this.ideas = ideas;
+    }
+
     public ArrayList<Idea> getIdeas() {
         return ideas;
     }
@@ -35,4 +41,6 @@ public class Brain {
 
         ideas.add(idea);
     }
+
+
 }

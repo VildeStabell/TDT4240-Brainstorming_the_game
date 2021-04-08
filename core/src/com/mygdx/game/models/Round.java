@@ -38,11 +38,15 @@ public class Round {
      * @param BRAIN_DAMAGE: The amount of damage the brain does
      * @param maxSelectedBrains: Max selected brains for the eliminationphase
      * */
-    public Round(ArrayList<Player> players, ArrayList<Brain> brains, int maxHitPoints, int BRAIN_DAMAGE, int maxSelectedBrains){
+    public Round(ArrayList<Player> players, ArrayList<Brain> brains, int maxHitPoints, int BRAIN_DAMAGE, int maxSelectedBrains) {
         this.players = players;
         for(Player player:players){
             brainstormingPhases.put(player, new BrainstormingPhase(player, maxHitPoints, BRAIN_DAMAGE));
-            playersBrains.put(player, brains);
+            ArrayList<Brain> brainsCopy = new ArrayList<>();
+            for (Brain originalBrain : brains){
+                brainsCopy.add(new Brain(originalBrain.getIdeas()));
+            }
+            playersBrains.put(player, brainsCopy);
             currentBrainNumbers.put(player, 0);
         }
 
@@ -86,6 +90,19 @@ public class Round {
         return brainstormingPhase.putIdeaOnBrainAndFire(brain, idea);
     }
 
+
+    /**
+     * Gets the brains used in the brainstormingphase
+     * @return list of brains collected from the brainstormingphases
+     * */
+    public ArrayList<Brain> getBrainstorimingBrains(){
+        ArrayList<Brain> brains = new ArrayList<>();
+        for (BrainstormingPhase brainstormingPhase : brainstormingPhases.values()){
+            brains.addAll(brainstormingPhase.getBrains());
+        }
+        return brains;
+    }
+
     /**
      * Creates new eliminationPhases for each player
      * */
@@ -96,6 +113,7 @@ public class Round {
         for (Player player : players){
             eliminationPhases.put(player, new EliminationPhase(brains, maxSelectedBrains));
         }
+        inEliminationPhase = true;
     }
 
     /**
@@ -114,4 +132,17 @@ public class Round {
         return brains;
     }
 
+
+    /**
+     * Calls on the toggleBrain function of the eliminationPhase for a player
+     * @param player: the player thats toggling
+     * @param brain: the brain that's being toggled
+     * */
+    public void toggleBrain(Player player, Brain brain){
+        if(!inEliminationPhase){
+            throw new IllegalStateException("Can't togge a brain when not in eliminationPhase");
+        }
+        EliminationPhase eliminationPhase = eliminationPhases.get(player);
+        eliminationPhase.toggleBrain(brain);
+    }
 }

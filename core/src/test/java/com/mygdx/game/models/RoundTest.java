@@ -99,10 +99,11 @@ public class RoundTest {
         Brain b2 = brainstormingBrains.get(1);
         round.toggleBrain(p1, b1);
         round.toggleBrain(p2, b2);
-        assertEquals("Expected (" + b1+ "," +
+        assertTrue("Expected list with (" + b1+ "," +
                 b2+"but was"+round.getSelectedBrains(),
-                new ArrayList<>(Arrays.asList(b1, b2)),
-                round.getSelectedBrains());
+                round.getSelectedBrains().size()==2 &&
+                round.getSelectedBrains().contains(b1) &&
+                round.getSelectedBrains().contains(b2));
     }
 
 }

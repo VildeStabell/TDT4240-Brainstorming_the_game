@@ -38,9 +38,6 @@ public class Player {
 
     @Override
     public String toString() {
-        return "Player{" +
-                "playerId=" + playerId +
-                ", username='" + username + '\'' +
-                '}';
+        return String.format("Player{playerId=%s, username=%s}", playerId, username);
     }
 }

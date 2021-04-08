@@ -44,8 +44,6 @@ public class Brain {
 
     @Override
     public String toString() {
-        return "Brain{" +
-                "ideas=" + ideas +
-                '}';
+        return String.format("Brain{ideas=%s}", ideas);
     }
 }

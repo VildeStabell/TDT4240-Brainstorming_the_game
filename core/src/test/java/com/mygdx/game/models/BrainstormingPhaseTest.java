@@ -43,8 +43,8 @@ public class BrainstormingPhaseTest {
         expectedBrainArrayList.add(brain2);
         brainstormingPhase.putIdeaOnBrainAndFire(brain1, idea1);
         brainstormingPhase.putIdeaOnBrainAndFire(brain2, idea2);
-        assertEquals("Expected list with b1 and b2, but was" + brainstormingPhase.getBrains(),
-                expectedBrainArrayList.toString(), brainstormingPhase.getBrains().toString());
+        assertEquals(String.format("Expected %s, but was %s", expectedBrainArrayList, brainstormingPhase.getBrains()),
+                expectedBrainArrayList, brainstormingPhase.getBrains());
     }
 
     @Test

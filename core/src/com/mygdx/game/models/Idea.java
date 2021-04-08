@@ -29,9 +29,6 @@ public class Idea {
 
     @Override
     public String toString() {
-        return "Idea{" +
-                "idea='" + idea + '\'' +
-                ", player=" + player +
-                '}';
+        return String.format("Idea{idea=%s, player=%s}", idea, player);
     }
 }

@@ -43,8 +43,8 @@ public class Round {
         for(Player player:players){
             brainstormingPhases.put(player, new BrainstormingPhase(player, maxHitPoints, BRAIN_DAMAGE));
             ArrayList<Brain> brainsCopy = new ArrayList<>();
-            for (Brain b : brains){
-                brainsCopy.add(new Brain(b.getIdeas()));
+            for (Brain originalBrain : brains){
+                brainsCopy.add(new Brain(originalBrain.getIdeas()));
             }
             playersBrains.put(player, brainsCopy);
             currentBrainNumbers.put(player, 0);
@@ -97,8 +97,8 @@ public class Round {
      * */
     public ArrayList<Brain> getBrainstorimingBrains(){
         ArrayList<Brain> brains = new ArrayList<>();
-        for (BrainstormingPhase bp : brainstormingPhases.values()){
-            brains.addAll(bp.getBrains());
+        for (BrainstormingPhase brainstormingPhase : brainstormingPhases.values()){
+            brains.addAll(brainstormingPhase.getBrains());
         }
         return brains;
     }

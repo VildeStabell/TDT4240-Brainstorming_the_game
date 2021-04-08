@@ -26,4 +26,12 @@ public class Idea {
     public Player getPlayer() {
         return player;
     }
+
+    @Override
+    public String toString() {
+        return "Idea{" +
+                "idea='" + idea + '\'' +
+                ", player=" + player +
+                '}';
+    }
 }

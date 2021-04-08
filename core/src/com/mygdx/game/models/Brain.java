@@ -41,4 +41,11 @@ public class Brain {
 
         ideas.add(idea);
     }
+
+    @Override
+    public String toString() {
+        return "Brain{" +
+                "ideas=" + ideas +
+                '}';
+    }
 }

@@ -52,4 +52,5 @@ public class Wall {
         hitPoints -= dmg;
         return false;
     }
+
 }

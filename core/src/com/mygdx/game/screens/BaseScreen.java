@@ -61,6 +61,7 @@ public abstract class BaseScreen implements Screen {
     /**
      * Scaling the image by multiplying the dimensions with the ratio between screen and image
      * Using the stage to draw the scaled image.
+     * TODO: decouple the drawing and the math of scaling images
      * @param image: the image to be scaled
      */
     protected void scaleImage(Texture image){

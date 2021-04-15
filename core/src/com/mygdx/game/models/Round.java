@@ -95,7 +95,7 @@ public class Round {
      * Gets the brains used in the brainstormingphase
      * @return list of brains collected from the brainstormingphases
      * */
-    public ArrayList<Brain> getBrainstorimingBrains(){
+    public ArrayList<Brain> getBrainstormingBrains(){
         ArrayList<Brain> brains = new ArrayList<>();
         for (BrainstormingPhase brainstormingPhase : brainstormingPhases.values()){
             brains.addAll(brainstormingPhase.getBrains());

@@ -3,24 +3,39 @@ package com.mygdx.game.models;
 import java.util.ArrayList;
 
 /**
- * The abstract Session model defines methods and variables that is needed regardless of
- * whether the session is singleplayer or multiplayer.
+ * The Session model keeps track of players, selected brains, total brains and
+ * rounds.
  *
  * This class implements the MVC pattern.
  * The parameters given in the constructor makes it easier to implement the quality requirement M1.
  */
 
-public abstract class Session {
-    protected ArrayList<Brain> selectedBrains;
-    protected ArrayList<Brain> allBrains;
-    protected ArrayList<Round> rounds;
-    protected final int maxHitPoints;
-    protected final int brainDamage;
-    protected final int maxSelectedBrains;
-    protected final int maxRounds;
-    protected boolean activeRound;
+public class Session {
+    private final int maxHitPoints;
+    private final int brainDamage;
+    private final int maxSelectedBrains;
+    private final int maxRounds;
+    private final ArrayList<Player> players;
+    private ArrayList<Brain> selectedBrains;
+    private ArrayList<Brain> allBrains;
+    private ArrayList<Round> rounds;
+    private boolean activeRound;
 
-    public Session(int maxHitPoints, int brainDamage, int maxSelectedBrains, int maxRounds) {
+    /**
+     * The Constructor for a singleplayer session
+     * @param maxHitPoints: The max number of hit points a wall has
+     * @param brainDamage: How much damage each brain does
+     * @param maxSelectedBrains: The mac number of brains that can be selected in each
+     *                         elimination phase
+     * @param maxRounds: The max number of rounds that can be played
+     * @param player: Which player is playing the session
+     */
+    public Session(int maxHitPoints, int brainDamage, int maxSelectedBrains, int maxRounds,
+                   Player player) {
+        ArrayList<Player> tempPlayerList = new ArrayList<>();
+        tempPlayerList.add(player);
+        validateStartingValues(maxHitPoints, brainDamage, maxSelectedBrains,
+                maxRounds, tempPlayerList, true);
         this.selectedBrains = new ArrayList<>();
         this.allBrains = new ArrayList<>();
         this.rounds = new ArrayList<>();
@@ -29,6 +44,95 @@ public abstract class Session {
         this.maxSelectedBrains = maxSelectedBrains;
         this.maxRounds = maxRounds;
         this.activeRound = false;
+        this.players = new ArrayList<>();
+        this.players.add(player);
+    }
+
+    /**
+     * The Constructor for a multiplayer session
+     * @param maxHitPoints: The max number of hit points a wall has
+     * @param brainDamage: How much damage each brain does
+     * @param maxSelectedBrains: The mac number of brains that can be selected in each
+     *                         elimination phase
+     * @param maxRounds: The max number of rounds that can be played
+     * @param players: The list of players that
+     */
+    public Session(int maxHitPoints, int brainDamage, int maxSelectedBrains, int maxRounds,
+                   ArrayList<Player> players) {
+        validateStartingValues(maxHitPoints, brainDamage, maxSelectedBrains, maxRounds, players,
+                false);
+        this.selectedBrains = new ArrayList<>();
+        this.allBrains = new ArrayList<>();
+        this.rounds = new ArrayList<>();
+        this.maxHitPoints = maxHitPoints;
+        this.brainDamage = brainDamage;
+        this.maxSelectedBrains = maxSelectedBrains;
+        this.maxRounds = maxRounds;
+        this.activeRound = false;
+        this.players = new ArrayList<>(players);
+    }
+
+    /**
+     * Validates that the parameters given to the constructor are valid.
+     * @param isSP: indicates if the session is a singleplayer or a multiplayer session
+     */
+    private void validateStartingValues(int maxHitPoints, int brainDamage, int maxSelectedBrains,
+                                        int maxRounds, ArrayList<Player> players, boolean isSP) {
+        if(isSP && players.size() != 1)
+            throw new IllegalArgumentException("Must be exactly one player in a singlePlayer session");
+        if(!isSP && players.size() < 2)
+            throw new IllegalArgumentException("Must be two or more players in a multiPlayer session");
+        if(maxHitPoints <= 0)
+            throw new IllegalArgumentException("maxHitPoints must be higher than 0");
+        if(brainDamage <= 0)
+            throw new IllegalArgumentException("brainDamage must be higher than 0");
+        if(maxSelectedBrains < 0)
+            throw new IllegalArgumentException("maxSelectedBrains cannot be negative");
+        if(maxRounds < 1)
+            throw new IllegalArgumentException("maxRounds must be at least 1");
+    }
+
+
+    /**
+     * Starts a new round and adds it to the rounds list.
+     */
+    public void startNewRound() {
+        if (getNumOfRounds() >= maxRounds)
+            throw new IllegalStateException("Cannot start another round since the max number of " +
+                    "rounds has been reached.");
+
+        if (activeRound)
+            throw new IllegalStateException("Cannot start a new round while another is in progress");
+
+        rounds.add(new Round(players, selectedBrains, maxHitPoints, brainDamage, maxSelectedBrains));
+        activeRound = true;
+    }
+
+    /**
+     * Ends the current round, and adds the selected and total brains to their respective lists.
+     * @return true if this means the session is over, false otherwise.
+     */
+    public boolean endRound() {
+        if (!activeRound)
+            throw new IllegalStateException("Cannot end a round, because no rounds are " +
+                    "currently active");
+
+        if (!getCurrentRound().isInEliminationPhase())
+            throw new IllegalStateException("The round is in the brainstormingPhase, " +
+                    "and can therefore not be ended");
+
+        for (Brain brain : getCurrentRound().getSelectedBrains()) {
+            if (!selectedBrains.contains(brain)) {
+                this.selectedBrains.add(brain);
+            }
+        }
+        for (Brain brain : getCurrentRound().getBrainstormingBrains()) {
+            if (!allBrains.contains(brain)) {
+                this.allBrains.add(brain);
+            }
+        }
+
+        return getNumOfRounds() >= maxRounds;
     }
 
     public ArrayList<Brain> getSelectedBrains() {
@@ -50,15 +154,4 @@ public abstract class Session {
     public Round getCurrentRound() {
         return rounds.get(rounds.size()-1);
     }
-
-    /**
-     * Starts a new round and adds it to the rounds list.
-     */
-    public abstract void startNewRound();
-
-    /**
-     * Ends the current round.
-     * @return true if this means the session is over, false otherwise.
-     */
-    public abstract boolean endRound();
 }

@@ -9,7 +9,9 @@ import java.util.HashMap;
  * Game screen manager to control and initialize the screens
  *
  * game: the Brainstorming game instance
- * gameScreens: representing the game screens as a HasH Map with ScreenEnum-BaseScreen pair.
+ * gameScreens: representing the game screens as a Hash Map with ScreenEnum-BaseScreen pair.
+ * screenEnum: storing the available screens as enums.
+ *
  */
 
 public class GameScreenManager {
@@ -21,7 +23,7 @@ public class GameScreenManager {
     public enum ScreenEnum {
         MENU,
         GAME, // We probably want the game phases to extend from Game so this will need to apply to these cases
-        // SETTINGS,
+        SETTINGS,
       }
 
     /**
@@ -37,11 +39,10 @@ public class GameScreenManager {
         setScreen(ScreenEnum.MENU);
     }
 
-
     private void initGameScreens(){
         this.gameScreens = new HashMap<>();
-        this.gameScreens.put(ScreenEnum.MENU, new MenuScreen(this));
-        this.gameScreens.put(ScreenEnum.GAME, new GameScreen(this, new Texture("gameScreen.jpg")));
+        this.gameScreens.put(ScreenEnum.MENU, new MenuScreen(this, "menuScreen.jpg"));
+        this.gameScreens.put(ScreenEnum.GAME, new GameScreen(this,"gameScreen.jpg"));
     }
 
     public void setScreen(ScreenEnum nextScreen){
@@ -55,6 +56,5 @@ public class GameScreenManager {
           }
       }
     }
-
 
 }

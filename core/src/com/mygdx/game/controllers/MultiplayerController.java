@@ -28,6 +28,7 @@ public class MultiplayerController extends Controller {
     public void pressFireBrain(String idea) {
         //fb.addBrain();
         Boolean wallFallen = session.getCurrentRound().addBrainInBrainstormingPhase(idea);
+        //gsm.fireBrainAnimation();
         if (wallFallen){
             //fb.setPlayerDoneFlag;
             //gsm.fallenWall();
@@ -37,6 +38,7 @@ public class MultiplayerController extends Controller {
     @Override
     public void toggleBrain(Brain brain) {
         session.getCurrentRound().toggleBrain(brain);
+        //gsm.toggleBrain(brain);
     }
 
     public void allPlayersDoneBrainstorming(){
@@ -44,6 +46,7 @@ public class MultiplayerController extends Controller {
         //brains = fb.getBrains()
         //fb.setBrainstormingFlagToFalse()
         session.getCurrentRound().startEliminationPhase(brains);
+        //gsm.setScreen(elimination);
     }
 
     public void allPlayersDoneEliminating(){
@@ -51,6 +54,7 @@ public class MultiplayerController extends Controller {
         //brains = fb.getSelectedBrains;
         //fb.setEliminationFlagToFalse()
         session.startNewRound();
+        //gsm.setScreen(brainstorming);
     }
 
     public void playerDoneEliminating(){

@@ -1,18 +1,17 @@
 package com.mygdx.game.models;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * The round keeps track of current players and their
  * BrainstormingPhase, EliminationPhase, Brains,
  * and which brain the player is currently on.
  *
- * players: List of current players
- * brainstorminPhases: a Map that keeps track of which BrainstormingPhase belongs to which player
- * eliminationPhases: a Map that keeps track of which EliminationPhase belongs to which player
- * brains: a map of which Brains are being used this round and which player it belongs to.
- * currentBrainNumbers: a map that keeps track of which brain each player is on
+ * player: Current player
+ * brainstormingPhases: The brainstorming phase
+ * eliminationPhases: The elimination phase
+ * brains: a list of the brain being used this round
+ * currentBrainNumber: the current brain
  * maxSelectedBrains: the max nr of selected brains in the eliminationphase
  * inEliminationPhase: A boolean to tell which round is going
  *
@@ -21,40 +20,35 @@ import java.util.HashMap;
 
 public class Round {
 
-    private ArrayList<Player> players;
-    private HashMap<Player, BrainstormingPhase> brainstormingPhases = new HashMap<>();
-    private HashMap<Player, EliminationPhase> eliminationPhases = new HashMap<>();
-    private HashMap<Player, ArrayList<Brain>> playersBrains = new HashMap<>();
-    private HashMap<Player, Integer> currentBrainNumbers = new HashMap<>();
+    private Player player;
+    private BrainstormingPhase brainstormingPhase;
+    private EliminationPhase eliminationPhase;
+    private ArrayList<Brain> brains = new ArrayList<>();
+    private int currentBrainNumber;
     private int maxSelectedBrains;
     private boolean inEliminationPhase = false;
 
 
     /**
-     * A constructor that initializes the brainstormingphases for each player.
-     * @param players: List of current players
+     * A constructor that initializes the brainstormingphase
+     * @param player: player
      * @param brains: List of brains used this round, if round one these brains should contain no ideas
      * @param maxHitPoints: The max HP for the wall
      * @param BRAIN_DAMAGE: The amount of damage the brain does
      * @param maxSelectedBrains: Max selected brains for the eliminationphase
      * */
-    public Round(ArrayList<Player> players, ArrayList<Brain> brains, int maxHitPoints, int BRAIN_DAMAGE, int maxSelectedBrains) {
-        this.players = players;
-        for(Player player:players){
-            brainstormingPhases.put(player, new BrainstormingPhase(player, maxHitPoints, BRAIN_DAMAGE));
-            ArrayList<Brain> brainsCopy = new ArrayList<>();
-            for (Brain originalBrain : brains){
-                brainsCopy.add(new Brain(originalBrain.getIdeas()));
-            }
-            playersBrains.put(player, brainsCopy);
-            currentBrainNumbers.put(player, 0);
+    public Round(Player player, ArrayList<Brain> brains, int maxHitPoints, int BRAIN_DAMAGE, int maxSelectedBrains) {
+        this.player = player;
+        brainstormingPhase = new BrainstormingPhase(player, maxHitPoints, BRAIN_DAMAGE);
+        for (Brain originalBrain : brains){
+            this.brains.add(new Brain(originalBrain.getIdeas()));
         }
-
+        currentBrainNumber = 0;
         this.maxSelectedBrains = maxSelectedBrains;
     }
 
-    public ArrayList<Player> getPlayers() {
-        return players;
+    public Player getPlayer() {
+        return player;
     }
 
     public boolean isInEliminationPhase() {
@@ -62,32 +56,21 @@ public class Round {
     }
 
     /**
-     * Checks which players still has their walls standing, and returns a list of them
-     * @return A list of players who still have standing walls
+     * Checks if the wall is still standing
+     * @return True if the wall is standing, false if not
      * */
-    public ArrayList<Player> playersLeft(){
-        ArrayList<Player> remainingPlayers = new ArrayList<>();
-        for (Player player : players){
-            if (brainstormingPhases.get(player).getWall().isStanding()){
-                remainingPlayers.add(player);
-            }
-        }
-        return remainingPlayers;
+    public Boolean isWallStanding(){
+        return brainstormingPhase.getWall().isStanding();
     }
 
     /**
      * Gets the current brain, and adds the idea on the current brain in the
      * brainstormingphase connected to the user.
-     * @param player: current player
      * @param idea: Idea thats going on the brain
      * @return true if the wall has fallen down, false if not.
      * */
-    public boolean addBrainInBrainstormingPhase(Player player, String idea){
-        int currentBrainNr = currentBrainNumbers.get(player);
-        currentBrainNumbers.put(player, currentBrainNr + 1);
-        Brain brain = playersBrains.get(player).get(currentBrainNr);
-        BrainstormingPhase brainstormingPhase = brainstormingPhases.get(player);
-        return brainstormingPhase.putIdeaOnBrainAndFire(brain, idea);
+    public boolean addBrainInBrainstormingPhase(String idea){
+        return brainstormingPhase.putIdeaOnBrainAndFire(brains.get(currentBrainNumber), idea);
     }
 
 
@@ -96,53 +79,36 @@ public class Round {
      * @return list of brains collected from the brainstormingphases
      * */
     public ArrayList<Brain> getBrainstormingBrains(){
-        ArrayList<Brain> brains = new ArrayList<>();
-        for (BrainstormingPhase brainstormingPhase : brainstormingPhases.values()){
-            brains.addAll(brainstormingPhase.getBrains());
-        }
-        return brains;
+        return brainstormingPhase.getBrains();
     }
 
     /**
      * Creates new eliminationPhases for each player
      * */
     public void startEliminationPhase(ArrayList<Brain> brains){
-        if (playersLeft().size() > 0){
-            throw new IllegalStateException("There are still players who have walls left standing");
-        }
-        for (Player player : players){
-            eliminationPhases.put(player, new EliminationPhase(brains, maxSelectedBrains));
+        if(isWallStanding()){
+            throw new IllegalStateException("Can't start eliminationPhase when wall is still standing");
         }
         inEliminationPhase = true;
+        eliminationPhase = new EliminationPhase(brains, maxSelectedBrains);
     }
 
     /**
-     * Return the selected brains from all the eliminationPhases, and removes duplicates.
+     * Return the selected brains from all the eliminationPhases.
      * */
     public ArrayList<Brain> getSelectedBrains(){
-        ArrayList<Brain> brains = new ArrayList<>();
-        for (EliminationPhase eliminationPhase : eliminationPhases.values()){
-            ArrayList<Brain> selectedBrains = eliminationPhase.getSelectedBrains();
-            for (Brain brain: selectedBrains){
-                if (!brains.contains(brain)){
-                    brains.add(brain);
-                }
-            }
-        }
-        return brains;
+        return eliminationPhase.getSelectedBrains();
     }
 
 
     /**
      * Calls on the toggleBrain function of the eliminationPhase for a player
-     * @param player: the player thats toggling
      * @param brain: the brain that's being toggled
      * */
-    public void toggleBrain(Player player, Brain brain){
+    public void toggleBrain(Brain brain){
         if(!inEliminationPhase){
-            throw new IllegalStateException("Can't togge a brain when not in eliminationPhase");
+            throw new IllegalStateException("Can't toggle a brain when not in eliminationPhase");
         }
-        EliminationPhase eliminationPhase = eliminationPhases.get(player);
         eliminationPhase.toggleBrain(brain);
     }
 }

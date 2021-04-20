@@ -26,4 +26,9 @@ public class Idea {
     public Player getPlayer() {
         return player;
     }
+
+    @Override
+    public String toString() {
+        return String.format("Idea{idea=%s, player=%s}", idea, player);
+    }
 }

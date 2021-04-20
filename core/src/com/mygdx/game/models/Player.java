@@ -35,4 +35,9 @@ public class Player {
 
         this.username = username;
     }
+
+    @Override
+    public String toString() {
+        return String.format("Player{playerId=%s, username=%s}", playerId, username);
+    }
 }

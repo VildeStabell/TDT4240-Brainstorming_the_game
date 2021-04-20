@@ -8,8 +8,7 @@ import java.util.ArrayList;
 
 
 public class SessionTest {
-    private Session singleplayerSession;
-    private Session multiplayerSession;
+    private Session session;
     private ArrayList<Player> players;
     private ArrayList<Brain> brains;
     private Player p1;
@@ -35,10 +34,8 @@ public class SessionTest {
         brains.add(b2);
         b3 = new Brain();
         brains.add(b3);
-        singleplayerSession = new Session(15, 5, 2,
+        session = new Session(15, 5, 2,
                 3, p1);
-        multiplayerSession = new Session(15, 5, 2,
-                3, players);
     }
 
     @Test
@@ -67,76 +64,84 @@ public class SessionTest {
     public void multiPlayerConstructor() {
         assertThrows("MaxHitPoints should not be able to be null or lower.",
                 IllegalArgumentException.class, () -> {Session s1 = new Session(0,
-                        5, 2, 3, players);});
+                        5, 2, 3, players, 1234);});
         assertThrows("MaxHitPoints should not be able to be null or lower.",
                 IllegalArgumentException.class, () -> {Session s1 = new Session(-1,
-                        5, 2, 3, players);});
+                        5, 2, 3, players, 1234);});
         assertThrows("BrainDamage should not be able to be null or lower.",
                 IllegalArgumentException.class, () -> {Session s1 = new Session(15,
-                        0, 2, 3, players);});
+                        0, 2, 3, players, 1234);});
         assertThrows("BrainDamage should not be able to be null or lower.",
                 IllegalArgumentException.class, () -> {Session s1 = new Session(15,
-                        -1, 2, 3, players);});
+                        -1, 2, 3, players, 1234);});
         assertThrows("MaxSelectedBrains should not be able to be lower than null.",
                 IllegalArgumentException.class, () -> {Session s1 = new Session(15,
-                        5, -1, 3, players);});
+                        5, -1, 3, players, 1234);});
         assertThrows("MaxRounds should not be able to be at least one.",
                 IllegalArgumentException.class, () -> {Session s1 = new Session(15,
-                        5, 2, 0, players);});
+                        5, 2, 0, players, 1234);});
         players.add(null);
         assertThrows("No players can be null.",
                 IllegalArgumentException.class, () -> {Session s1 = new Session(0,
-                        5, 2, 3, players);});
+                        5, 2, 3, players, 1234);});
         ArrayList<Player> emptyPlayers = new ArrayList<>();
         assertThrows("There must be at least one player.",
                 IllegalArgumentException.class, () -> {Session s1 = new Session(0,
-                        5, 2, 3, emptyPlayers);});
+                        5, 2, 3, emptyPlayers, 1234);});
+        assertThrows("SessionCode should be above the MIN parameter",
+                IllegalArgumentException.class, () -> {Session s1 = new Session(15,
+                        5, 2, 0, players,
+                        Session.MIN - 1);});
+        assertThrows("SessionCode should be below the MAX parameter",
+                IllegalArgumentException.class, () -> {Session s1 = new Session(15,
+                        5, 2, 0, players,
+                        Session.MAX + 1);});
     }
 
     @Test
     public void startNewRound() {
-        singleplayerSession.startNewRound();
-        assertEquals("Expected 1 round, but was " + singleplayerSession.getNumOfRounds(),
-                1, singleplayerSession.getNumOfRounds());
-        ArrayList<Round> rounds = singleplayerSession.getRounds();
+        session.startNewRound();
+        assertEquals("Expected 1 round, but was " + session.getNumOfRounds(),
+                1, session.getNumOfRounds());
+        ArrayList<Round> rounds = session.getRounds();
         assertEquals("Didn't receive the correct round", rounds.get(0),
-                singleplayerSession.getCurrentRound());
+                session.getCurrentRound());
         assertThrows("Shouldn't be able to start a new round before the previous is finished",
-                IllegalStateException.class, () -> singleplayerSession.startNewRound());
-        moveSingleToEliminationPhase(singleplayerSession.getCurrentRound());
-        singleplayerSession.endRound();
-        singleplayerSession.startNewRound();
-        assertEquals("Expected 2 rounds but was " + singleplayerSession.getNumOfRounds(),
-                2, singleplayerSession.getNumOfRounds());
+                IllegalStateException.class, () -> session.startNewRound());
+        moveSingleToEliminationPhase(session.getCurrentRound());
+        session.endRound();
+        session.startNewRound();
+        assertEquals("Expected 2 rounds but was " + session.getNumOfRounds(),
+                2, session.getNumOfRounds());
 
-        moveSingleToEliminationPhase(singleplayerSession.getCurrentRound());
-        singleplayerSession.endRound();
-        singleplayerSession.startNewRound();
-        assertEquals("Expected 3 rounds but was " + singleplayerSession.getNumOfRounds(),
-                3, singleplayerSession.getNumOfRounds());
+        moveSingleToEliminationPhase(session.getCurrentRound());
+        session.endRound();
+        session.startNewRound();
+        assertEquals("Expected 3 rounds but was " + session.getNumOfRounds(),
+                3, session.getNumOfRounds());
 
-        moveSingleToEliminationPhase(singleplayerSession.getCurrentRound());
-        singleplayerSession.endRound();
+        moveSingleToEliminationPhase(session.getCurrentRound());
+        session.endRound();
         assertThrows("Should not be able to start more rounds then maxRounds",
-                IllegalStateException.class, () -> singleplayerSession.startNewRound());
+                IllegalStateException.class, () -> session.startNewRound());
     }
 
     @Test
     public void endRound() {
         assertThrows("Should not be able to end a nonexistent round",
-                IllegalStateException.class, () -> singleplayerSession.endRound());
-        singleplayerSession.startNewRound();
+                IllegalStateException.class, () -> session.endRound());
+        session.startNewRound();
         assertThrows("Should not be able to end a round in its brainstorming phase",
-                IllegalStateException.class, () -> singleplayerSession.endRound());
+                IllegalStateException.class, () -> session.endRound());
 
-        Round currentRound = singleplayerSession.getCurrentRound();
+        Round currentRound = session.getCurrentRound();
         moveSingleToEliminationPhase(currentRound);
         ArrayList<Brain> bBrains = currentRound.getBrainstormingBrains();
         currentRound.toggleBrain(p1, bBrains.get(0));
         currentRound.toggleBrain(p1, bBrains.get(1));
-        assertFalse("The session should not be over yet", singleplayerSession.endRound());
-        ArrayList<Brain> sBrains = singleplayerSession.getSelectedBrains();
-        ArrayList<Brain> aBrains = singleplayerSession.getAllBrains();
+        assertFalse("The session should not be over yet", session.endRound());
+        ArrayList<Brain> sBrains = session.getSelectedBrains();
+        ArrayList<Brain> aBrains = session.getAllBrains();
 
         assertTrue("Selected brains should contain b1 and b2, but was " + sBrains,
                 sBrains.size() == 2 && sBrains.contains(bBrains.get(0)) &&

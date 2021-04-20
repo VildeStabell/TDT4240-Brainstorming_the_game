@@ -24,6 +24,7 @@ public class Session {
     private ArrayList<Brain> selectedBrains;
     private ArrayList<Brain> allBrains;
     private ArrayList<Round> rounds;
+    private ArrayList<Round> currentRounds;
     private boolean activeRound;
     private final int sessionCode;
 
@@ -58,6 +59,7 @@ public class Session {
         this.selectedBrains = new ArrayList<>();
         this.allBrains = new ArrayList<>();
         this.rounds = new ArrayList<>();
+        this.currentRounds = new ArrayList<>();
         this.maxHitPoints = maxHitPoints;
         this.brainDamage = brainDamage;
         this.maxSelectedBrains = maxSelectedBrains;
@@ -122,7 +124,12 @@ public class Session {
             allBrains.add(newBrain);
         }
 
-        rounds.add(new Round(players, brains, maxHitPoints, brainDamage, maxSelectedBrains));
+        for(Player p : players) {
+            Round newRound = new Round(p, brains, maxHitPoints, brainDamage, maxSelectedBrains);
+            rounds.add(newRound);
+            currentRounds.add(newRound);
+        }
+
         activeRound = true;
     }
 
@@ -135,13 +142,15 @@ public class Session {
             throw new IllegalStateException("Cannot end a round, because no rounds are " +
                     "currently active");
 
-        if (!getCurrentRound().isInEliminationPhase())
-            throw new IllegalStateException("The round is in the brainstormingPhase, " +
-                    "and can therefore not be ended");
+        for(Round round : currentRounds) {
+            if (!round.isInEliminationPhase())
+                throw new IllegalStateException("The round is in the brainstormingPhase, " +
+                        "and can therefore not be ended");
 
-        for (Brain brain : getCurrentRound().getSelectedBrains()) {
-            if (!selectedBrains.contains(brain)) {
-                this.selectedBrains.add(brain);
+            for (Brain brain : round.getSelectedBrains()) {
+                if (!selectedBrains.contains(brain)) {
+                    this.selectedBrains.add(brain);
+                }
             }
         }
 
@@ -162,11 +171,11 @@ public class Session {
     }
 
     public int getNumOfRounds() {
-        return rounds.size();
+        return rounds.size() / players.size();
     }
 
-    public Round getCurrentRound() {
-        return rounds.get(rounds.size()-1);
+    public ArrayList<Round> getCurrentRounds() {
+        return currentRounds;
     }
 
     public int getSessionCode() {

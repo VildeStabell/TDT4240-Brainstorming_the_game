@@ -11,6 +11,12 @@ import java.util.ArrayList;
 public class Brain {
     private ArrayList<Idea> ideas = new ArrayList<>();
 
+    public Brain(){    }
+
+    public Brain (ArrayList<Idea> ideas){
+        this.ideas = ideas;
+    }
+
     public ArrayList<Idea> getIdeas() {
         return ideas;
     }
@@ -30,7 +36,14 @@ public class Brain {
     public void addIdea(Idea idea) {
         if(idea == null)
             throw new IllegalArgumentException("Idea cannot be null");
+        if(ideas.contains(idea))
+            throw new IllegalArgumentException("Cannot add the same idea twice");
 
         ideas.add(idea);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Brain{ideas=%s}", ideas);
     }
 }

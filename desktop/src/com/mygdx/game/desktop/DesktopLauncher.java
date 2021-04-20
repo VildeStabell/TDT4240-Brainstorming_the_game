@@ -9,5 +9,7 @@ public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		new LwjglApplication(new Brainstorming(new DesktopInterfaceClass()), config);
+		config.width = Brainstorming.WIDTH;
+		config.height = Brainstorming.HEIGHT;
 	}
 }

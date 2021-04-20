@@ -57,22 +57,6 @@ public abstract class BaseScreen implements Screen {
         Gdx.input.setInputProcessor(stage);
     }
 
-
-    /**
-     * Scaling the image by multiplying the dimensions with the ratio between screen and image
-     * Using the stage to draw the scaled image.
-     * TODO: decouple the drawing and the math of scaling images
-     * @param image: the image to be scaled
-     */
-    protected void scaleImage(Texture image){
-        float imageRatio = (float) Gdx.graphics.getHeight() / image.getHeight();
-        float scaledWidth = imageRatio*image.getWidth();
-        float scaledHeight = imageRatio*image.getHeight();
-        stage.getBatch().begin();
-        stage.getBatch().draw(image, 0,0, scaledWidth, scaledHeight);
-        stage.getBatch().end();
-    }
-
     /**
      * Clearing the buffer and checking if a background has been set.
      * If so, it will render the background to fit the screen size.
@@ -83,7 +67,9 @@ public abstract class BaseScreen implements Screen {
     public void render(float delta){
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
         if(background != null){
-            scaleImage(background);
+            stage.getBatch().begin();
+            stage.getBatch().draw(background, 0,0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+            stage.getBatch().end();
         }
     }
 

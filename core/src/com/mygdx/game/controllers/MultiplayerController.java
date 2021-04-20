@@ -26,12 +26,14 @@ public class MultiplayerController extends Controller {
 
     @Override
     public void pressFireBrain(String idea) {
-        //fb.addBrain();
         Boolean wallFallen = session.getCurrentRound().addBrainInBrainstormingPhase(idea);
         //gsm.fireBrainAnimation();
+        //gsm.updateHitPoints(session.getCurrentRound().getWall()
         if (wallFallen){
             //fb.setPlayerDoneFlag;
+            //fb.updateBrains;
             //gsm.fallenWall();
+            //gsm.waitingForOtherPlayers();
         }
     }
 
@@ -60,5 +62,6 @@ public class MultiplayerController extends Controller {
     public void playerDoneEliminating(){
         ArrayList<Brain> selectedBrains = session.getSelectedBrains();
         //fb.updateSelectedBrains();
+        //gsm.waitingForOtherPlayers();
     }
 }

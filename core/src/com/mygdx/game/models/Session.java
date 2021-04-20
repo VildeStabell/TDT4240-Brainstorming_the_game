@@ -20,6 +20,9 @@ public class Session {
     private ArrayList<Brain> allBrains;
     private ArrayList<Round> rounds;
     private boolean activeRound;
+    private String sessionCode; //TODO: Generate code, or receive if first. Maybe have a public
+    // method to generate a code, and a getter(?). Call it in SingleplayerConstructor, but take it
+    //As a parameter in MultiplayerConstructor
 
     /**
      * The Constructor for a singleplayer session
@@ -34,8 +37,8 @@ public class Session {
                    Player player) {
         ArrayList<Player> tempPlayerList = new ArrayList<>();
         tempPlayerList.add(player);
-        validateStartingValues(maxHitPoints, brainDamage, maxSelectedBrains,
-                maxRounds, tempPlayerList, true);
+        validateStartingValues(maxHitPoints, brainDamage, maxSelectedBrains, maxRounds,
+                tempPlayerList);
         this.selectedBrains = new ArrayList<>();
         this.allBrains = new ArrayList<>();
         this.rounds = new ArrayList<>();
@@ -59,8 +62,7 @@ public class Session {
      */
     public Session(int maxHitPoints, int brainDamage, int maxSelectedBrains, int maxRounds,
                    ArrayList<Player> players) {
-        validateStartingValues(maxHitPoints, brainDamage, maxSelectedBrains, maxRounds, players,
-                false);
+        validateStartingValues(maxHitPoints, brainDamage, maxSelectedBrains, maxRounds, players);
         this.selectedBrains = new ArrayList<>();
         this.allBrains = new ArrayList<>();
         this.rounds = new ArrayList<>();
@@ -74,14 +76,12 @@ public class Session {
 
     /**
      * Validates that the parameters given to the constructor are valid.
-     * @param isSP: indicates if the session is a singleplayer or a multiplayer session
+     * This assumes that maxSelectedBrains = 0 means that there is no limit on selected brains.
      */
     private void validateStartingValues(int maxHitPoints, int brainDamage, int maxSelectedBrains,
-                                        int maxRounds, ArrayList<Player> players, boolean isSP) {
-        if(isSP && players.size() != 1)
-            throw new IllegalArgumentException("Must be exactly one player in a singlePlayer session");
-        if(!isSP && players.size() < 2)
-            throw new IllegalArgumentException("Must be two or more players in a multiPlayer session");
+                                        int maxRounds, ArrayList<Player> players) {
+        if(players.size() < 1)
+            throw new IllegalArgumentException("Must be at least one player in a session");
         if(maxHitPoints <= 0)
             throw new IllegalArgumentException("maxHitPoints must be higher than 0");
         if(brainDamage <= 0)
@@ -90,6 +90,10 @@ public class Session {
             throw new IllegalArgumentException("maxSelectedBrains cannot be negative");
         if(maxRounds < 1)
             throw new IllegalArgumentException("maxRounds must be at least 1");
+        for (Player player : players) {
+            if(player == null)
+                throw new IllegalArgumentException("No players can be null");
+        }
     }
 
 

@@ -15,12 +15,8 @@ public class RoundTest {
     int maxSelectedBrains = 10;
 
     Round round;
-    ArrayList<Player> players;
     ArrayList<Brain> brains;
-    Player player1;
-    Player player2;
-    Player player3;
-    Player player4;
+    Player player;
     Brain brain1;
     Brain brain2;
     Brain brain3;
@@ -29,16 +25,12 @@ public class RoundTest {
     @Before
     public void setUp() throws Exception {
         try{
-            player1 = new Player("Player1");
-            player2 = new Player("Player2");
-            player3 = new Player("Player3");
-            player4 = new Player("Player4");
+            player = new Player("Player1");
             brain1 = new Brain();
             brain2 = new Brain();
             brain3 = new Brain();
-            players = new ArrayList<>(Arrays.asList(player1, player2, player3, player4));
             brains = new ArrayList<>(Arrays.asList(brain1, brain2, brain3));
-            round = new Round(players, brains, maxHitPoints, BRAIN_DAMAGE, maxSelectedBrains);
+            round = new Round(player, brains, maxHitPoints, BRAIN_DAMAGE, maxSelectedBrains);
         }
         catch (Exception e){
             throw new Exception("Failed to set up RoundTest: ", e);
@@ -46,11 +38,10 @@ public class RoundTest {
     }
 
     @Test
-    public void getPlayers() {
-        assertEquals(String.format("Expected %s but was %s",
-                Arrays.asList(player1, player2, player3, player4), round.getPlayers()),
-                players.toString(),
-                round.getPlayers().toString());
+    public void getPlayer() {
+        assertEquals(String.format("Expected %s but was %s", player, round.getPlayer()),
+                player.toString(),
+                round.getPlayer().toString());
     }
 
     @Test
@@ -60,57 +51,54 @@ public class RoundTest {
 
     @Test
     public void isInEliminationPhaseTrue(){
-        for (Player player : players){
-            round.addBrainInBrainstormingPhase(player, "Idea");
-        }
+        round.addBrainInBrainstormingPhase("Idea");
         round.startEliminationPhase(brains);
         assertTrue("Expected to be in the EliminationPhase, but is not",
                 round.isInEliminationPhase());
     }
 
+
     @Test
-    public void playersLeft() {
-        round.addBrainInBrainstormingPhase(player1, "Idea");
-        ArrayList<Player> playersLeft = new ArrayList<>(Arrays.asList(player2, player3, player4));
-        assertEquals(String.format("Expected %s but was %s", playersLeft, round.playersLeft()),
-                playersLeft.toString(), round.playersLeft().toString());
+    public void isWallStandingFalse() {
+        round.addBrainInBrainstormingPhase("Idea");
+        assertFalse(String.format("Expected %s but was %s", false, round.isWallStanding()), round.isWallStanding());
+    }
+
+    @Test
+    public void isWallStandingTrue(){
+        int nrNeededForFallenWall = maxHitPoints/BRAIN_DAMAGE;
+        for (int nr = 1; nr < nrNeededForFallenWall; nr++){
+            round.addBrainInBrainstormingPhase("Idea");
+        }
+        assertTrue(String.format("Expected %s but was %s", true, round.isWallStanding()), round.isWallStanding());
     }
 
     @Test
     public void  getBrainstorimingBrains(){
-        for (Player player : players){
-            round.addBrainInBrainstormingPhase(player, "Idea");
-        }
+        round.addBrainInBrainstormingPhase("Idea");
         assertEquals(String.format("Expected length of %d, but was %d",
-                players.size(), round.getBrainstorimingBrains().size()),
-                4,
-                round.getBrainstorimingBrains().size());
-
+                1, round.getBrainstormingBrains().size()),
+                1,
+                round.getBrainstormingBrains().size());
     }
 
 
     @Test
-    public void startEliminationPhaseWhenPlayersLeft() {
-        assertThrows("Should not be able to start eliminationphase when players are left",
+    public void startEliminationPhaseWhenWallIsStanding() {
+        assertThrows("Should not be able to start eliminationphase when wall is standing",
                 IllegalStateException.class, () -> round.startEliminationPhase(brains));
     }
 
     @Test
     public void getSelectedBrains() {
-        for (Player player : players){
-            round.addBrainInBrainstormingPhase(player, "Idea");
-        }
-        ArrayList<Brain> brainstormingBrains = round.getBrainstorimingBrains();
+        round.addBrainInBrainstormingPhase("Idea");
+        ArrayList<Brain> brainstormingBrains = round.getBrainstormingBrains();
         round.startEliminationPhase(brainstormingBrains);
         Brain brainstormingBrain1 = brainstormingBrains.get(0);
-        Brain brainstormingBrain2 = brainstormingBrains.get(1);
-        round.toggleBrain(player1, brainstormingBrain1);
-        round.toggleBrain(player2, brainstormingBrain2);
-        assertTrue(String.format("Expected list with (%s,%s) but was %s",
-                brainstormingBrain1, brainstormingBrain2, round.getSelectedBrains()),
-                round.getSelectedBrains().size()==2 &&
-                round.getSelectedBrains().contains(brainstormingBrain1) &&
-                round.getSelectedBrains().contains(brainstormingBrain2));
+        round.toggleBrain(brainstormingBrain1);
+        assertTrue(String.format("Expected list with %s but was %s",
+                brainstormingBrain1, round.getSelectedBrains()),
+                round.getSelectedBrains().size()==1 &&
+                        round.getSelectedBrains().contains(brainstormingBrain1));
     }
-
 }

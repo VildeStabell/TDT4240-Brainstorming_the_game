@@ -154,6 +154,8 @@ public class Session {
             }
         }
 
+        currentRounds = new ArrayList<>();
+
         activeRound = false;
         return getNumOfRounds() >= maxRounds;
     }

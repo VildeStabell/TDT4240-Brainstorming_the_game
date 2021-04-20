@@ -70,7 +70,8 @@ public class Round {
      * @return true if the wall has fallen down, false if not.
      * */
     public boolean addBrainInBrainstormingPhase(String idea){
-        return brainstormingPhase.putIdeaOnBrainAndFire(brains.get(currentBrainNumber), idea);
+        currentBrainNumber++;
+        return brainstormingPhase.putIdeaOnBrainAndFire(brains.get(currentBrainNumber - 1), idea);
     }
 
 

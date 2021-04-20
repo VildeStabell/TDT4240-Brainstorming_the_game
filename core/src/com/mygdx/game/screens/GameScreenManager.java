@@ -40,8 +40,8 @@ public class GameScreenManager {
 
     private void initGameScreens(){
         this.gameScreens = new HashMap<>();
-        this.gameScreens.put(ScreenEnum.MENU, new MenuScreen(this));
-        this.gameScreens.put(ScreenEnum.GAME, new GameScreen(this, new Texture("gameScreen.jpg")));
+        //this.gameScreens.put(ScreenEnum.MENU, new MenuScreen(this));
+        //this.gameScreens.put(ScreenEnum.GAME, new GameScreen(this, new Texture("gameScreen.jpg")));
     }
 
     public void setScreen(ScreenEnum nextScreen){

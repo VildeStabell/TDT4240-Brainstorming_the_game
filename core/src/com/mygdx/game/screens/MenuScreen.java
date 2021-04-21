@@ -71,7 +71,7 @@ public class MenuScreen extends BaseScreen {
         playButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                gsm.setScreen(GameScreenManager.ScreenEnum.GAME);
+                gsm.setScreen(GameScreenManager.ScreenEnum.GAME_PHASE);
             }
         });
 
@@ -103,7 +103,6 @@ public class MenuScreen extends BaseScreen {
     public void render(float delta){
         super.render(delta);
         stage.draw();
-
     }
 
     @Override

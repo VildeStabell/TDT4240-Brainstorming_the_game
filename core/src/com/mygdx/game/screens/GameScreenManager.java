@@ -1,7 +1,6 @@
 package com.mygdx.game.screens;
 
 
-import com.badlogic.gdx.graphics.Texture;
 import com.mygdx.game.Brainstorming;
 import java.util.HashMap;
 
@@ -24,6 +23,8 @@ public class GameScreenManager {
         MENU,
         GAME, // We probably want the game phases to extend from Game so this will need to apply to these cases
         SETTINGS,
+        GAME_PHASE,
+        ELIMINATION_PHASE,
       }
 
     /**
@@ -43,6 +44,7 @@ public class GameScreenManager {
         this.gameScreens = new HashMap<>();
         this.gameScreens.put(ScreenEnum.MENU, new MenuScreen(this, "menuScreen.jpg"));
         this.gameScreens.put(ScreenEnum.GAME, new GameScreen(this,"gameScreen.jpg"));
+        this.gameScreens.put(ScreenEnum.GAME_PHASE, new BrainstormingScreen(this, "textures/backgrounds/brainstormingBackground.png"));
     }
 
     public void setScreen(ScreenEnum nextScreen){

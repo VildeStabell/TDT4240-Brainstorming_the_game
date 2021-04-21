@@ -121,7 +121,6 @@ public class Session {
         while(brains.size() < brainsNeeded) {
             Brain newBrain = new Brain();
             brains.add(newBrain);
-            allBrains.add(newBrain);
         }
 
         for(Player p : players) {
@@ -142,17 +141,27 @@ public class Session {
             throw new IllegalStateException("Cannot end a round, because no rounds are " +
                     "currently active");
 
+        ArrayList<Brain> newSelectedBrains = new ArrayList<>();
+
         for(Round round : currentRounds) {
             if (!round.isInEliminationPhase())
                 throw new IllegalStateException("The round is in the brainstormingPhase, " +
                         "and can therefore not be ended");
 
             for (Brain brain : round.getSelectedBrains()) {
-                if (!selectedBrains.contains(brain)) {
-                    this.selectedBrains.add(brain);
+                if (!newSelectedBrains.contains(brain)) {
+                    newSelectedBrains.add(brain);
+                }
+            }
+
+            for(Brain brain : round.getBrainstormingBrains()) {
+                if(!allBrains.contains(brain)) {
+                    allBrains.add(brain);
                 }
             }
         }
+
+        selectedBrains = newSelectedBrains;
 
         currentRounds = new ArrayList<>();
 
@@ -164,14 +173,28 @@ public class Session {
         return selectedBrains;
     }
 
+    /**
+     * A getter for all the brains that has been, or is, in play.
+     * @return The brains that have been played in previous rounds, and the brains from the
+     * current rounds.
+     */
     public ArrayList<Brain> getAllBrains() {
-        return allBrains;
+        ArrayList<Brain> tempAllBrains = new ArrayList<>(allBrains);
+        for(Round round : currentRounds)
+            tempAllBrains.addAll(round.getBrainstormingBrains());
+
+        return tempAllBrains;
     }
 
     public ArrayList<Round> getRounds() {
         return rounds;
     }
 
+    /**
+     * A getter for how many rounds has been, or is curretly being, played.
+     * @return number of rounds that has been started during the session. If there are multiple
+     * players, this number is divided by the number of players.
+     */
     public int getNumOfRounds() {
         return rounds.size() / players.size();
     }

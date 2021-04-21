@@ -14,7 +14,7 @@ public class Brain {
     public Brain(){    }
 
     public Brain (ArrayList<Idea> ideas){
-        this.ideas = ideas;
+        this.ideas = new ArrayList<>(ideas);
     }
 
     public ArrayList<Idea> getIdeas() {

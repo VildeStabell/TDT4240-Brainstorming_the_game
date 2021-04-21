@@ -1,0 +1,12 @@
+sprites.png
+size: 890, 912
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+brain1
+  rotate: false
+  xy: 1, 1
+  size: 888, 910
+  orig: 1200, 1005
+  offset: 104, 3
+  index: -1

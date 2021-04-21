@@ -44,7 +44,7 @@ public class GameScreenManager {
         this.gameScreens = new HashMap<>();
         this.gameScreens.put(ScreenEnum.MENU, new MenuScreen(this, "menuScreen.jpg"));
         this.gameScreens.put(ScreenEnum.GAME, new GameScreen(this,"gameScreen.jpg"));
-        this.gameScreens.put(ScreenEnum.GAME_PHASE, new BrainstormingScreen(this, "textures/backgrounds/brainstormingBackground.png"));
+        this.gameScreens.put(ScreenEnum.GAME_PHASE, new BrainstormingScreen(this, "textures/backgrounds/standardBackground.png"));
     }
 
     public void setScreen(ScreenEnum nextScreen){

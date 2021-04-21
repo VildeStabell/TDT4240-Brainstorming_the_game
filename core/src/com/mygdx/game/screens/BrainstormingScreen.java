@@ -3,7 +3,10 @@ package com.mygdx.game.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
@@ -41,6 +44,7 @@ public class BrainstormingScreen extends BaseScreen {
     // Texture
     Texture ideaBrainTexture;
     Image ideaBrainImg;
+    TextureAtlas atlas;
 
     // Font
     BitmapFont font;
@@ -71,6 +75,7 @@ public class BrainstormingScreen extends BaseScreen {
     private static final float ideaInputPosY = Gdx.graphics.getHeight()/2f;
 
     private int maxHitPoints;
+    private float stateTime;
 
     private boolean toggleMiniScreen;
 
@@ -79,7 +84,7 @@ public class BrainstormingScreen extends BaseScreen {
         // dummy values
         ideaText = "";
         ArrayList<Brain> brains = new ArrayList<>();
-        maxHitPoints = 10;
+        maxHitPoints = 1;
         int brainDamage = 1;
         int maxSelectedBrains = 3;
         Player player = new Player("Mai");
@@ -89,6 +94,9 @@ public class BrainstormingScreen extends BaseScreen {
     @Override
     public void show() {
         super.show();
+        stateTime = 0f;
+
+
         // Skin
         brainstormingSkin = new Skin(Gdx.files.internal("skin/brainstormingSkin.json"));
         plainSkin = new Skin(Gdx.files.internal("ui/plain_james.json"));
@@ -167,6 +175,7 @@ public class BrainstormingScreen extends BaseScreen {
         }
 
         if(!round.isWallStanding()){
+            wallFallingAnimation(delta);
             //round.startEliminationPhase(round.getBrainstormingBrains());
             resume();
         }
@@ -226,7 +235,7 @@ public class BrainstormingScreen extends BaseScreen {
     @Override
     public void resume() {
         // Temporary
-        gsm.setScreen(GameScreenManager.ScreenEnum.MENU);
+//        gsm.setScreen(GameScreenManager.ScreenEnum.MENU);
     }
 
     @Override
@@ -238,12 +247,26 @@ public class BrainstormingScreen extends BaseScreen {
 
     @Override
     public void dispose(){
+        atlas.dispose();
         brainstormingSkin.dispose();
         plainSkin.dispose();
         ideaBrainTexture.dispose();
         font.dispose();
         round.dispose();
         super.dispose();
+    }
+
+    private void wallFallingAnimation(float delta){
+        castle.remove();
+        stateTime += delta;
+        atlas = new TextureAtlas(Gdx.files.internal("textures/walls/castle.atlas"));
+        Animation<TextureRegion> castleAnimation = new Animation<TextureRegion>(1/2f, atlas.findRegions("castle"), Animation.PlayMode.NORMAL);
+        stage.draw();
+        TextureRegion currentFrame = castleAnimation.getKeyFrame(stateTime, false);
+        stage.getBatch().begin();
+        stage.getBatch().draw(currentFrame, table.getX()-castle.getWidth()/2f, table.getY()-castle.getHeight()/2f-healthLabel.getHeight()/2f, wallWidth, wallHeight);
+
+        stage.getBatch().end();
     }
 
     public String getCurrentHealth(){

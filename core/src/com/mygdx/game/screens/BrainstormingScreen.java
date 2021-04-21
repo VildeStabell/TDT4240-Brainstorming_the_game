@@ -1,6 +1,7 @@
 package com.mygdx.game.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -9,10 +10,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Align;
 import com.mygdx.game.models.Brain;
 import com.mygdx.game.models.Player;
 import com.mygdx.game.models.Round;
@@ -32,11 +35,14 @@ public class BrainstormingScreen extends BaseScreen {
     Button ideaCheck;
     ImageButton brainButton;
     CheckBox checkBrain;
+    Image castle;
+    Label healthLabel;
 
     // Texture
     Texture ideaBrainTexture;
     Image ideaBrainImg;
 
+    // Font
     BitmapFont font;
 
     // Ratios according to screen size, temporary variables
@@ -87,11 +93,17 @@ public class BrainstormingScreen extends BaseScreen {
         brainstormingSkin = new Skin(Gdx.files.internal("skin/brainstormingSkin.json"));
         plainSkin = new Skin(Gdx.files.internal("ui/plain_james.json"));
 
+        // Font
+        font = brainstormingSkin.getFont("myriad-pro-font");
+        font.setColor(Color.RED);
+
         // Ui widgets
         ideaInput = new TextField("Write an idea", plainSkin);
         ideaCheck = new Button(brainstormingSkin, "ideaCheck");
         brainButton = new ImageButton(brainstormingSkin);
         checkBrain = new CheckBox("", brainstormingSkin);
+
+        castle = new Image(round.getWall().getWallTexture());
 
         // Texture
         ideaBrainTexture = new Texture("textures/brains/ideaBrain.png");
@@ -108,8 +120,12 @@ public class BrainstormingScreen extends BaseScreen {
 
         // Init the brain to the stage
         stage.addActor(brainButton);
-
-        table.setPosition(Gdx.graphics.getWidth() / 2f, Gdx.graphics.getHeight() / 2f);
+        
+        healthLabel = new Label(getCurrentHealth(), plainSkin);
+        table.add(healthLabel).top();
+        table.row();
+        table.add(castle).size(wallWidth, wallHeight);
+        table.setPosition(Gdx.graphics.getWidth() - Gdx.graphics.getWidth() / 5f, wallHeight);
         table.debug();      // Turn on all debug lines (table, cell, and widget).
         table.debugTable(); // Turn on only table lines.
     }
@@ -131,8 +147,16 @@ public class BrainstormingScreen extends BaseScreen {
         super.render(delta);
         stage.draw();
         stage.act(delta);
+
         stage.getBatch().begin();
-        stage.getBatch().draw(round.getWall().getWallTexture(), wallWidthOffset, wallHeightOffset, wallWidth, wallHeight);
+        font.draw(
+                stage.getBatch(),
+                String.format("BRAINS LEFT: %s", round.getMaxSelectedBrains()-round.getCurrentBrainNumber()),
+                Gdx.graphics.getWidth()/2f,
+                Gdx.graphics.getHeight() - font.getCapHeight(),
+                10,
+                Align.center,
+                true);
         stage.getBatch().end();
 
         if(toggleMiniScreen){
@@ -142,7 +166,8 @@ public class BrainstormingScreen extends BaseScreen {
             hide();
         }
 
-        if(round.isInEliminationPhase()){
+        if(!round.isWallStanding()){
+            //round.startEliminationPhase(round.getBrainstormingBrains());
             resume();
         }
     }
@@ -185,11 +210,14 @@ public class BrainstormingScreen extends BaseScreen {
                 if(ideaCheck.isDisabled()){
                     // Submit idea to brain
                     System.out.println(String.format("Submit idea to brain: %s", getIdeaText()));
+                    round.addBrainInBrainstormingPhase(ideaInput.getText());
                     toggleMiniScreen();
                     hide();
                     setIdeaText("");
                     ideaInput.setText("Write an idea");
                     ideaCheck.setDisabled(false);
+                    healthLabel.setText(getCurrentHealth());
+
                 }
             }
         });
@@ -197,6 +225,7 @@ public class BrainstormingScreen extends BaseScreen {
 
     @Override
     public void resume() {
+        // Temporary
         gsm.setScreen(GameScreenManager.ScreenEnum.MENU);
     }
 
@@ -215,6 +244,10 @@ public class BrainstormingScreen extends BaseScreen {
         font.dispose();
         round.dispose();
         super.dispose();
+    }
+
+    public String getCurrentHealth(){
+        return String.format("HEALTH: %s/%s", round.getWall().getHitPoints(), round.getWall().getMaxHitPoints());
     }
 
 }

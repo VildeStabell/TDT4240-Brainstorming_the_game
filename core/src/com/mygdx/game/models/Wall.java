@@ -20,7 +20,7 @@ public class Wall {
 
         this.maxHitPoints = hitPoints;
         this.hitPoints = hitPoints;
-        wallTexture = new Texture("textures/walls/castle1.png");
+        wallTexture = new Texture("textures/walls/castle_0.png");
     }
 
     public int getMaxHitPoints() {

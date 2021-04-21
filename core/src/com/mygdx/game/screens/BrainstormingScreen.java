@@ -154,6 +154,7 @@ public class BrainstormingScreen extends BaseScreen {
         stage.addActor(ideaCheck);
         stage.addActor(ideaInput);
 
+
         ideaBrainImg.setBounds(
                 widthCenter,
                 heightCenter,
@@ -181,7 +182,6 @@ public class BrainstormingScreen extends BaseScreen {
         ideaCheck.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
-                System.out.println("DEBUG ideaCHECK: " + ideaCheck.isChecked());
                 if(ideaCheck.isDisabled()){
                     // Submit idea to brain
                     System.out.println(String.format("Submit idea to brain: %s", getIdeaText()));

@@ -10,20 +10,23 @@ import java.util.UUID;
  */
 
 public class Player {
-    private final UUID playerId;
+    //private UUID playerId;
     private String username;
 
+    public Player(){
+
+    }
     public Player(String username) {
         if(username == null || username.equals(""))
             throw new IllegalArgumentException("The username cannot be null or an empty string");
 
-        this.playerId = UUID.randomUUID();
+        //this.playerId = UUID.randomUUID();
         this.username = username;
     }
 
-    public UUID getPlayerId() {
+    /*public UUID getPlayerId() {
         return playerId;
-    }
+    }*/
 
     public String getUsername() {
         return username;
@@ -38,6 +41,6 @@ public class Player {
 
     @Override
     public String toString() {
-        return String.format("Player{playerId=%s, username=%s}", playerId, username);
+        return String.format("Player{username=%s}", username);
     }
 }

@@ -29,12 +29,11 @@ public class MenuScreen extends BaseScreen {
     }
 
     /**
-     * Centering and initialize the buttons using a Skin (Plain James resource).
+     * Centering and initialize the buttons using a Skin (Brainstorming Skin).
      *
      * skin: Consist of styling of the UI widgets, texture pack image and file
-     * playButton: Currently navigate to a placeholder GameScreen view
-     * exitButton: Exits the app when clicked
-     * settingsButton: Not implemented yet
+     * startGameButton: Currently navigate to a placeholder GameScreen view
+     * joinGameButton: Currently exits the app when clicked (change this to an input for joining game)
      *
      * Implementing listeners to each button by using addListener and instantiate a ChangeListener.
      * Then override the change method to fit the purpose of each event (a click event in this case).
@@ -43,55 +42,42 @@ public class MenuScreen extends BaseScreen {
      * A generalized centering method will replace line 57-74 when it can be applied on multiple use cases.
      */
     private void initButtons(){
-        Skin skin = new Skin(Gdx.files.internal("ui/plain_james.json"));
-        TextButton playButton = new TextButton("Play", skin);
-        TextButton exitButton = new TextButton("Exit", skin);
-        TextButton settingsButton = new TextButton("Settings", skin);
+        Skin skin = new Skin(Gdx.files.internal("skin/brainstormingSkin.json"));
+        TextButton newGameButton = new TextButton("START NEW GAME", skin);
+        TextButton joinGameButton = new TextButton("JOIN EXISTING GAME", skin);
 
 
         // TODO: Replace with a method for centering and write unit tests
         int MENU_OFFSET = 10;
         int OPTIONS = 3;
-        float menuHeight = playButton.getHeight()+exitButton.getHeight()+settingsButton.getHeight()+(OPTIONS-1)*MENU_OFFSET;
+        float menuHeight = newGameButton.getHeight()+joinGameButton.getHeight()+(OPTIONS-1)*MENU_OFFSET;
         float margin = (Gdx.graphics.getHeight() - menuHeight)/2f;
         // Top button
-        playButton.setPosition(
-                (Gdx.graphics.getWidth()/2f)-(playButton.getWidth()/2f),
-                Gdx.graphics.getHeight() - margin - (playButton.getHeight()/2)
+        newGameButton.setPosition(
+                (Gdx.graphics.getWidth()/2f)-(newGameButton.getWidth()/2f),
+                Gdx.graphics.getHeight() - margin - (newGameButton.getHeight()/2)
         );
-        settingsButton.setPosition(
-                (Gdx.graphics.getWidth()/2f)-(settingsButton.getWidth()/2f),
-                playButton.getY() - playButton.getHeight() - MENU_OFFSET
-        );
-        exitButton.setPosition(
-                (Gdx.graphics.getWidth()/2f)-(exitButton.getWidth()/2f),
-                settingsButton.getY() - settingsButton.getHeight() - MENU_OFFSET
+        joinGameButton.setPosition(
+                (Gdx.graphics.getWidth()/2f)-(joinGameButton.getWidth()/2f),
+                newGameButton.getY() - newGameButton.getHeight() - MENU_OFFSET
         );
 
-        playButton.addListener(new ChangeListener() {
+        newGameButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 gsm.setScreen(GameScreenManager.ScreenEnum.GAME_PHASE);
             }
         });
 
-        settingsButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                // TODO
-            }
-        });
-
-        exitButton.addListener(new ChangeListener() {
+        joinGameButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 Gdx.app.exit();
             }
         });
 
-        stage.addActor(settingsButton);
-        stage.addActor(exitButton);
-        stage.addActor(playButton);
+        stage.addActor(joinGameButton);
+        stage.addActor(newGameButton);
     }
 
     /**

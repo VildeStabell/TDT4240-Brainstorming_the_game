@@ -8,63 +8,39 @@ import java.util.ArrayList;
 public class CoreInterfaceClass implements FirebaseInterface {
 
     @Override
-    public void setOnValueChangedListener() {}
-
-    @Override
     public void setValueInDb(String target, String value) {}
 
     @Override
-    public void writeNewPlayer(Player player) {
-
-    }
+    public void writeNewPlayer(Player player) { }
 
     @Override
-    public void getGameCodeFromDB(Dataholder dataholder) {
-    }
+    public void getGameCodeFromDB(Dataholder dataholder) { }
 
     @Override
-    public void setGameCodeRef(String gameCodeRef) {
-
-    }
+    public void setGameCodeRef(String gameCodeRef) { }
 
     @Override
-    public void setPlayerDoneBrainstorming(Player player, boolean value) {
-
-    }
+    public void setPlayerDoneBrainstorming(Player player, boolean value) { }
 
     @Override
-    public void setPlayerDoneEliminating(Player player, boolean value) {
-
-    }
+    public void setPlayerDoneEliminating(Player player, boolean value) { }
 
     @Override
-    public void setPlayerBrainList(Player player, ArrayList<Brain> brains) {
-
-    }
+    public void setPlayerBrainList(Player player, ArrayList<Brain> brains) { }
 
     @Override
-    public void getAllBrains(Dataholder dataholder) {
-
-    }
+    public void getAllBrains(Dataholder dataholder) { }
 
     @Override
-    public String getGameCodeRef() {
-        return null;
-    }
+    public String getGameCodeRef() { return null; }
 
     @Override
-    public void setNrPlayers(int i) {
-
-    }
+    public void setNrPlayers(int i) { }
 
     @Override
-    public void setAllDoneBrainstormingChangedListener() {
-
-    }
+    public void setAllDoneBrainstormingChangedListener() { }
 
     @Override
-    public void setAllDoneEliminatingChangedListener() {
-
-    }
+    public void setAllDoneEliminatingChangedListener() { }
 
 }

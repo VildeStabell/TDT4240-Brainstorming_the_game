@@ -6,8 +6,8 @@ import java.util.ArrayList;
 
 public class Dataholder {
 
-    String gameCode;
-    ArrayList<Brain> brains;
+    private String gameCode;
+    private ArrayList<Brain> brains;
 
     public String getGameCode() {
         return gameCode;
@@ -15,7 +15,6 @@ public class Dataholder {
 
     public void setGameCode(String gameCode) {
         this.gameCode = gameCode;
-        System.out.println("Gamecode sat to: "+this.gameCode);
     }
 
     public void setBrains(ArrayList<Brain> brains){

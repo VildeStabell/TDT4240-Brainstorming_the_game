@@ -30,6 +30,7 @@ public class AndroidInterfaceClass implements FirebaseInterface {
 
     private final FirebaseDatabase database;
     private String gameCodeRef;
+    private int nrPlayers;
 
 
     /**
@@ -113,9 +114,8 @@ public class AndroidInterfaceClass implements FirebaseInterface {
             throw new IllegalStateException("GameRoom is not set");
         }
         DatabaseReference currentRef = database.getReference(gameCodeRef);
-        currentRef.child(player.getUsername()).setValue(player.getUsername());
+        currentRef.child("Players").child(player.getUsername()).setValue(player.getUsername());
         updateNrPlayers("NumberOfPlayers");
-        System.out.println("Called on updateNrPlayers");
     }
 
     private void updateNrPlayers(String target) {
@@ -124,7 +124,25 @@ public class AndroidInterfaceClass implements FirebaseInterface {
         @Override
         public void onDataChange(@NonNull DataSnapshot snapshot) {
             String value = String.valueOf(snapshot.getValue());
-            increaseDBValue(target,Integer.parseInt(value));
+            System.out.println(value);
+            if (value.isEmpty() || value == null || value.equals(null) || value.contains("null")){
+                startDBValue(target);
+                value = "1";
+            }
+            else {
+                increaseDBValue(target, Integer.parseInt(value));
+            }
+            switch (target){
+                case "NumberOfPlayers":
+                    increaseNrPlayers(Integer.parseInt(value));
+                    break;
+                case "PlayersDoneBrainstorming":
+                    checkPlayersDoneBrainstorming(Integer.parseInt(value)+1);
+                    break;
+                case "PlayersDoneEliminating":
+                    checkPlayersDoneEliminating(Integer.parseInt(value)+1);
+                    break;
+            }
             System.out.println("Updated "+target);
         }
 
@@ -136,13 +154,40 @@ public class AndroidInterfaceClass implements FirebaseInterface {
     });
     }
 
+    private void checkPlayersDoneBrainstorming(int nrDoneBrainstorming) {
+        System.out.println(String.format("NrDoneBrainstorming %s, nrPlayers %s", nrDoneBrainstorming, nrPlayers));
+        if (nrDoneBrainstorming == nrPlayers){
+            database.getReference(gameCodeRef).child("AllDoneBrainstorming").setValue(true);
+            database.getReference(gameCodeRef).child("PlayersDoneBrainstorming").setValue(0);
+            database.getReference(gameCodeRef).child("AllDoneEliminating").setValue(false);
+        }
+    }
+
+    private void checkPlayersDoneEliminating(int nrDoneEliminating) {
+        System.out.println(String.format("NrDoneEliminating %s, nrPlayers %s", nrDoneEliminating, nrPlayers));
+        if (nrDoneEliminating == nrPlayers){
+            database.getReference(gameCodeRef).child("AllDoneEliminating").setValue(true);
+            database.getReference(gameCodeRef).child("PlayersDoneEliminating").setValue(0);
+            database.getReference(gameCodeRef).child("AllDoneBrainstorming").setValue(false);
+
+        }
+    }
+
+    private void increaseNrPlayers(int value) {
+        nrPlayers = value++;
+    }
+
     private void increaseDBValue(String target, int i){
         database.getReference(gameCodeRef).child(target).setValue(i+1);
     }
 
+    private void startDBValue(String target){
+        database.getReference(gameCodeRef).child(target).setValue(1);
+    }
+
     @Override
     public void setPlayerDoneBrainstorming(Player player, boolean value){
-        DatabaseReference currentRef = database.getReference(gameCodeRef).child(player.getUsername());
+        DatabaseReference currentRef = database.getReference(gameCodeRef).child("Players").child(player.getUsername());
         currentRef.child("DoneBrainstorming").setValue(value);
         if(value){
             updateNrPlayers("PlayersDoneBrainstorming");
@@ -160,24 +205,33 @@ public class AndroidInterfaceClass implements FirebaseInterface {
 
     }
 
-
     @Override
     public void setPlayerBrainList(Player player, ArrayList<Brain> brains) {
-        DatabaseReference currentRef = database.getReference(gameCodeRef).child(player.getUsername());
+        DatabaseReference currentRef = database.getReference(gameCodeRef).child("Players").child(player.getUsername());
         currentRef.child("BrainList").setValue(brains);
     }
 
     @Override
-    public void getAllBrains(Dataholder dataholder, Player player) {
-    //TODO: get all brains, rn this only get one
-        database.getReference(gameCodeRef).child(player.getUsername()).child("BrainList").addListenerForSingleValueEvent(new ValueEventListener()
+    public void getAllBrains(Dataholder dataholder) {
+        database.getReference(gameCodeRef).child("Players").addListenerForSingleValueEvent(new ValueEventListener()
         {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 ArrayList<Brain> brains = new ArrayList<>();
-                for (DataSnapshot brainSnapshot : snapshot.getChildren()){
-                    Brain brain = brainSnapshot.getValue(Brain.class);
-                    brains.add(brain);
+                for (DataSnapshot playersSnapshot : snapshot.getChildren()) {
+                    ArrayList<Brain> playerBrains = new ArrayList<>();
+                    for (DataSnapshot brainSnapshot : playersSnapshot.getChildren()) {
+                        for (DataSnapshot brain2Snapshot : brainSnapshot.getChildren()){
+                            if (!(brain2Snapshot.getValue() instanceof String)){
+                                Brain brain = brain2Snapshot.getValue(Brain.class);
+                                brains.add(brain);
+                            }
+                        }
+                        System.out.println(playerBrains);
+                        if (playerBrains != null) {
+                            brains.addAll(playerBrains);
+                        }
+                    }
                 }
                 dataholder.setBrains(brains);
             }
@@ -193,6 +247,45 @@ public class AndroidInterfaceClass implements FirebaseInterface {
     @Override
     public String getGameCodeRef() {
         return this.gameCodeRef;
+    }
+
+    @Override
+    public void setNrPlayers(int i) {
+        this.nrPlayers = i;
+    }
+
+    @Override
+    public void setAllDoneBrainstormingChangedListener() {
+        database.getReference(gameCodeRef).child("AllDoneBrainstorming").addValueEventListener(new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot snapshot) {
+            Boolean value = (Boolean) snapshot.getValue();
+            Log.d(TAG, "AllDoneBrainstorming Value is: " + value);
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError error) {
+            Log.w(TAG, "Failed to read value.", error.toException());
+            }
+        });
+
+    }
+
+    @Override
+    public void setAllDoneEliminatingChangedListener() {
+        database.getReference(gameCodeRef).child("AllDoneEliminating").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Boolean value = (Boolean) snapshot.getValue();
+                Log.d(TAG, "AllDoneEliminating Value is: " + value);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.w(TAG, "Failed to read value.", error.toException());
+            }
+        });
+
     }
 
 

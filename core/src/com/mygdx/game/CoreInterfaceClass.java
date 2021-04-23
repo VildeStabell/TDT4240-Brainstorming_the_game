@@ -43,13 +43,28 @@ public class CoreInterfaceClass implements FirebaseInterface {
     }
 
     @Override
-    public void getAllBrains(Dataholder dataholder, Player player) {
+    public void getAllBrains(Dataholder dataholder) {
 
     }
 
     @Override
     public String getGameCodeRef() {
         return null;
+    }
+
+    @Override
+    public void setNrPlayers(int i) {
+
+    }
+
+    @Override
+    public void setAllDoneBrainstormingChangedListener() {
+
+    }
+
+    @Override
+    public void setAllDoneEliminatingChangedListener() {
+
     }
 
 }

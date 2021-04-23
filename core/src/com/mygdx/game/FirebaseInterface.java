@@ -15,8 +15,11 @@ public interface FirebaseInterface {
     void setPlayerDoneBrainstorming(Player player, boolean value);
     void setPlayerDoneEliminating(Player player, boolean value);
     void setPlayerBrainList(Player player, ArrayList<Brain> brains);
-    void getAllBrains(Dataholder dataholder, Player player);
+    void getAllBrains(Dataholder dataholder);
     String getGameCodeRef();
+    void setNrPlayers(int i);
+    void setAllDoneBrainstormingChangedListener();
+    void setAllDoneEliminatingChangedListener();
 
 
 }

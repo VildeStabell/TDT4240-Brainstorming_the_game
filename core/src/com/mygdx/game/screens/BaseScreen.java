@@ -6,6 +6,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 
 /**
  * Basic abstract screen view implementing the Screen interface
@@ -13,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
  * gsm: game screen manager to control the different screens
  * stage: processing inputs and managing actors (2D Node Graph object)
  * background: optionally to set a background image in the constructor
+ * table: providing a layout for the screens
  * @see com.badlogic.gdx.scenes.scene2d.Actor
  *
  * Note to call the super method of
@@ -28,6 +30,8 @@ public abstract class BaseScreen implements Screen {
     protected final GameScreenManager gsm;
     protected Stage stage;
     protected Texture background;
+    protected Table table;
+
 
     /**
      * Default constructor
@@ -36,7 +40,6 @@ public abstract class BaseScreen implements Screen {
 
     public BaseScreen(GameScreenManager gsm){
         this.gsm = gsm;
-        this.stage = new Stage();
     }
 
     /**
@@ -48,13 +51,32 @@ public abstract class BaseScreen implements Screen {
 
     public BaseScreen(GameScreenManager gsm, String imagePath){
         this.gsm = gsm;
-        this.stage = new Stage();
         this.background = new Texture(imagePath);
+
     }
 
     @Override
     public void show(){
+        this.stage = new Stage();
+        this.table = new Table();
         Gdx.input.setInputProcessor(stage);
+        stage.addActor(table);
+    }
+
+
+    /**
+     * Scaling the image by multiplying the dimensions with the ratio between screen and image
+     * Using the stage to draw the scaled image.
+     * TODO: decouple the drawing and the math of scaling images
+     * @param image: the image to be scaled
+     */
+    protected void scaleImage(Texture image){
+        float imageRatio = (float) Gdx.graphics.getHeight() / image.getHeight();
+        float scaledWidth = imageRatio*image.getWidth();
+        float scaledHeight = imageRatio*image.getHeight();
+        stage.getBatch().begin();
+        stage.getBatch().draw(image, 0,0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        stage.getBatch().end();
     }
 
     /**

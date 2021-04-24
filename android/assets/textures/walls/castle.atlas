@@ -1,0 +1,47 @@
+animationCastle.png
+size: 7692, 1196
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+castle
+  rotate: false
+  xy: 1, 1
+  size: 1280, 1194
+  orig: 1280, 1194
+  offset: 0, 0
+  index: 0
+castle
+  rotate: false
+  xy: 1283, 1
+  size: 1280, 1194
+  orig: 1280, 1194
+  offset: 0, 0
+  index: 1
+castle
+  rotate: false
+  xy: 2565, 1
+  size: 1280, 1194
+  orig: 1280, 1194
+  offset: 0, 0
+  index: 2
+castle
+  rotate: false
+  xy: 3847, 1
+  size: 1280, 1194
+  orig: 1280, 1194
+  offset: 0, 0
+  index: 3
+castle
+  rotate: false
+  xy: 5129, 1
+  size: 1280, 1194
+  orig: 1280, 1194
+  offset: 0, 0
+  index: 4
+castle
+  rotate: false
+  xy: 6411, 1
+  size: 1280, 1194
+  orig: 1280, 1194
+  offset: 0, 0
+  index: 5

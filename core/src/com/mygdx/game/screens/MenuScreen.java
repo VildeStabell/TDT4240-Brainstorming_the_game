@@ -8,8 +8,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 /**
  * Menu screen containing different options for the game
- *
- * background: JPG image
  */
 
 public class MenuScreen extends BaseScreen {
@@ -29,55 +27,38 @@ public class MenuScreen extends BaseScreen {
     }
 
     /**
-     * Centering and initialize the buttons using a Skin (Brainstorming Skin).
+     * Centering and initialize the buttons using a Skin (Brainstorming Skin) and a table.
      *
-     * skin: Consist of styling of the UI widgets, texture pack image and file
      * startGameButton: Currently navigate to a placeholder GameScreen view
      * joinGameButton: Currently exits the app when clicked (change this to an input for joining game)
      *
      * Implementing listeners to each button by using addListener and instantiate a ChangeListener.
      * Then override the change method to fit the purpose of each event (a click event in this case).
-     * Lastly add the each button which is considered as an actor to the stage {@link BaseScreen}
+     * Lastly add the each button which is considered as an actor to the table {@link BaseScreen}
      *
-     * A generalized centering method will replace line 57-74 when it can be applied on multiple use cases.
      */
     private void initButtons(){
-        Skin skin = new Skin(Gdx.files.internal("skin/brainstormingSkin.json"));
         TextButton newGameButton = new TextButton("START NEW GAME", skin);
         TextButton joinGameButton = new TextButton("JOIN EXISTING GAME", skin);
-
-
-        // TODO: Replace with a method for centering and write unit tests
-        int MENU_OFFSET = 10;
-        int OPTIONS = 3;
-        float menuHeight = newGameButton.getHeight()+joinGameButton.getHeight()+(OPTIONS-1)*MENU_OFFSET;
-        float margin = (Gdx.graphics.getHeight() - menuHeight)/2f;
-        // Top button
-        newGameButton.setPosition(
-                (Gdx.graphics.getWidth()/2f)-(newGameButton.getWidth()/2f),
-                Gdx.graphics.getHeight() - margin - (newGameButton.getHeight()/2)
-        );
-        joinGameButton.setPosition(
-                (Gdx.graphics.getWidth()/2f)-(joinGameButton.getWidth()/2f),
-                newGameButton.getY() - newGameButton.getHeight() - MENU_OFFSET
-        );
 
         newGameButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                gsm.setScreen(GameScreenManager.ScreenEnum.GAME_PHASE);
+                resume();
             }
         });
 
         joinGameButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                // Redirect to a screen for sign in other games with a digit code
                 Gdx.app.exit();
             }
         });
-
-        stage.addActor(joinGameButton);
-        stage.addActor(newGameButton);
+        table.add(newGameButton);
+        table.row();
+        table.add(joinGameButton);
+        table.setPosition(Gdx.graphics.getWidth()/2f, Gdx.graphics.getHeight()/2f);
     }
 
     /**
@@ -94,12 +75,15 @@ public class MenuScreen extends BaseScreen {
     @Override
     public void pause() {}
 
+
     @Override
-    public void resume() {}
+    public void resume() {
+        // temporary, need to redirecet to a lobby while waitng for others to join
+        gsm.setScreen(GameScreenManager.ScreenEnum.GAME);
+    }
 
     @Override
     public void hide() {
-        background.dispose();
         super.dispose();
     }
 }

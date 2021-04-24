@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -34,10 +33,9 @@ public class BrainstormingScreen extends BaseScreen {
     Skin plainSkin;
 
     // Ui widgets using customized skin (almost)
-    TextField ideaInput;
+    TextField ideaInputField;
     Button ideaCheck;
     ImageButton brainButton;
-    CheckBox checkBrain;
     Image castle;
     Label healthLabel;
 
@@ -52,8 +50,6 @@ public class BrainstormingScreen extends BaseScreen {
     // Ratios according to screen size, temporary variables
     private static final float wallWidth = Gdx.graphics.getHeight()/2.5f; // Find ratio of grass
     private static final float wallHeight = Gdx.graphics.getHeight()/3f;
-    private static final float wallWidthOffset = Gdx.graphics.getWidth()- (8f/7f)*(wallWidth); // Offset from wall from the screen
-    private static final float wallHeightOffset = (Gdx.graphics.getHeight()/3.5f)/5f;
 
     private static final float brainButtonSize = wallWidth/2f;
     private static final float brainPosOffset = Gdx.graphics.getWidth()/14f;
@@ -77,7 +73,7 @@ public class BrainstormingScreen extends BaseScreen {
     private int maxHitPoints;
     private float stateTime;
 
-    private boolean toggleMiniScreen;
+    private boolean toggleSubmitIdeaField;
 
     public BrainstormingScreen(GameScreenManager gsm, String imagePath) {
         super(gsm, imagePath);
@@ -94,8 +90,31 @@ public class BrainstormingScreen extends BaseScreen {
     @Override
     public void show() {
         super.show();
-        stateTime = 0f;
+        initWidgets();
 
+        // Defining position of brain and make it clickable
+        brainButton.setBounds(brainPosOffset,brainPosOffset, brainButtonSize, brainButtonSize);
+        brainButton.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                toggleSubmitIdea();
+            }
+       });
+
+        // Init the brain to the stage
+        stage.addActor(brainButton);
+
+        // Table, adjusting to screen and add actors
+        table.add(healthLabel).top();
+        table.row();
+        table.add(castle).size(wallWidth, wallHeight);
+        table.setPosition(Gdx.graphics.getWidth() - Gdx.graphics.getWidth() / 5f, wallHeight);
+        table.debug();      // Turn on all debug lines (table, cell, and widget).
+        table.debugTable(); // Turn on only table lines.
+    }
+
+    private void initWidgets(){
+        stateTime = 0f;
 
         // Skin
         brainstormingSkin = new Skin(Gdx.files.internal("skin/brainstormingSkin.json"));
@@ -105,89 +124,20 @@ public class BrainstormingScreen extends BaseScreen {
         font = brainstormingSkin.getFont("myriad-pro-font");
         font.setColor(Color.RED);
 
-        // Ui widgets
-        ideaInput = new TextField("Write an idea", plainSkin);
-        ideaCheck = new Button(brainstormingSkin, "ideaCheck");
+        // Clickable brain
         brainButton = new ImageButton(brainstormingSkin);
-        checkBrain = new CheckBox("", brainstormingSkin);
 
+        // Castle
         castle = new Image(round.getWall().getWallTexture());
+        healthLabel = new Label(getCurrentHealth(), brainstormingSkin);
+        atlas = new TextureAtlas(Gdx.files.internal("textures/walls/castle.atlas"));
 
-        // Texture
+        // Idea brain field
         ideaBrainTexture = new Texture("textures/brains/ideaBrain.png");
         ideaBrainImg = new Image(ideaBrainTexture);
-
-        // Defining position of brain and make it clickable
-        brainButton.setBounds(brainPosOffset,brainPosOffset, brainButtonSize, brainButtonSize);
-        brainButton.addListener(new ClickListener(){
-            @Override
-            public void clicked(InputEvent event, float x, float y){
-                toggleMiniScreen();
-            }
-       });
-
-        // Init the brain to the stage
-        stage.addActor(brainButton);
-        
-        healthLabel = new Label(getCurrentHealth(), plainSkin);
-        table.add(healthLabel).top();
-        table.row();
-        table.add(castle).size(wallWidth, wallHeight);
-        table.setPosition(Gdx.graphics.getWidth() - Gdx.graphics.getWidth() / 5f, wallHeight);
-        table.debug();      // Turn on all debug lines (table, cell, and widget).
-        table.debugTable(); // Turn on only table lines.
-    }
-
-    private void toggleMiniScreen(){
-        toggleMiniScreen = !toggleMiniScreen;
-    }
-
-    public void setIdeaText(String ideaText){
-        this.ideaText = ideaText;
-    }
-
-    public String getIdeaText(){
-        return this.ideaText;
-    }
-
-    @Override
-    public void render(float delta){
-        super.render(delta);
-        stage.draw();
-        stage.act(delta);
-
-        stage.getBatch().begin();
-        font.draw(
-                stage.getBatch(),
-                String.format("BRAINS LEFT: %s", round.getMaxSelectedBrains()-round.getCurrentBrainNumber()),
-                Gdx.graphics.getWidth()/2f,
-                Gdx.graphics.getHeight() - font.getCapHeight(),
-                10,
-                Align.center,
-                true);
-        stage.getBatch().end();
-
-        if(toggleMiniScreen){
-            pause();
-        }else{
-            ideaInput.setDisabled(false);
-            hide();
-        }
-
-        if(!round.isWallStanding()){
-            wallFallingAnimation(delta);
-            //round.startEliminationPhase(round.getBrainstormingBrains());
-            resume();
-        }
-    }
-
-    @Override
-    public void pause() {
-        // Mini screen to type the idea
-        stage.addActor(ideaBrainImg);
-        stage.addActor(ideaCheck);
-        stage.addActor(ideaInput);
-
+        ideaCheck = new Button(brainstormingSkin, "ideaCheck");
+        ideaInputField = new TextField("Write an idea", brainstormingSkin);
+        ideaInputField.setAlignment(Align.center);
 
         ideaBrainImg.setBounds(
                 widthCenter,
@@ -199,16 +149,78 @@ public class BrainstormingScreen extends BaseScreen {
                 cbY,
                 cbWidth,
                 cbHeight);
-        ideaInput.setBounds(
+        ideaInputField.setBounds(
                 ideaInputPosX,
                 ideaInputPosY,
                 ideaTextWidth,
                 ideaInputHeight);
+    }
 
-        ideaInput.addListener(new ChangeListener() {
+    @Override
+    public void render(float delta){
+        super.render(delta);
+        stage.draw();
+        stage.act(delta);
+
+        stage.getBatch().begin();
+        font.draw(
+                stage.getBatch(),
+                String.format("BRAINS LEFT: %s", getBrainsLeft()),
+                Gdx.graphics.getWidth()/2f,
+                Gdx.graphics.getHeight() - font.getCapHeight(),
+                10,
+                Align.center,
+                true);
+        stage.getBatch().end();
+
+        if(toggleSubmitIdeaField){
+            showSubmitIdeaField();
+        }else{
+            ideaInputField.setDisabled(false);
+            hideSubmitIdeaField();
+        }
+
+        if(!round.isWallStanding()){
+            wallFallingAnimation(delta);
+            //round.startEliminationPhase(round.getBrainstormingBrains());
+            resume();
+        }
+    }
+
+    // Should display the menu option for continue game, exit and possibly turn on/off volume
+    @Override
+    public void pause() {
+        System.out.println("Show menu options");
+    }
+
+    @Override
+    public void resume() {
+        // Temporary
+        gsm.setScreen(GameScreenManager.ScreenEnum.MENU);
+    }
+
+    @Override
+    public void hide() {
+        atlas.dispose();
+        brainstormingSkin.dispose();
+        plainSkin.dispose();
+        ideaBrainTexture.dispose();
+        font.dispose();
+        round.dispose();
+        super.dispose();
+    }
+
+    private void showSubmitIdeaField(){
+        // Mini screen to type the idea
+        stage.addActor(ideaBrainImg);
+        stage.addActor(ideaCheck);
+        stage.addActor(ideaInputField);
+
+
+        ideaInputField.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                setIdeaText(ideaInput.getText());
+                setIdeaText(ideaInputField.getText());
                 ideaCheck.setDisabled(true);
             }
         });
@@ -219,52 +231,51 @@ public class BrainstormingScreen extends BaseScreen {
                 if(ideaCheck.isDisabled()){
                     // Submit idea to brain
                     System.out.println(String.format("Submit idea to brain: %s", getIdeaText()));
-                    round.addBrainInBrainstormingPhase(ideaInput.getText());
-                    toggleMiniScreen();
-                    hide();
-                    setIdeaText("");
-                    ideaInput.setText("Write an idea");
-                    ideaCheck.setDisabled(false);
-                    healthLabel.setText(getCurrentHealth());
-
+//                    round.addBrainInBrainstormingPhase(ideaInput.getText());
+                    submitIdea();
                 }
             }
         });
     }
 
-    @Override
-    public void resume() {
-        // Temporary
-//        gsm.setScreen(GameScreenManager.ScreenEnum.MENU);
-    }
-
-    @Override
-    public void hide() {
+    private void hideSubmitIdeaField(){
         ideaBrainImg.remove();
-        ideaInput.remove();
+        ideaInputField.remove();
         ideaCheck.remove();
     }
 
-    @Override
-    public void dispose(){
-        atlas.dispose();
-        brainstormingSkin.dispose();
-        plainSkin.dispose();
-        ideaBrainTexture.dispose();
-        font.dispose();
-        round.dispose();
-        super.dispose();
+    private void submitIdea(){
+        toggleSubmitIdea();
+        hideSubmitIdeaField();
+        setIdeaText("");
+        ideaCheck.setDisabled(false);
+        healthLabel.setText(getCurrentHealth());
+        ideaInputField.setText("Write an idea");
+
+    }
+
+    private void toggleSubmitIdea(){
+        toggleSubmitIdeaField = !toggleSubmitIdeaField;
+    }
+
+    private void setIdeaText(String ideaText){
+        this.ideaText = ideaText;
+    }
+
+    private String getIdeaText(){
+        return this.ideaText;
     }
 
     private void wallFallingAnimation(float delta){
+        float castleWidthCenter = table.getX()-castle.getWidth()/2f;
+        float castleHeightCenter = table.getY()-castle.getHeight()/2f-healthLabel.getHeight()/2f;
         castle.remove();
         stateTime += delta;
-        atlas = new TextureAtlas(Gdx.files.internal("textures/walls/castle.atlas"));
-        Animation<TextureRegion> castleAnimation = new Animation<TextureRegion>(1/2f, atlas.findRegions("castle"), Animation.PlayMode.NORMAL);
+        Animation<TextureRegion> castleAnimation = new Animation<>(1/2f, atlas.findRegions("castle"), Animation.PlayMode.NORMAL);
         stage.draw();
         TextureRegion currentFrame = castleAnimation.getKeyFrame(stateTime, false);
         stage.getBatch().begin();
-        stage.getBatch().draw(currentFrame, table.getX()-castle.getWidth()/2f, table.getY()-castle.getHeight()/2f-healthLabel.getHeight()/2f, wallWidth, wallHeight);
+        stage.getBatch().draw(currentFrame, castleWidthCenter, castleHeightCenter, wallWidth, wallHeight);
 
         stage.getBatch().end();
     }
@@ -273,4 +284,7 @@ public class BrainstormingScreen extends BaseScreen {
         return String.format("HEALTH: %s/%s", round.getWall().getHitPoints(), round.getWall().getMaxHitPoints());
     }
 
+    private int getBrainsLeft(){
+        return round.getMaxSelectedBrains()-round.getCurrentBrainNumber();
+    }
 }

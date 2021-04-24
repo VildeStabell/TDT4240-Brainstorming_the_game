@@ -27,7 +27,7 @@ public class PlayerTest {
                 IllegalArgumentException.class, () -> p1.setUsername(""));
     }
 
-   /** @Test
+   /** @Test NO LONGER IN USE BECAUSE OF FIREBASE
     public void getPlayerId() {
         assertNotNull("The PlayerId cannot be null", p1.getPlayerId());
         assertTrue("The PlayerId does not match the expected pattern",

@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.screens.GameScreenManager;
-
 //import com.mygdx.game.screens.MenuScreen;
 
 public class Brainstorming extends Game {
@@ -30,5 +29,4 @@ public class Brainstorming extends Game {
 		gsm.dispose();
 		super.dispose();
 	}
-
 }

@@ -5,6 +5,10 @@ import com.mygdx.game.models.Player;
 
 import java.util.ArrayList;
 
+/**
+ * A class to access the Firebase package through an interface
+ * Not in use because of LibGDX and Firebase setup
+ * */
 public class CoreInterfaceClass implements FirebaseInterface {
 
     @Override
@@ -12,9 +16,6 @@ public class CoreInterfaceClass implements FirebaseInterface {
 
     @Override
     public void writeNewPlayer(Player player) { }
-
-    @Override
-    public void getGameCodeFromDB(Dataholder dataholder) { }
 
     @Override
     public void setGameCodeRef(String gameCodeRef) { }
@@ -32,10 +33,30 @@ public class CoreInterfaceClass implements FirebaseInterface {
     public void getAllBrains(Dataholder dataholder) { }
 
     @Override
+    public void setStartGame() {
+
+    }
+
+    @Override
+    public void setStartGameChangedListener() {
+
+    }
+
+    @Override
+    public void initializeGameRoom(String gameCode) {
+
+    }
+
+    @Override
     public String getGameCodeRef() { return null; }
 
     @Override
     public void setNrPlayers(int i) { }
+
+    @Override
+    public int getNrPlayers() {
+        return 0;
+    }
 
     @Override
     public void setNrPlayersChangedListener() {

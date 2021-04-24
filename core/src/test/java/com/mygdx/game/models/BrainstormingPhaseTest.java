@@ -47,11 +47,11 @@ public class BrainstormingPhaseTest {
                 expectedBrainArrayList, brainstormingPhase.getBrains());
     }
 
-    /*@Test
+    @Test
     public void getPlayer() {
         assertEquals("Expected Player1 but was" + brainstormingPhase.getPlayer(),
-                player1.getPlayerId(), brainstormingPhase.getPlayer().getPlayerId());
-    }*/
+                player1.getUsername(), brainstormingPhase.getPlayer().getUsername());
+    }
 
     @Test
     public void putIdeaOnBrainAndFireTestBrainIdeaCheckIdea() {

@@ -19,13 +19,12 @@ import static android.content.ContentValues.TAG;
 
 /**
  * A class to access the Firebase package through an interface
- * The database is a NoSQL database which the data is stored as a key-value pair
+ * The database is a NoSQL database which means the data is stored as a key-value pair
  *
  * database: the realtime database in Firebase
  * gameCodeRef: the gamecode, used for referencing to the place where the games data is stored
  * nrPlayers: the current number of players
  *
- * Need to implement relevant methods according to the Brainstorming game
  */
 public class AndroidInterfaceClass implements FirebaseInterface {
 
@@ -43,7 +42,7 @@ public class AndroidInterfaceClass implements FirebaseInterface {
     }
 
     /**
-     * Sets a value in the database to a given value to a given target
+     * Sets a value in the database on a given target to a given value.
      * @param target: target of the update
      * @param value: value target should be set to
      * */
@@ -71,48 +70,17 @@ public class AndroidInterfaceClass implements FirebaseInterface {
     }
 
     /**
-     * Increased the gamecode in the database with 1
-     * @param i: the number currently stored in the database
+     * Initializes the values in the database
+     * @param gameCode: the current gameCodeReference
      * */
-    private void increaseGameCode(int i){
-        database.getReference("gameCode").setValue(i+1);
-    }
-
-    /**
-     * Gets the current gamecode from the database and saves it in a dataholder class,
-     * while updating the variable gameCodeRef.
-     * */
-    @Override
-    public void getGameCodeFromDB(final Dataholder dataholder){
-        database.getReference("gameCode").addListenerForSingleValueEvent(new ValueEventListener()
-        {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                String value = String.valueOf(snapshot.getValue());
-                dataholder.setGameCode(value);
-                gameCodeRef = dataholder.getGameCode();
-                increaseGameCode(Integer.parseInt(value));
-                initializeGameRoom(value);
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.w(TAG,"loadGamecode:onCancelled", error.toException());
-            }
-
-        });
-    }
-
-    /**
-     * Sets different values in the database to zero
-     * @param value: the current gameCodeReference
-     * */
-    private void initializeGameRoom(String value) {
-        DatabaseReference game = database.getReference(value);
+    public void initializeGameRoom(String gameCode) {
+        DatabaseReference game = database.getReference(gameCode);
         game.child("NumberOfPlayers").setValue(0);
         game.child("PlayersDoneBrainstorming").setValue(0);
         game.child("PlayersDoneEliminating").setValue(0);
+        game.child("AllDoneBrainstorming").setValue(false);
+        game.child("AllDoneEliminating").setValue(false);
+        game.child("StartGame").setValue(false);
     }
 
     /**
@@ -134,12 +102,20 @@ public class AndroidInterfaceClass implements FirebaseInterface {
     }
 
     /**
-     * Sets the nrPlayers to value i
-     * @param i: value nrPlayers have been set to
+     * Sets the nrPlayers to the given value
+     * @param value: value nrPlayers have been set to
      * */
     @Override
-    public void setNrPlayers(int i) {
-        this.nrPlayers = i;
+    public void setNrPlayers(int value) {
+        this.nrPlayers = value;
+    }
+
+    /**
+     * @return the number of players
+     * */
+    @Override
+    public int getNrPlayers(){
+        return nrPlayers;
     }
 
     /**
@@ -224,13 +200,13 @@ public class AndroidInterfaceClass implements FirebaseInterface {
      * Checks if all players are done brainstorming by comparing the number of players with
      * the number of players done brainstorming.
      * Sets the field AllDoneBrainstorming to true,
-     * PlayersDoneBrainstorming to 0, and AllDoneEliminating to false
+     * PlayersDoneEliminating to 0, and AllDoneEliminating to false
      * @param nrDoneBrainstorming: The number of players done brainstorming.
      * */
     private void checkPlayersDoneBrainstorming(int nrDoneBrainstorming) {
         if (nrDoneBrainstorming == nrPlayers){
             database.getReference(gameCodeRef).child("AllDoneBrainstorming").setValue(true);
-            database.getReference(gameCodeRef).child("PlayersDoneBrainstorming").setValue(0);
+            database.getReference(gameCodeRef).child("PlayersDoneEliminating").setValue(0);
             database.getReference(gameCodeRef).child("AllDoneEliminating").setValue(false);
         }
     }
@@ -239,13 +215,13 @@ public class AndroidInterfaceClass implements FirebaseInterface {
      * Checks if all players are done eliminating by comparing the number of players with
      * the number of players done eliminating.
      * Sets the field AllDoneEliminating to true,
-     * PlayersDoneEliminating to 0, and AllDoneBrainstorming to false
+     * PlayersDoneBrainstorming to 0, and AllDoneBrainstorming to false
      * @param nrDoneEliminating: The number of players done eliminating.
      * */
     private void checkPlayersDoneEliminating(int nrDoneEliminating) {
         if (nrDoneEliminating == nrPlayers){
             database.getReference(gameCodeRef).child("AllDoneEliminating").setValue(true);
-            database.getReference(gameCodeRef).child("PlayersDoneEliminating").setValue(0);
+            database.getReference(gameCodeRef).child("PlayersDoneBrainstorming").setValue(0);
             database.getReference(gameCodeRef).child("AllDoneBrainstorming").setValue(false);
         }
     }
@@ -274,7 +250,7 @@ public class AndroidInterfaceClass implements FirebaseInterface {
      * */
     @Override
     public void setPlayerDoneEliminating(Player player, boolean value) {
-        DatabaseReference currentRef = database.getReference(gameCodeRef).child(player.getUsername());
+        DatabaseReference currentRef = database.getReference(gameCodeRef).child("Players").child(player.getUsername());
         currentRef.child("DoneEliminating").setValue(value);
         if(value){
             updateNrPlayerValues("PlayersDoneEliminating");
@@ -291,8 +267,14 @@ public class AndroidInterfaceClass implements FirebaseInterface {
         database.getReference(gameCodeRef).child("AllDoneBrainstorming").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Boolean value = (Boolean) snapshot.getValue();
-                Log.d(TAG, "AllDoneBrainstorming Value is: " + value);
+                String stringValue = String.valueOf(snapshot.getValue());
+                if (!stringValue.equals(null) && !stringValue.equals("null")){
+                    Boolean value = (Boolean) snapshot.getValue();
+                    if (value){
+                        //TODO: Should call on the controller to start elimination round
+                    }
+                }
+
             }
 
             @Override
@@ -312,8 +294,13 @@ public class AndroidInterfaceClass implements FirebaseInterface {
         database.getReference(gameCodeRef).child("AllDoneEliminating").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Boolean value = (Boolean) snapshot.getValue();
-                Log.d(TAG, "AllDoneEliminating Value is: " + value);
+                String stringValue = String.valueOf(snapshot.getValue());
+                if (!stringValue.equals(null) && !stringValue.equals("null")){
+                    Boolean value = (Boolean) snapshot.getValue();
+                    if (value){
+                        //TODO: Should call on the controller to start new round or end the game
+                    }
+                }
             }
 
             @Override
@@ -324,8 +311,8 @@ public class AndroidInterfaceClass implements FirebaseInterface {
     }
 
     /**
-     * Updates the players list of brains with an arrayList of brains
-     * @param player: The player who had the brains
+     * Updates the player's list of brains with a given ArrayList of brains
+     * @param player: The player who is being updated
      * @param brains: the list of brains that are being saved to the database
      * */
     @Override
@@ -363,6 +350,39 @@ public class AndroidInterfaceClass implements FirebaseInterface {
                 Log.w(TAG,"loadGamecode:onCancelled", error.toException());
             }
 
+        });
+    }
+
+    /**
+     *Sets the variable "StartGame" to true
+     * */
+    @Override
+    public void setStartGame() {
+        database.getReference(gameCodeRef).child("StartGame").setValue(true);
+    }
+
+    /**
+     * Sets a listener for the variable "StartGame" and notifies the controller when its set to true.
+     * TODO: Should call on the controller to start the game
+     */
+    @Override
+    public void setStartGameChangedListener() {
+        database.getReference(gameCodeRef).child("StartGame").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String stringValue = String.valueOf(snapshot.getValue());
+                if (!stringValue.equals(null) && !stringValue.equals("null")){
+                    Boolean value = (Boolean) snapshot.getValue();
+                    if (value){
+                        //TODO: Should call on the controller to start the game
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.w(TAG, "Failed to read value.", error.toException());
+            }
         });
     }
 

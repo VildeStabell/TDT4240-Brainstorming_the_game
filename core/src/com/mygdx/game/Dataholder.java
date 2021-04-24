@@ -4,6 +4,10 @@ import com.mygdx.game.models.Brain;
 
 import java.util.ArrayList;
 
+
+/**
+ * A class for helping with retrieving data from Firebase
+ * */
 public class Dataholder {
 
     private String gameCode;

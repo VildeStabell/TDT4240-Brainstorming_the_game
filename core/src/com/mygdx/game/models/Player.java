@@ -4,15 +4,18 @@ import java.util.UUID;
 
 /**
  * The Player model represents a player
- * playerId: The players unique id. Cannot be changed
+ * playerId: The players unique id. Cannot be changed UPDATE: Because of our firebase setup this value is no longer in use
  * username: The username that will be displayed. Can be changed later.
  * This class implements the MVC pattern.
  */
 
 public class Player {
-    //private UUID playerId;
+    //private UUID playerId; NO LONGER IN USE BECAUSE OF FIREBASE
     private String username;
 
+    /**
+     * Empty constructor needed for Firebase
+     * */
     public Player(){
 
     }
@@ -24,6 +27,7 @@ public class Player {
         this.username = username;
     }
 
+    //NO LONGER IN USE BECAUSE OF FIREBASE
     /*public UUID getPlayerId() {
         return playerId;
     }*/

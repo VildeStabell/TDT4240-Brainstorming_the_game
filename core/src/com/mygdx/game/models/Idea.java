@@ -20,6 +20,9 @@ public class Idea {
         this.player = player;
     }
 
+    /**
+     * Empty constructor needed for Firebase
+     * */
     public Idea (){
     }
 

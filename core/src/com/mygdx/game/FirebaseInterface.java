@@ -9,9 +9,9 @@ public interface FirebaseInterface {
 
     void setValueInDb(String target, String value);
     void writeNewPlayer(Player player);
-    void setNrPlayers(int i);
+    void setNrPlayers(int value);
+    int getNrPlayers();
     void setNrPlayersChangedListener();
-    void getGameCodeFromDB(Dataholder dataholder);
     void setGameCodeRef(String gameCodeRef);
     String getGameCodeRef();
     void setPlayerDoneBrainstorming(Player player, boolean value);
@@ -20,5 +20,8 @@ public interface FirebaseInterface {
     void setAllDoneEliminatingChangedListener();
     void setPlayerBrainList(Player player, ArrayList<Brain> brains);
     void getAllBrains(Dataholder dataholder);
+    void setStartGame();
+    void setStartGameChangedListener();
+    void initializeGameRoom(String gameCode);
 
 }

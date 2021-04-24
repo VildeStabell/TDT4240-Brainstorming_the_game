@@ -71,6 +71,11 @@
 		"imageDisabled": "brainSelect"
 	}
 },
+"com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle": {
+	"default": {
+		"font": "myriad-pro-font"
+	}
+},
 "com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle": {
 	"default": {
 		"font": "myriad-pro-font",
@@ -84,6 +89,11 @@
 	"default": {
 		"font": "myriad-pro-font",
 		"fontColor": "RGBA_77_77_77_255"
+	}
+},
+"com.badlogic.gdx.scenes.scene2d.ui.TextTooltip$TextTooltipStyle": {
+	"default": {
+		"label": "default"
 	}
 }
 }

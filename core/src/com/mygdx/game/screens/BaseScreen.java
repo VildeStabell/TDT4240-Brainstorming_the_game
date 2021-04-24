@@ -6,6 +6,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 
 /**
@@ -15,7 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
  * stage: processing inputs and managing actors (2D Node Graph object)
  * background: optionally to set a background image in the constructor
  * table: providing a layout for the screens
- * @see com.badlogic.gdx.scenes.scene2d.Actor
+ * skin: Consist of styling of the UI widgets, texture pack image and file
  *
  * Note to call the super method of
  * show: for the stage to process inputs,
@@ -27,10 +28,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 
 public abstract class BaseScreen implements Screen {
 
+
     protected final GameScreenManager gsm;
     protected Stage stage;
     protected Texture background;
     protected Table table;
+    protected Skin skin;
 
 
     /**
@@ -59,6 +62,7 @@ public abstract class BaseScreen implements Screen {
     public void show(){
         this.stage = new Stage();
         this.table = new Table();
+        this.skin = new Skin(Gdx.files.internal("skin/brainstormingSkin.json"));
         Gdx.input.setInputProcessor(stage);
         stage.addActor(table);
     }
@@ -89,7 +93,9 @@ public abstract class BaseScreen implements Screen {
     public void render(float delta){
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
         if(background != null){
-            scaleImage(background);
+            stage.getBatch().begin();
+            stage.getBatch().draw(background, 0,0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+            stage.getBatch().end();
         }
     }
 
@@ -107,6 +113,7 @@ public abstract class BaseScreen implements Screen {
         if(background != null){
             background.dispose();
         }
+        skin.dispose();
         stage.dispose();
     }
 

@@ -10,6 +10,7 @@ public interface FirebaseInterface {
     void setValueInDb(String target, String value);
     void writeNewPlayer(Player player);
     void setNrPlayers(int i);
+    void setNrPlayersChangedListener();
     void getGameCodeFromDB(Dataholder dataholder);
     void setGameCodeRef(String gameCodeRef);
     String getGameCodeRef();

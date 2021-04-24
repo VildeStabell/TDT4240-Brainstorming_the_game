@@ -143,6 +143,29 @@ public class AndroidInterfaceClass implements FirebaseInterface {
     }
 
     /**
+     * Creates a listener that updates the nrPlayers value each time the NumberOfPlayers value in the DB
+     * is updated.
+     * */
+    @Override
+    public void setNrPlayersChangedListener() {
+        database.getReference(gameCodeRef).child("NumberOfPlayers").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String value = String.valueOf(snapshot.getValue());
+                if (!value.equals(null) && !value.equals("null")) {
+                    setNrPlayers(Integer.parseInt(value));
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.w(TAG, "Failed to read value.", error.toException());
+            }
+        });
+    }
+
+
+    /**
      * Adds a new player to the database, and increases the number of players
      * @param player: The player being added
      * */
@@ -156,13 +179,6 @@ public class AndroidInterfaceClass implements FirebaseInterface {
         updateNrPlayerValues("NumberOfPlayers");
     }
 
-    /**
-     * Increases the nrPlayers variable with one.
-     * @param value: the current number stored in the database
-     * */
-    private void increaseNrPlayers(int value) {
-        nrPlayers = value + 1;
-    }
 
     /**
      * Updates the number of different player values:
@@ -187,7 +203,6 @@ public class AndroidInterfaceClass implements FirebaseInterface {
             }
             switch (target){
                 case "NumberOfPlayers":
-                    increaseNrPlayers(Integer.parseInt(value));
                     break;
                 case "PlayersDoneBrainstorming":
                     checkPlayersDoneBrainstorming(Integer.parseInt(value)+1);

@@ -38,6 +38,11 @@ public class CoreInterfaceClass implements FirebaseInterface {
     public void setNrPlayers(int i) { }
 
     @Override
+    public void setNrPlayersChangedListener() {
+
+    }
+
+    @Override
     public void setAllDoneBrainstormingChangedListener() { }
 
     @Override

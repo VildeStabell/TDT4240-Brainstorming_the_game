@@ -23,32 +23,45 @@ import com.mygdx.game.models.Round;
 import java.util.ArrayList;
 
 /**
+ * statetime: accumulated delta time for each frame, used in animation
+ * toggleSubmitField: boolean value for toggling the text field
+ * ideaText: input text from the user
  *
- * statetime:
+ * ideaInputField: the text field to submit ideas
+ * ideaCheck: validate by outputting a green checkmark if the user has typed anything to text field
+ * brainButton: clickable brain to toggle the text field
+ * castle: the castle to attack
+ * healthLabel: displaying the remaining HP
+ * ideaBrainTexture: background of the toggling text field
+ * ideaBrainImg: the image of the ideaBrainTexture in order to add it as an actor to stage
+ * atlas: generated drawable texture regions for animation purposes
+ * font: Myriad Pro font from customized skin
+ *
  * Implementing the MVC pattern
  */
 
 public class BrainstormingScreen extends BaseScreen {
 
-    private Round round;
+    private float stateTime;
+    private boolean toggleSubmitIdeaField;
     private String ideaText;
 
-    // Ui widgets using customized skin (almost)
-    TextField ideaInputField;
-    Button ideaCheck;
-    ImageButton brainButton;
-    Image castle;
-    Label healthLabel;
+    // TODO: replace with controller
+    private Round round;
 
-    // Texture
-    Texture ideaBrainTexture;
-    Image ideaBrainImg;
-    TextureAtlas atlas;
+    private TextField ideaInputField;
+    private Button ideaCheck;
+    private ImageButton brainButton;
+    private Image castle;
+    private Label healthLabel;
 
-    // Font
-    BitmapFont font;
+    private Texture ideaBrainTexture;
+    private Image ideaBrainImg;
+    private TextureAtlas atlas;
 
-    // Ratios according to screen size, temporary variables
+    private BitmapFont font;
+
+    // TODO: Ratios according to screen size, temporary variables
     private static final float wallWidth = Gdx.graphics.getHeight()/2.5f; // Find ratio of grass
     private static final float wallHeight = Gdx.graphics.getHeight()/3f;
 
@@ -71,29 +84,34 @@ public class BrainstormingScreen extends BaseScreen {
     private static final float ideaInputPosX = Gdx.graphics.getWidth()/2f - ideaTextWidth/2f;
     private static final float ideaInputPosY = Gdx.graphics.getHeight()/2f;
 
-    private int maxHitPoints;
-    private float stateTime;
-
-    private boolean toggleSubmitIdeaField;
+    /**
+     * Init the game phase
+     * Temporary using the round model, but should use the controller
+     * @param gsm: GameScreenManager to switch screens
+     * @param imagePath: path to background image
+     */
 
     public BrainstormingScreen(GameScreenManager gsm, String imagePath) {
         super(gsm, imagePath);
-        // dummy values
+        // TODO: replace with controller
         ideaText = "";
         ArrayList<Brain> brains = new ArrayList<>();
-        maxHitPoints = 1;
+        int maxHitPoints = 1;
         int brainDamage = 1;
         int maxSelectedBrains = 3;
         Player player = new Player("Mai");
         round = new Round(player, brains, maxHitPoints, brainDamage, maxSelectedBrains);
     }
 
+    /**
+     * Init UI widget and layout (using table)
+     * Also added listeners to some of the widgets
+     */
     @Override
     public void show() {
         super.show();
         initWidgets();
 
-        // Defining position of brain and make it clickable
         brainButton.setBounds(brainPosOffset,brainPosOffset, brainButtonSize, brainButtonSize);
         brainButton.addListener(new ClickListener(){
             @Override
@@ -102,7 +120,6 @@ public class BrainstormingScreen extends BaseScreen {
             }
        });
 
-        // Init the brain to the stage
         stage.addActor(brainButton);
 
         // Table, adjusting to screen and add actors
@@ -110,15 +127,16 @@ public class BrainstormingScreen extends BaseScreen {
         table.row();
         table.add(castle).size(wallWidth, wallHeight);
         table.setPosition(Gdx.graphics.getWidth() - Gdx.graphics.getWidth() / 5f, wallHeight);
-        table.debug();      // Turn on all debug lines (table, cell, and widget).
-        table.debugTable(); // Turn on only table lines.
+        // TODO: remove debug
+//        table.debug();      // Turn on all debug lines (table, cell, and widget).
+//        table.debugTable(); // Turn on only table lines.
     }
 
+    /**
+     * Init the UI widgets and set position of each widget according to screen size ratios
+     */
     private void initWidgets(){
         stateTime = 0f;
-
-
-        // Font
         font = skin.getFont("myriad-pro-font");
         font.setColor(Color.RED);
 
@@ -154,6 +172,13 @@ public class BrainstormingScreen extends BaseScreen {
                 ideaInputHeight);
     }
 
+    /**
+     * Drawing everything that has been put to the stage (i.e table and widgets)
+     * Also drawing how many brains left in the phase
+     * Will toggle the text field when clicking on the brain
+     * Display the animation when castle's health decrease to zero
+     * @param delta: time difference since last frame
+     */
     @Override
     public void render(float delta){
         super.render(delta);
@@ -180,12 +205,13 @@ public class BrainstormingScreen extends BaseScreen {
 
         if(!round.isWallStanding()){
             wallFallingAnimation(delta);
-            //round.startEliminationPhase(round.getBrainstormingBrains());
+            // TODO: Start elimination round
             resume();
         }
     }
 
-    // Should display the menu option for continue game, exit and possibly turn on/off volume
+    // TODO: probably dropping it
+    // Should display the menu option for continue game, exit and possibly turn on/off volume???
     @Override
     public void pause() {
         System.out.println("Show menu options");
@@ -193,8 +219,8 @@ public class BrainstormingScreen extends BaseScreen {
 
     @Override
     public void resume() {
-        // Temporary
-        gsm.setScreen(GameScreenManager.ScreenEnum.MENU);
+        // TODO: Temporary empty
+        gsm.setScreen(GameScreenManager.ScreenEnum.ELIMINATION_PHASE);
     }
 
     @Override
@@ -202,12 +228,15 @@ public class BrainstormingScreen extends BaseScreen {
         atlas.dispose();
         ideaBrainTexture.dispose();
         font.dispose();
+        // TODO: Remove when replacing with controller
         round.dispose();
         super.dispose();
     }
 
+    /**
+     * Adding the UI widgets to stage to show the text field
+     */
     private void showSubmitIdeaField(){
-        // Mini screen to type the idea
         stage.addActor(ideaBrainImg);
         stage.addActor(ideaCheck);
         stage.addActor(ideaInputField);
@@ -225,7 +254,7 @@ public class BrainstormingScreen extends BaseScreen {
             @Override
             public void clicked(InputEvent event, float x, float y){
                 if(ideaCheck.isDisabled()){
-                    // Submit idea to brain
+                    // TODO: Submit idea to brain
                     System.out.println(String.format("Submit idea to brain: %s", getIdeaText()));
 //                    round.addBrainInBrainstormingPhase(ideaInput.getText());
                     submitIdea();
@@ -234,12 +263,19 @@ public class BrainstormingScreen extends BaseScreen {
         });
     }
 
+    /**
+     * Remove the actors/ UI widget from the stage
+     */
     private void hideSubmitIdeaField(){
         ideaBrainImg.remove();
         ideaInputField.remove();
         ideaCheck.remove();
     }
 
+    /**
+     * Submit idea to brain
+     * TODO: controller
+     */
     private void submitIdea(){
         toggleSubmitIdea();
         hideSubmitIdeaField();
@@ -262,6 +298,10 @@ public class BrainstormingScreen extends BaseScreen {
         return this.ideaText;
     }
 
+    /**
+     * Accumulating the time differences to render the animation frames
+     * @param delta: time difference since last frame
+     */
     private void wallFallingAnimation(float delta){
         float castleWidthCenter = table.getX()-castle.getWidth()/2f;
         float castleHeightCenter = table.getY()-castle.getHeight()/2f-healthLabel.getHeight()/2f;
@@ -276,11 +316,14 @@ public class BrainstormingScreen extends BaseScreen {
         stage.getBatch().end();
     }
 
+    // TODO: calculate the remaining health of castle
     public String getCurrentHealth(){
         return String.format("HEALTH: %s/%s", round.getWall().getHitPoints(), round.getWall().getMaxHitPoints());
     }
 
+    // TODO: calculate the remaining brains
     private int getBrainsLeft(){
-        return round.getMaxSelectedBrains()-round.getCurrentBrainNumber();
+//        return round.getMaxSelectedBrains()-round.getCurrentBrainNumber();
+        return 10;
     }
 }

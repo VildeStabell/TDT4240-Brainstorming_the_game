@@ -2,7 +2,6 @@ package com.mygdx.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
@@ -78,8 +77,9 @@ public class MenuScreen extends BaseScreen {
 
     @Override
     public void resume() {
-        // temporary, need to redirecet to a lobby while waitng for others to join
-        gsm.setScreen(GameScreenManager.ScreenEnum.GAME);
+        // TODO: Maybe: temporary, need to redirecet to a lobby while waiting for others to join?
+        // TODO: Only accepting players that have typed username in text field
+        gsm.setScreen(GameScreenManager.ScreenEnum.GAME_PHASE);
     }
 
     @Override

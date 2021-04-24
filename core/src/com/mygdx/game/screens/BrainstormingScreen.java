@@ -13,7 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -23,14 +22,16 @@ import com.mygdx.game.models.Player;
 import com.mygdx.game.models.Round;
 import java.util.ArrayList;
 
+/**
+ *
+ * statetime:
+ * Implementing the MVC pattern
+ */
+
 public class BrainstormingScreen extends BaseScreen {
 
     private Round round;
     private String ideaText;
-
-    // Skin
-    Skin brainstormingSkin;
-    Skin plainSkin;
 
     // Ui widgets using customized skin (almost)
     TextField ideaInputField;
@@ -116,27 +117,24 @@ public class BrainstormingScreen extends BaseScreen {
     private void initWidgets(){
         stateTime = 0f;
 
-        // Skin
-        brainstormingSkin = new Skin(Gdx.files.internal("skin/brainstormingSkin.json"));
-        plainSkin = new Skin(Gdx.files.internal("ui/plain_james.json"));
 
         // Font
-        font = brainstormingSkin.getFont("myriad-pro-font");
+        font = skin.getFont("myriad-pro-font");
         font.setColor(Color.RED);
 
         // Clickable brain
-        brainButton = new ImageButton(brainstormingSkin);
+        brainButton = new ImageButton(skin);
 
         // Castle
         castle = new Image(round.getWall().getWallTexture());
-        healthLabel = new Label(getCurrentHealth(), brainstormingSkin);
+        healthLabel = new Label(getCurrentHealth(), skin);
         atlas = new TextureAtlas(Gdx.files.internal("textures/walls/castle.atlas"));
 
         // Idea brain field
         ideaBrainTexture = new Texture("textures/brains/ideaBrain.png");
         ideaBrainImg = new Image(ideaBrainTexture);
-        ideaCheck = new Button(brainstormingSkin, "ideaCheck");
-        ideaInputField = new TextField("Write an idea", brainstormingSkin);
+        ideaCheck = new Button(skin, "ideaCheck");
+        ideaInputField = new TextField("Write an idea", skin);
         ideaInputField.setAlignment(Align.center);
 
         ideaBrainImg.setBounds(
@@ -202,8 +200,6 @@ public class BrainstormingScreen extends BaseScreen {
     @Override
     public void hide() {
         atlas.dispose();
-        brainstormingSkin.dispose();
-        plainSkin.dispose();
         ideaBrainTexture.dispose();
         font.dispose();
         round.dispose();

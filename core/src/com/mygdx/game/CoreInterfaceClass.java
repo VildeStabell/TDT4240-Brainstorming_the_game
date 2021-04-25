@@ -43,7 +43,7 @@ public class CoreInterfaceClass implements FirebaseInterface {
     }
 
     @Override
-    public void initializeGameRoom(String gameCode) {
+    public void initializeGameRoom() {
 
     }
 

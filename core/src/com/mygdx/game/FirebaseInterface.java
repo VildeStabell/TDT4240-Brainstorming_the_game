@@ -22,6 +22,5 @@ public interface FirebaseInterface {
     void getAllBrains(Dataholder dataholder);
     void setStartGame();
     void setStartGameChangedListener();
-    void initializeGameRoom(String gameCode);
-
+    void initializeGameRoom();
 }

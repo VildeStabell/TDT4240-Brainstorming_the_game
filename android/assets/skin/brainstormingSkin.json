@@ -11,6 +11,12 @@
 		"b": 0.8571111,
 		"a": 1
 	},
+	"lime": {
+		"r": 0.4908355,
+		"g": 1,
+		"b": 0.44333327,
+		"a": 1
+	},
 	"purple": {
 		"r": 0.82333344,
 		"g": 0.17564446,
@@ -71,6 +77,16 @@
 		"imageDisabled": "brainSelect"
 	}
 },
+"com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle": {
+	"default": {
+		"font": "myriad-pro-font",
+		"fontColor": "RGBA_77_77_77_255"
+	},
+	"health": {
+		"font": "myriad-pro-font",
+		"fontColor": "lime"
+	}
+},
 "com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle": {
 	"default": {
 		"font": "myriad-pro-font",
@@ -83,7 +99,17 @@
 "com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle": {
 	"default": {
 		"font": "myriad-pro-font",
-		"fontColor": "RGBA_77_77_77_255"
+		"fontColor": "white",
+		"focusedFontColor": "RGBA_77_77_77_255",
+		"background": "textfield",
+		"focusedBackground": "texfield-pressed",
+		"cursor": "black",
+		"selection": "gray"
+	}
+},
+"com.badlogic.gdx.scenes.scene2d.ui.TextTooltip$TextTooltipStyle": {
+	"default": {
+		"label": "default"
 	}
 }
 }

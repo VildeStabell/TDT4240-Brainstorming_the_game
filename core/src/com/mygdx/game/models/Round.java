@@ -1,6 +1,7 @@
 package com.mygdx.game.models;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * The round keeps track of current players and their
@@ -70,7 +71,8 @@ public class Round {
      * @return true if the wall has fallen down, false if not.
      * */
     public boolean addBrainInBrainstormingPhase(String idea){
-        return brainstormingPhase.putIdeaOnBrainAndFire(brains.get(currentBrainNumber), idea);
+        currentBrainNumber++;
+        return brainstormingPhase.putIdeaOnBrainAndFire(brains.get(currentBrainNumber - 1), idea);
     }
 
 
@@ -88,6 +90,7 @@ public class Round {
     public Wall getWall() {
         return brainstormingPhase.getWall();
     }
+
 
     /**
      * Creates new eliminationPhases for each player

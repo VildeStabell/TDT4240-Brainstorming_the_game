@@ -11,7 +11,12 @@ import com.mygdx.game.screens.GameScreenManager;
 
 public class Brainstorming extends Game {
 	GameScreenManager gsm;
+	private final FirebaseInterface _FBIC;
 
+	public Brainstorming(FirebaseInterface fbic){
+		_FBIC = fbic;
+	}
+	
 	@Override
 	public void create () {
 		gsm = new GameScreenManager(this);

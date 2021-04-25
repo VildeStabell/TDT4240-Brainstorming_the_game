@@ -12,7 +12,6 @@ import com.badlogic.gdx.graphics.Texture;
 public class Wall {
     private final int maxHitPoints;
     private int hitPoints;
-    private Texture wallTexture;
 
     public Wall(int hitPoints) {
         if(hitPoints <= 0)
@@ -55,13 +54,5 @@ public class Wall {
         }
         hitPoints -= dmg;
         return false;
-    }
-
-    public Texture getWallTexture(){
-        return wallTexture;
-    }
-
-    public void dispose(){
-        wallTexture.dispose();
     }
 }

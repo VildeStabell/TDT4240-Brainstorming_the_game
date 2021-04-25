@@ -134,7 +134,7 @@ public class Controller {
      * Then sets the gsm to a waiting screen.
      * */
     public void pressFireBrain(String idea) {
-        Boolean wallFallen = session.getCurrentRound().addBrainInBrainstormingPhase(idea);
+        boolean wallFallen = session.getCurrentRound().addBrainInBrainstormingPhase(idea);
         //gsm.fireBrainAnimation();
         //gsm.updateHitPoints(session.getCurrentRound().getWall()
         if (wallFallen){
@@ -188,11 +188,10 @@ public class Controller {
      * The sleep function is added because of delays when dealing with retrieving data from firebase
      * */
     public void allPlayersDoneEliminating(){
-        ArrayList<Brain> brains = new ArrayList<>();
         Dataholder dataholder = new Dataholder();
         fb.getAllBrains(dataholder);
         sleep(1);
-        brains = dataholder.getBrains();
+        ArrayList<Brain> brains = dataholder.getBrains();
         fb.setPlayerDoneEliminating(player, false);
         if (session.endRound()){
             //gsm.endGame()

@@ -11,11 +11,14 @@ import java.util.HashMap;
  * gameScreens: representing the game screens as a Hash Map with ScreenEnum-BaseScreen pair.
  * screenEnum: storing the available screens as enums.
  *
+ * This class inplements the Singleton pattern
  */
 
 public class GameScreenManager {
 
-    private final Brainstorming game;
+    private static GameScreenManager INSTANCE = null;
+
+    private Brainstorming game;
     private HashMap<ScreenEnum, BaseScreen> gameScreens;
 
     // Add to ScreenEnum as we extend more screen options
@@ -31,13 +34,20 @@ public class GameScreenManager {
      * Initializing the screens in constructor
      * Setting the menu screen as start screen
      *
-     * @param game: Brainstorming game instance
      */
-
-    public GameScreenManager(Brainstorming game){
-        this.game = game;
+    private GameScreenManager(){
         initGameScreens();
-        setScreen(ScreenEnum.MENU);
+    }
+
+    public static GameScreenManager getInstance(){
+        if (INSTANCE == null){
+            INSTANCE = new GameScreenManager();
+        }
+        return INSTANCE;
+    }
+
+    public void setGame(Brainstorming game){
+        this.game = game;
     }
 
     private void initGameScreens(){

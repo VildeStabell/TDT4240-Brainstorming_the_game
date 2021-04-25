@@ -69,7 +69,7 @@ back
   index: -1
 backDisable
   rotate: false
-  xy: 253, 699
+  xy: 253, 777
   size: 100, 76
   orig: 100, 76
   offset: 0, 0
@@ -132,7 +132,7 @@ next
   index: -1
 nextDisable
   rotate: false
-  xy: 253, 777
+  xy: 253, 699
   size: 100, 76
   orig: 100, 76
   offset: 0, 0

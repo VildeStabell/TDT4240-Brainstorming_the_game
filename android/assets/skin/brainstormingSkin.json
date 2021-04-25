@@ -1,7 +1,7 @@
 {
 "com.badlogic.gdx.graphics.g2d.BitmapFont": {
 	"myriad-pro-font": {
-		"file": "skin/myriad-pro-font.fnt"
+		"file": "myriad-pro-font.fnt"
 	}
 },
 "com.badlogic.gdx.graphics.Color": {

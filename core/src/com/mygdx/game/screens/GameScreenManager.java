@@ -45,6 +45,7 @@ public class GameScreenManager {
         this.gameScreens.put(ScreenEnum.MENU, new MenuScreen(this, "textures/backgrounds/standardBackground.png"));
         this.gameScreens.put(ScreenEnum.GAME, new GameScreen(this,"textures/backgrounds/standardBackground.png"));
         this.gameScreens.put(ScreenEnum.GAME_PHASE, new BrainstormingScreen(this,"textures/backgrounds/standardBackground.png"));
+        this.gameScreens.put(ScreenEnum.ELIMINATION_PHASE, new EliminationScreen(this));
     }
 
     public void setScreen(ScreenEnum nextScreen){

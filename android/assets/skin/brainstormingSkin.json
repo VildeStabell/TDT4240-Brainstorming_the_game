@@ -17,6 +17,12 @@
 		"b": 0.44333327,
 		"a": 1
 	},
+	"orange": {
+		"r": 1,
+		"g": 0.7429333,
+		"b": 0.3599999,
+		"a": 1
+	},
 	"purple": {
 		"r": 0.82333344,
 		"g": 0.17564446,
@@ -85,6 +91,20 @@
 	"health": {
 		"font": "myriad-pro-font",
 		"fontColor": "lime"
+	}
+},
+"com.badlogic.gdx.scenes.scene2d.ui.List$ListStyle": {
+	"default": {
+		"font": "myriad-pro-font",
+		"fontColorSelected": "orange",
+		"fontColorUnselected": "RGBA_77_77_77_255",
+		"selection": "white",
+		"background": "blank"
+	}
+},
+"com.badlogic.gdx.scenes.scene2d.ui.ScrollPane$ScrollPaneStyle": {
+	"default": {
+		"background": "blank"
 	}
 },
 "com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle": {

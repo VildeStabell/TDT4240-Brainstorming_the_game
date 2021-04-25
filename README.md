@@ -38,3 +38,7 @@ To write a new unit test:
 The tests can be found in core/src/test/java. 
 The IDE may display them under core/src/java, or core/java/java.
 
+## Attribution
+Images retrieved from Vecteezy
+- <a href="https://www.vecteezy.com/free-vector/cloud">Menu screen</a>
+- <a href="https://www.vecteezy.com/free-vector/landscape">Game screen</a>

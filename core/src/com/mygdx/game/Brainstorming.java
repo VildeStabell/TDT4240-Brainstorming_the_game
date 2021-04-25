@@ -11,8 +11,6 @@ import com.mygdx.game.screens.GameScreenManager;
 
 public class Brainstorming extends Game {
 	GameScreenManager gsm;
-	public final static int WIDTH = 640;
-	public final static int HEIGHT = 360;
 	private final FirebaseInterface _FBIC;
 
 	public Brainstorming(FirebaseInterface fbic){

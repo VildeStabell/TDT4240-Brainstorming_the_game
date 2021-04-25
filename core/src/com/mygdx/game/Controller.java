@@ -2,7 +2,7 @@ package com.mygdx.game;
 
 import com.mygdx.game.models.Brain;
 import com.mygdx.game.models.Player;
-//import com.mygdx.game.models.Session;
+import com.mygdx.game.models.Session;
 import com.mygdx.game.screens.GameScreenManager;
 
 import java.util.ArrayList;
@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * Controller
- * This controller connects the models, views and firebase.
+ * This controller connects the models, views and firebase interface.
  *
  *  INSTANCE: the instance of the controller
  *  fb: The firebase interface used to connect to the firebase database
@@ -25,11 +25,17 @@ public class Controller {
 
     private static Controller INSTANCE = null;
 
+    private int maxHitPoints = 25;
+    private int brainDamage = 5;
+    private int maxSelectedBrains = 5;
+    private int maxRound = 3;
+
+
     private FirebaseInterface fb;
     private GameScreenManager gsm;
-    //private Session session;
+    private Session session;
     private Player player;
-
+    private int gameCode;
 
     /**
      * Checks if there is an instance of the controller, if not it creates an instance
@@ -60,6 +66,7 @@ public class Controller {
      * */
     public void setUsername(String username){
         this.player = new Player(username);
+        //gsm next screen
     }
 
     /**
@@ -68,8 +75,8 @@ public class Controller {
      * Also sets the needed listeners, and adds the player to the database.
      * */
     public void startMultiplayerGameRoom(){
-       // int gameCode = session.generateSessionCode();
-        //fb.setGameCodeRef(String.valueOf(gameCode));
+        this.gameCode = Session.generateSessionCode();
+        fb.setGameCodeRef(String.valueOf(gameCode));
         fb.initializeGameRoom();
         fb.setNrPlayersChangedListener();
         fb.setAllDoneBrainstormingChangedListener();
@@ -92,6 +99,18 @@ public class Controller {
         fb.writeNewPlayer(player);
     }
 
+    public void startSingleplayerSession(){
+        int gameCode = Session.generateSessionCode();
+        fb.setGameCodeRef(String.valueOf(gameCode));
+        fb.initializeGameRoom();
+        fb.setNrPlayersChangedListener();
+        fb.setAllDoneBrainstormingChangedListener();
+        fb.setAllDoneEliminatingChangedListener();
+        fb.setStartGameChangedListener();
+        fb.writeNewPlayer(player);
+        fb.setStartGame();
+    }
+
     /**
      * Calls on the firebase interface to update the StartGame variable
      * */
@@ -103,7 +122,8 @@ public class Controller {
      * Starts a new session
      * */
     public void startGameChangedToTrue(){
-        //session = session();
+        session = new Session(maxHitPoints, brainDamage, maxSelectedBrains, maxRound, player, gameCode);
+        session.startNewRound();
     }
 
 
@@ -114,15 +134,15 @@ public class Controller {
      * Then sets the gsm to a waiting screen.
      * */
     public void pressFireBrain(String idea) {
-        //Boolean wallFallen = session.getCurrentRounds().getBrainstormingPhase(idea);
+        Boolean wallFallen = session.getCurrentRound().addBrainInBrainstormingPhase(idea);
         //gsm.fireBrainAnimation();
         //gsm.updateHitPoints(session.getCurrentRound().getWall()
-        //if (wallFallen){
-        //fb.setPlayerBrainList(mainPlayer, );
-        fb.setPlayerDoneBrainstorming(player, true);
-        //gsm.fallenWall();
-        //gsm.waitingForOtherPlayers();
-        //}
+        if (wallFallen){
+            fb.setPlayerBrainList(player, session.getCurrentRound().getBrainstormingBrains());
+            fb.setPlayerDoneBrainstorming(player, true);
+            //gsm.fallenWall();
+            //gsm.waitingForOtherPlayers();
+        }
     }
 
     /**
@@ -131,18 +151,18 @@ public class Controller {
      * Then sets the gsm to a waiting screen.
      * */
     public void playerDoneEliminating(){
-        //ArrayList<Brain> selectedBrains = session.getSelectedBrains();
-        //fb.setPlayerBrainList(player, selectedBrains);
+        ArrayList<Brain> selectedBrains = session.getCurrentRound().getSelectedBrains();
+        fb.setPlayerBrainList(player, selectedBrains);
         fb.setPlayerDoneEliminating(player, true);
         //gsm.waitingForOtherPlayers();
     }
 
     /**
      * Toggles a brain in the eliminating phase
-     * @param brain: the brain thats being toggled
+     * @param brain: the brain thats being toggled TODO: Change this to not-brain (Int)
      * */
     public void toggleBrain(Brain brain) {
-        //session.getCurrentRound().toggleBrain(brain);
+        session.getCurrentRound().toggleBrain(brain);
         //gsm.toggleBrain(brain);
     }
 
@@ -152,13 +172,12 @@ public class Controller {
      * The sleep function is added because of delays when dealing with retrieving data from firebase
      * */
     public void allPlayersDoneBrainstorming(){
-        ArrayList<Brain> brains = new ArrayList<>();
         Dataholder dataholder = new Dataholder();
         fb.getAllBrains(dataholder);
         sleep(1);
-        brains = dataholder.getBrains();
+        ArrayList<Brain> brains = dataholder.getBrains();
         fb.setPlayerDoneBrainstorming(player, false);
-        //session.getCurrentRound().startEliminationPhase(brains);
+        session.getCurrentRound().startEliminationPhase(brains);
         //gsm.setScreen(elimination);
     }
 
@@ -175,7 +194,11 @@ public class Controller {
         sleep(1);
         brains = dataholder.getBrains();
         fb.setPlayerDoneEliminating(player, false);
-        //session.startNewRound(); //if returns true, continue, else stop.
+        if (session.endRound()){
+            //gsm.endGame()
+            return;
+        }
+        session.startNewRound(); //TODO: This needs to have an input for brains
         //gsm.setScreen(brainstorming);
     }
 

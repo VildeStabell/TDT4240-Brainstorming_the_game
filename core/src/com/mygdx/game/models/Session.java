@@ -1,7 +1,6 @@
 package com.mygdx.game.models;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Random;
 
 /**
@@ -20,16 +19,16 @@ public class Session {
     private final int brainDamage;
     private final int maxSelectedBrains;
     private final int maxRounds;
-    private final ArrayList<Player> players;
+    private final Player player;
     private ArrayList<Brain> selectedBrains;
     private ArrayList<Brain> allBrains;
     private ArrayList<Round> rounds;
-    private ArrayList<Round> currentRounds;
     private boolean activeRound;
     private final int sessionCode;
 
+
     /**
-     * The Constructor for a singleplayer session
+     * The Constructor for a session. Works for both singleplayer and multiplayer
      * @param maxHitPoints: The max number of hit points a wall has
      * @param brainDamage: How much damage each brain does
      * @param maxSelectedBrains: The mac number of brains that can be selected in each
@@ -38,34 +37,18 @@ public class Session {
      * @param player: Which player is playing the session
      */
     public Session(int maxHitPoints, int brainDamage, int maxSelectedBrains, int maxRounds,
-                   Player player) {
-        this(maxHitPoints, brainDamage, maxSelectedBrains, maxRounds,
-                new ArrayList<>(Collections.singletonList(player)), generateSessionCode());
-    }
-
-    /**
-     * The Constructor for a multiplayer session
-     * @param maxHitPoints: The max number of hit points a wall has
-     * @param brainDamage: How much damage each brain does
-     * @param maxSelectedBrains: The mac number of brains that can be selected in each
-     *                         elimination phase
-     * @param maxRounds: The max number of rounds that can be played
-     * @param players: The list of players that
-     */
-    public Session(int maxHitPoints, int brainDamage, int maxSelectedBrains, int maxRounds,
-                   ArrayList<Player> players, int sessionCode) {
-        validateStartingValues(maxHitPoints, brainDamage, maxSelectedBrains, maxRounds, players,
+                   Player player, int sessionCode) {
+        validateStartingValues(maxHitPoints, brainDamage, maxSelectedBrains, maxRounds, player,
                 sessionCode);
         this.selectedBrains = new ArrayList<>();
         this.allBrains = new ArrayList<>();
         this.rounds = new ArrayList<>();
-        this.currentRounds = new ArrayList<>();
         this.maxHitPoints = maxHitPoints;
         this.brainDamage = brainDamage;
         this.maxSelectedBrains = maxSelectedBrains;
         this.maxRounds = maxRounds;
         this.activeRound = false;
-        this.players = new ArrayList<>(players);
+        this.player = player;
         this.sessionCode = sessionCode;
     }
 
@@ -74,9 +57,9 @@ public class Session {
      * This assumes that maxSelectedBrains = 0 means that there is no limit on selected brains.
      */
     private void validateStartingValues(int maxHitPoints, int brainDamage, int maxSelectedBrains,
-                                        int maxRounds, ArrayList<Player> players, int sessionCode) {
-        if(players.size() < 1)
-            throw new IllegalArgumentException("Must be at least one player in a session");
+                                        int maxRounds, Player player, int sessionCode) {
+        if(player == null)
+            throw new IllegalArgumentException("Player cannot be null");
         if(maxHitPoints <= 0)
             throw new IllegalArgumentException("maxHitPoints must be higher than 0");
         if(brainDamage <= 0)
@@ -85,10 +68,6 @@ public class Session {
             throw new IllegalArgumentException("maxSelectedBrains cannot be negative");
         if(maxRounds < 1)
             throw new IllegalArgumentException("maxRounds must be at least 1");
-        for (Player player : players) {
-            if(player == null)
-                throw new IllegalArgumentException("No players can be null");
-        }
         if(sessionCode < MIN || sessionCode > MAX)
             throw new IllegalArgumentException("The sessionCode must be between " + MIN +
                     " and " + MAX);
@@ -103,7 +82,6 @@ public class Session {
         Random random = new Random();
         return random.nextInt(MAX - MIN) + MIN;
     }
-
 
     /**
      * Starts a new round and adds it to the rounds list.
@@ -123,11 +101,8 @@ public class Session {
             brains.add(newBrain);
         }
 
-        for(Player p : players) {
-            Round newRound = new Round(p, brains, maxHitPoints, brainDamage, maxSelectedBrains);
-            rounds.add(newRound);
-            currentRounds.add(newRound);
-        }
+        Round newRound = new Round(player, brains, maxHitPoints, brainDamage, maxSelectedBrains);
+        rounds.add(newRound);
 
         activeRound = true;
     }
@@ -141,29 +116,29 @@ public class Session {
             throw new IllegalStateException("Cannot end a round, because no rounds are " +
                     "currently active");
 
-        ArrayList<Brain> newSelectedBrains = new ArrayList<>();
+        selectedBrains = new ArrayList<>();
 
-        for(Round round : currentRounds) {
-            if (!round.isInEliminationPhase())
-                throw new IllegalStateException("The round is in the brainstormingPhase, " +
-                        "and can therefore not be ended");
+        Round currentRound = getCurrentRound();
+        if (!currentRound.isInEliminationPhase())
+            throw new IllegalStateException("The round is in the brainstormingPhase, " +
+                    "and can therefore not be ended");
 
-            for (Brain brain : round.getSelectedBrains()) {
-                if (!newSelectedBrains.contains(brain)) {
-                    newSelectedBrains.add(brain);
-                }
-            }
-
-            for(Brain brain : round.getBrainstormingBrains()) {
-                if(!allBrains.contains(brain)) {
-                    allBrains.add(brain);
-                }
+        for (Brain brain : currentRound.getSelectedBrains()) {
+            if (!selectedBrains.contains(brain)) {
+                selectedBrains.add(brain);
             }
         }
 
-        selectedBrains = newSelectedBrains;
-
-        currentRounds = new ArrayList<>();
+        for(Brain newBrain : currentRound.getBrainstormingBrains()) {
+            boolean inAllBrains = false;
+            for(Brain brain : allBrains) {
+                if (newBrain.toString().equals(brain.toString())) {
+                    inAllBrains = true;
+                }
+            }
+            if(!inAllBrains)
+                allBrains.add(newBrain);
+        }
 
         activeRound = false;
         return getNumOfRounds() >= maxRounds;
@@ -176,13 +151,12 @@ public class Session {
     /**
      * A getter for all the brains that has been, or is, in play.
      * @return The brains that have been played in previous rounds, and the brains from the
-     * current rounds.
+     * current round.
      */
     public ArrayList<Brain> getAllBrains() {
         ArrayList<Brain> tempAllBrains = new ArrayList<>(allBrains);
-        for(Round round : currentRounds)
-            tempAllBrains.addAll(round.getBrainstormingBrains());
-
+        if(activeRound)
+            tempAllBrains.addAll(getCurrentRound().getBrainstormingBrains());
         return tempAllBrains;
     }
 
@@ -190,17 +164,12 @@ public class Session {
         return rounds;
     }
 
-    /**
-     * A getter for how many rounds has been, or is curretly being, played.
-     * @return number of rounds that has been started during the session. If there are multiple
-     * players, this number is divided by the number of players.
-     */
     public int getNumOfRounds() {
-        return rounds.size() / players.size();
+        return rounds.size();
     }
 
-    public ArrayList<Round> getCurrentRounds() {
-        return currentRounds;
+    public Round getCurrentRound() {
+        return rounds.get(rounds.size() - 1);
     }
 
     public int getSessionCode() {

@@ -91,12 +91,6 @@ public class Round {
         return brainstormingPhase.getWall();
     }
 
-    /**
-     * Disposes of the walls texture
-     * */
-    public void dispose(){
-        brainstormingPhase.getWall().dispose();
-    }
 
     /**
      * Creates new eliminationPhases for each player

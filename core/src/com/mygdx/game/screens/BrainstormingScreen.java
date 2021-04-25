@@ -13,6 +13,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -35,8 +37,9 @@ import java.util.ArrayList;
  * ideaBrainTexture: background of the toggling text field
  * ideaBrainImg: the image of the ideaBrainTexture in order to add it as an actor to stage
  * atlas: generated drawable texture regions for animation purposes
+ * castleAnimation: contain the texture regions for the animation
  * font: Myriad Pro font from customized skin
- *
+ * roundOverTable: table for centering the round over text and continue button
  * Implementing the MVC pattern
  */
 
@@ -59,7 +62,9 @@ public class BrainstormingScreen extends BaseScreen {
     private Image ideaBrainImg;
     private TextureAtlas atlas;
 
+    private Animation<TextureRegion> castleAnimation;
     private BitmapFont font;
+    private Table roundOverTable;
 
     // TODO: Ratios according to screen size, temporary variables
     private static final float wallWidth = Gdx.graphics.getHeight()/2.5f; // Find ratio of grass
@@ -138,7 +143,16 @@ public class BrainstormingScreen extends BaseScreen {
     private void initWidgets(){
         stateTime = 0f;
         font = skin.getFont("myriad-pro-font");
-        font.setColor(Color.RED);
+        font.getData().setScale(1.2f);
+
+        // Mid widgets  ("Round over" and continue button for elimination phase)
+        roundOverTable = new Table();
+        Label roundOver = new Label("ROUND OVER", skin);
+        TextButton continueButton = new TextButton("Continue", skin);
+        roundOverTable.setPosition(Gdx.graphics.getWidth()/2f, Gdx.graphics.getHeight()/2f);
+        roundOverTable.add(roundOver);
+        roundOverTable.row();
+        roundOverTable.add(continueButton);
 
         // Clickable brain
         brainButton = new ImageButton(skin);
@@ -147,6 +161,7 @@ public class BrainstormingScreen extends BaseScreen {
         castle = new Image(round.getWall().getWallTexture());
         healthLabel = new Label(getCurrentHealth(), skin);
         atlas = new TextureAtlas(Gdx.files.internal("textures/walls/castle.atlas"));
+        castleAnimation = new Animation<>(1/2f, atlas.findRegions("castle"), Animation.PlayMode.NORMAL);
 
         // Idea brain field
         ideaBrainTexture = new Texture("textures/brains/ideaBrain.png");
@@ -176,7 +191,7 @@ public class BrainstormingScreen extends BaseScreen {
      * Drawing everything that has been put to the stage (i.e table and widgets)
      * Also drawing how many brains left in the phase
      * Will toggle the text field when clicking on the brain
-     * Display the animation when castle's health decrease to zero
+     * Display the animation when castle's health decrease to zero and a continue button to elimination phase
      * @param delta: time difference since last frame
      */
     @Override
@@ -184,6 +199,7 @@ public class BrainstormingScreen extends BaseScreen {
         super.render(delta);
         stage.draw();
         stage.act(delta);
+        font.setColor(Color.RED);
 
         stage.getBatch().begin();
         font.draw(
@@ -205,8 +221,11 @@ public class BrainstormingScreen extends BaseScreen {
 
         if(!round.isWallStanding()){
             wallFallingAnimation(delta);
-            // TODO: Start elimination round
-            resume();
+            if (castleAnimation.isAnimationFinished(stateTime)){
+                // TODO: Start elimination round
+                stage.addActor(roundOverTable);
+//            resume();
+            }
         }
     }
 
@@ -307,7 +326,6 @@ public class BrainstormingScreen extends BaseScreen {
         float castleHeightCenter = table.getY()-castle.getHeight()/2f-healthLabel.getHeight()/2f;
         castle.remove();
         stateTime += delta;
-        Animation<TextureRegion> castleAnimation = new Animation<>(1/2f, atlas.findRegions("castle"), Animation.PlayMode.NORMAL);
         stage.draw();
         TextureRegion currentFrame = castleAnimation.getKeyFrame(stateTime, false);
         stage.getBatch().begin();

@@ -8,8 +8,9 @@ package com.mygdx.game.models;
  */
 
 public class Idea {
-    private final String idea;
-    private final Player player;
+    private String idea;
+    private Player player;
+
 
     public Idea(String idea, Player player) {
         if(idea == null || idea.equals("")|| player == null)
@@ -17,6 +18,12 @@ public class Idea {
 
         this.idea = idea;
         this.player = player;
+    }
+
+    /**
+     * Empty constructor needed for Firebase
+     * */
+    public Idea (){
     }
 
     public String getIdea() {

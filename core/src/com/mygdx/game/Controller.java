@@ -3,6 +3,7 @@ package com.mygdx.game;
 import com.mygdx.game.models.Brain;
 import com.mygdx.game.models.Player;
 import com.mygdx.game.models.Session;
+import com.mygdx.game.screens.BrainstormingScreen;
 import com.mygdx.game.screens.GameScreenManager;
 
 import java.util.ArrayList;
@@ -100,7 +101,7 @@ public class Controller {
     }
 
     public void startSingleplayerSession(){
-        int gameCode = Session.generateSessionCode();
+        gameCode = Session.generateSessionCode();
         fb.setGameCodeRef(String.valueOf(gameCode));
         fb.initializeGameRoom();
         fb.setNrPlayersChangedListener();
@@ -124,6 +125,7 @@ public class Controller {
     public void startGameChangedToTrue(){
         session = new Session(maxHitPoints, brainDamage, maxSelectedBrains, maxRound, player, gameCode);
         session.startNewRound(new ArrayList<>());
+        //gsm.setScreen(GameScreenManager.ScreenEnum.GAME_PHASE);
     }
 
 
@@ -135,12 +137,11 @@ public class Controller {
      * */
     public void pressFireBrain(String idea) {
         boolean wallFallen = session.getCurrentRound().addBrainInBrainstormingPhase(idea);
-        //gsm.fireBrainAnimation();
-        //gsm.updateHitPoints(session.getCurrentRound().getWall()
         if (wallFallen){
             fb.setPlayerBrainList(player, session.getCurrentRound().getBrainstormingBrains());
             fb.setPlayerDoneBrainstorming(player, true);
-            //gsm.fallenWall();
+            BrainstormingScreen brainstormingScreen = (BrainstormingScreen) gsm.getGameScreens().get(GameScreenManager.ScreenEnum.GAME_PHASE);
+            brainstormingScreen.setWallFallen();
             //gsm.waitingForOtherPlayers();
         }
     }
@@ -210,5 +211,17 @@ public class Controller {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    public int getHitPoints() {
+        return session.getCurrentRound().getWall().getHitPoints();
+    }
+
+    public int getMaxHitPoints() {
+        return session.getCurrentRound().getWall().getMaxHitPoints();
+    }
+
+    public int getBrainsLeft() {
+        return session.getCurrentRound().brainsLeft();
     }
 }

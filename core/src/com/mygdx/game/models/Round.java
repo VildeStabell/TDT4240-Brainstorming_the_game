@@ -121,4 +121,8 @@ public class Round {
         }
         eliminationPhase.toggleBrain(brain);
     }
+
+    public int brainsLeft(){
+        return brains.size() - brainstormingPhase.getBrains().size();
+    }
 }

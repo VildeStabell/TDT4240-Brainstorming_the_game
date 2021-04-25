@@ -61,6 +61,10 @@ public class GameScreenManager {
         game.setScreen(gameScreens.get(nextScreen));
     }
 
+    public HashMap<ScreenEnum, BaseScreen> getGameScreens() {
+        return gameScreens;
+    }
+
     public void dispose(){
         for(BaseScreen screen : gameScreens.values()){
             if(screen != null ){

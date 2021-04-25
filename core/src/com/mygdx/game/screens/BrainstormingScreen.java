@@ -19,10 +19,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
+import com.mygdx.game.Controller;
 import com.mygdx.game.models.Brain;
 import com.mygdx.game.models.Player;
 import com.mygdx.game.models.Round;
 import java.util.ArrayList;
+
+import javax.naming.ldap.Control;
 
 /**
  * statetime: accumulated delta time for each frame, used in animation
@@ -88,6 +91,8 @@ public class BrainstormingScreen extends BaseScreen {
     private static final float ideaInputHeight = Gdx.graphics.getHeight() / 10f;
     private static final float ideaInputPosX = Gdx.graphics.getWidth()/2f - ideaTextWidth/2f;
     private static final float ideaInputPosY = Gdx.graphics.getHeight()/2f;
+
+    private boolean wallFallen = false;
 
     /**
      * Init the game phase
@@ -158,7 +163,7 @@ public class BrainstormingScreen extends BaseScreen {
         brainButton = new ImageButton(skin);
 
         // Castle
-        castle = new Image(round.getWall().getWallTexture());
+        castle = new Image(new Texture("textures/walls/castle_0.png"));
         healthLabel = new Label(getCurrentHealth(), skin);
         atlas = new TextureAtlas(Gdx.files.internal("textures/walls/castle.atlas"));
         castleAnimation = new Animation<>(1/2f, atlas.findRegions("castle"), Animation.PlayMode.NORMAL);
@@ -219,7 +224,7 @@ public class BrainstormingScreen extends BaseScreen {
             hideSubmitIdeaField();
         }
 
-        if(!round.isWallStanding()){
+        if(wallFallen){
             wallFallingAnimation(delta);
             if (castleAnimation.isAnimationFinished(stateTime)){
                 // TODO: Start elimination round
@@ -248,7 +253,6 @@ public class BrainstormingScreen extends BaseScreen {
         ideaBrainTexture.dispose();
         font.dispose();
         // TODO: Remove when replacing with controller
-        round.dispose();
         super.dispose();
     }
 
@@ -273,9 +277,7 @@ public class BrainstormingScreen extends BaseScreen {
             @Override
             public void clicked(InputEvent event, float x, float y){
                 if(ideaCheck.isDisabled()){
-                    // TODO: Submit idea to brain
                     System.out.println(String.format("Submit idea to brain: %s", getIdeaText()));
-//                    round.addBrainInBrainstormingPhase(ideaInput.getText());
                     submitIdea();
                 }
             }
@@ -293,9 +295,9 @@ public class BrainstormingScreen extends BaseScreen {
 
     /**
      * Submit idea to brain
-     * TODO: controller
      */
     private void submitIdea(){
+        Controller.getInstance().pressFireBrain(getIdeaText());
         toggleSubmitIdea();
         hideSubmitIdeaField();
         setIdeaText("");
@@ -334,14 +336,17 @@ public class BrainstormingScreen extends BaseScreen {
         stage.getBatch().end();
     }
 
-    // TODO: calculate the remaining health of castle
+
     public String getCurrentHealth(){
-        return String.format("HEALTH: %s/%s", round.getWall().getHitPoints(), round.getWall().getMaxHitPoints());
+        return String.format("HEALTH: %s/%s", Controller.getInstance().getHitPoints(), Controller.getInstance().getMaxHitPoints());
     }
 
-    // TODO: calculate the remaining brains
+
     private int getBrainsLeft(){
-//        return round.getMaxSelectedBrains()-round.getCurrentBrainNumber();
-        return 10;
+        return Controller.getInstance().getBrainsLeft();
+    }
+
+    public void setWallFallen(){
+        wallFallen = true;
     }
 }

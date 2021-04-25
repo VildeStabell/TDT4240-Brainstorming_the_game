@@ -1,6 +1,5 @@
 package com.mygdx.game.models;
 
-import com.badlogic.gdx.graphics.Texture;
 
 /**
  * The Wall model represents a wall, and stores how damaged it currently is.
@@ -19,7 +18,6 @@ public class Wall {
 
         this.maxHitPoints = hitPoints;
         this.hitPoints = hitPoints;
-        wallTexture = new Texture("textures/walls/castle_0.png");
     }
 
     public int getMaxHitPoints() {

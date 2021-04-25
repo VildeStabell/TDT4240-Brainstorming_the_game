@@ -55,38 +55,47 @@ public class SessionTest {
     public void startNewRound() {
         assertEquals("Expected 0 rounds, but was " + session.getNumOfRounds(),
                 0, session.getNumOfRounds());
-        session.startNewRound();
+        session.startNewRound(new ArrayList<>());
         assertEquals("Expected 1 round, but was " + session.getNumOfRounds(),
                 1, session.getNumOfRounds());
         assertEquals("Didn't receive the correct round", session.getRounds().get(0),
                 session.getCurrentRound());
         assertThrows("Shouldn't be able to start a new round before the previous is finished",
-                IllegalStateException.class, () -> session.startNewRound());
-        moveToEliminationPhase(session.getCurrentRound());
+                IllegalStateException.class, () -> session.startNewRound(new ArrayList<>()));
+
+        checkSelectedBrains(new ArrayList<>());
+        ArrayList<Brain>[] brainLists = toggleBrains(session.getCurrentRound(), new ArrayList<>());
+        ArrayList<Brain> selectedBrains = brainLists[1];
         session.endRound();
-        session.startNewRound();
+
+        session.startNewRound(selectedBrains);
         assertEquals("Expected 2 rounds but was " + session.getNumOfRounds(),
                 2, session.getNumOfRounds());
         assertEquals("Didn't receive the correct round", session.getRounds().get(1),
                 session.getCurrentRound());
 
-        moveToEliminationPhase(session.getCurrentRound());
+        checkSelectedBrains(selectedBrains);
+        brainLists = toggleBrains(session.getCurrentRound(), new ArrayList<>());
+        selectedBrains = brainLists[1];
         session.endRound();
-        session.startNewRound();
+
+        session.startNewRound(selectedBrains);
         assertEquals("Expected 3 rounds but was " + session.getNumOfRounds(),
                 3, session.getNumOfRounds());
 
+        checkSelectedBrains(selectedBrains);
         moveToEliminationPhase(session.getCurrentRound());
         session.endRound();
+
         assertThrows("Should not be able to start more rounds then maxRounds",
-                IllegalStateException.class, () -> session.startNewRound());
+                IllegalStateException.class, () -> session.startNewRound(new ArrayList<>()));
     }
 
     @Test
     public void endRound() {
         assertThrows("Should not be able to end a nonexistent round",
                 IllegalStateException.class, () -> session.endRound());
-        session.startNewRound();
+        session.startNewRound(new ArrayList<>());
         assertThrows("Should not be able to end a round in its brainstorming phase",
                 IllegalStateException.class, () -> session.endRound());
 
@@ -95,23 +104,22 @@ public class SessionTest {
         bBrains = brainLists[0];
         ArrayList<Brain> actualSBrains = brainLists[1];
         assertFalse("The session should not be over yet", session.endRound());
-        checkBrainContent(actualSBrains, bBrains);
+        checkAllBrains(bBrains);
 
 
-        session.startNewRound();
+        session.startNewRound(actualSBrains);
         brainLists = toggleBrains(session.getCurrentRound(), bBrains);
         bBrains = brainLists[0];
         actualSBrains = brainLists[1];
         assertFalse("The session should not be over yet", session.endRound());
-        checkBrainContent(actualSBrains, bBrains);
+        checkAllBrains(bBrains);
 
 
-        session.startNewRound();
+        session.startNewRound(actualSBrains);
         brainLists = toggleBrains(session.getCurrentRound(), bBrains);
         bBrains = brainLists[0];
-        actualSBrains = brainLists[1];
         assertTrue("The session should over", session.endRound());
-        checkBrainContent(actualSBrains, bBrains);
+        checkAllBrains(bBrains);
     }
 
     private void moveToEliminationPhase(Round round) {
@@ -134,12 +142,14 @@ public class SessionTest {
         return new ArrayList[]{bBrains, actualSBrains};
     }
 
-    private void checkBrainContent(ArrayList<Brain> actualSBrains, ArrayList<Brain> bBrains) {
+    private void checkSelectedBrains(ArrayList<Brain> actualSBrains) {
         ArrayList<Brain> sBrains = session.getSelectedBrains();
-        ArrayList<Brain> aBrains = session.getAllBrains();
-
         assertTrue("Selected brains should be \n" + actualSBrains + ", \nbut was \n" + sBrains,
                 sBrains.size() == actualSBrains.size() && sBrains.containsAll(actualSBrains));
+    }
+
+    private void checkAllBrains(ArrayList<Brain> bBrains) {
+        ArrayList<Brain> aBrains = session.getAllBrains();
         assertTrue("The list of all brains should be \n" + bBrains + ",\nbut was \n" + aBrains,
                 aBrains.size() == bBrains.size() && aBrains.containsAll(bBrains));
     }

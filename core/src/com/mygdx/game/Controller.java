@@ -123,7 +123,7 @@ public class Controller {
      * */
     public void startGameChangedToTrue(){
         session = new Session(maxHitPoints, brainDamage, maxSelectedBrains, maxRound, player, gameCode);
-        session.startNewRound();
+        session.startNewRound(new ArrayList<>());
     }
 
 
@@ -198,7 +198,7 @@ public class Controller {
             //gsm.endGame()
             return;
         }
-        session.startNewRound(); //TODO: This needs to have an input for brains
+        session.startNewRound(brains);
         //gsm.setScreen(brainstorming);
     }
 

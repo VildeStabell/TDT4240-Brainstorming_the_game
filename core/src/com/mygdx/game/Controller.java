@@ -208,6 +208,7 @@ public class Controller {
     public void allPlayersDoneBrainstorming(){
         sleep(1);
         fb.setPlayerDoneBrainstorming(player, false);
+        sleep(5);
         session.getCurrentRound().startEliminationPhase(brains);
         EliminationScreen eliminationScreen = (EliminationScreen) gsm.getGameScreens().get(GameScreenManager.ScreenEnum.ELIMINATION_PHASE);
         eliminationScreen.resetEliminating();

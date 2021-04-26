@@ -185,6 +185,22 @@ public class EliminationScreen extends GameScreen {
     @Override
     public void render(float delta) {
         super.render(delta);
+        if (playerDone){
+            // Show "Waiting for players" text
+            setActorOnTable(table, continueButton, false);
+            setActorOnTable(table,waitingForPlayers, true);
+            if (allPlayersDone){
+                // Only show the continue button
+                setActorOnTable(table, continueButton, true);
+                setActorOnTable(table, waitingForPlayers, false);
+                if (gameDone){
+                    gsm.setScreen(GameScreenManager.ScreenEnum.FINISH);
+                }
+                else {
+                    gsm.setScreen(GameScreenManager.ScreenEnum.GAME_PHASE);
+                }
+            }
+        }
         stage.draw();
         currentBrainLabel.setText(getEliminationBrains().get(currentBrain).toString());
         brainCounterLabel.setText(getBrainCounterLabel());
@@ -208,22 +224,6 @@ public class EliminationScreen extends GameScreen {
             checkBox.setChecked(false);
         }
 
-        if (playerDone){
-            // Show "Waiting for players" text
-            setActorOnTable(table, continueButton, false);
-            setActorOnTable(table,waitingForPlayers, true);
-            if (allPlayersDone){
-                // Only show the continue button
-                setActorOnTable(table, continueButton, true);
-                setActorOnTable(table, waitingForPlayers, false);
-                if (gameDone){
-                    gsm.setScreen(GameScreenManager.ScreenEnum.FINISH);
-                }
-                else {
-                    gsm.setScreen(GameScreenManager.ScreenEnum.GAME_PHASE);
-                }
-            }
-        }
     }
 
     @Override

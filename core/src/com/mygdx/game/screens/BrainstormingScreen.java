@@ -56,7 +56,7 @@ public class BrainstormingScreen extends BaseScreen {
     private Button ideaCheck;
     private ImageButton brainButton;
     private Image castle;
-    private Label healthLabel;
+    private Label healthLabel, waitingForPlayers;
 
     private Texture ideaBrainTexture;
     private Image ideaBrainImg;
@@ -65,6 +65,7 @@ public class BrainstormingScreen extends BaseScreen {
     private Animation<TextureRegion> castleAnimation;
     private BitmapFont font;
     private Table roundOverTable;
+    private TextButton continueButton;
 
     // TODO: Ratios according to screen size, temporary variables
     private static final float wallWidth = Gdx.graphics.getHeight()/2.5f; // Find ratio of grass
@@ -148,11 +149,14 @@ public class BrainstormingScreen extends BaseScreen {
         // Mid widgets  ("Round over" and continue button for elimination phase)
         roundOverTable = new Table();
         Label roundOver = new Label("ROUND OVER", skin);
-        TextButton continueButton = new TextButton("Continue", skin);
+        continueButton = new TextButton("Continue", skin);
+        waitingForPlayers = new Label("Waiting for players ...", skin);
         roundOverTable.setPosition(Gdx.graphics.getWidth()/2f, Gdx.graphics.getHeight()/2f);
         roundOverTable.add(roundOver);
         roundOverTable.row();
         roundOverTable.add(continueButton);
+        roundOverTable.row();
+        roundOverTable.add(waitingForPlayers);
 
         // Clickable brain
         brainButton = new ImageButton(skin);
@@ -222,15 +226,22 @@ public class BrainstormingScreen extends BaseScreen {
         if(!round.isWallStanding()){
             wallFallingAnimation(delta);
             if (castleAnimation.isAnimationFinished(stateTime)){
-                // TODO: Start elimination round
                 stage.addActor(roundOverTable);
-//            resume();
+                // TODO: check if all players have completed
+                if(allPlayersCompleted){
+                    // TODO: Start elimination round
+                    setActorOnTable(roundOverTable, waitingForPlayers, false);
+                    setActorOnTable(roundOverTable, continueButton, true);
+
+                }else{
+                    // Waiting for players
+                    setActorOnTable(roundOverTable, continueButton, false);
+                }
             }
         }
     }
 
-    // TODO: probably dropping it
-    // Should display the menu option for continue game, exit and possibly turn on/off volume???
+
     @Override
     public void pause() {
         System.out.println("Show menu options");
@@ -280,6 +291,13 @@ public class BrainstormingScreen extends BaseScreen {
                 }
             }
         });
+    }
+
+    /**
+     * Turning on/off visiblity of an actor
+     */
+    private void setActorOnTable(Table table, Actor actor, boolean bool){
+        table.getCell(actor).getActor().setVisible(bool);
     }
 
     /**

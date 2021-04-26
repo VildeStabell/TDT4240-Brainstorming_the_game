@@ -139,7 +139,7 @@ public class Controller {
     /**
      * Starts a new session
      * */
-    public void startGameChangedToTrue(){
+    public void startGameChangedToTrue() {
         session = new Session(maxHitPoints, brainDamage, maxSelectedBrains, maxRound, player, gameCode);
         session.startNewRound(new ArrayList<>());
     }

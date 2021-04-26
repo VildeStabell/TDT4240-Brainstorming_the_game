@@ -12,8 +12,8 @@ import com.mygdx.game.Controller;
 
 public class MenuScreen extends BaseScreen {
 
-    public MenuScreen(GameScreenManager gsm, String imagePath){
-        super(gsm, imagePath);
+    public MenuScreen(String imagePath){
+        super(imagePath);
     }
 
     /**
@@ -79,7 +79,7 @@ public class MenuScreen extends BaseScreen {
 
     @Override
     public void resume() {
-        // TODO: Maybe: temporary, need to redirecet to a lobby while waiting for others to join?
+        // TODO: Maybe: temporary, need to redirect to a lobby while waiting for others to join?
         // TODO: Only accepting players that have typed username in text field
         gsm.setScreen(GameScreenManager.ScreenEnum.GAME_PHASE);
     }

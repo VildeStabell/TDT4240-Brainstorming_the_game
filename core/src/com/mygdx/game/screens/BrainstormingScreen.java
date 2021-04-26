@@ -99,12 +99,12 @@ public class BrainstormingScreen extends BaseScreen {
     /**
      * Init the game phase
      * Temporary using the round model, but should use the controller
-     * @param gsm: GameScreenManager to switch screens
+     * gsm: GameScreenManager to switch screens
      * @param imagePath: path to background image
      */
 
-    public BrainstormingScreen(GameScreenManager gsm, String imagePath) {
-        super(gsm, imagePath);
+    public BrainstormingScreen(String imagePath) {
+        super(imagePath);
         // TODO: replace with controller
         ideaText = "";
        /* ArrayList<Brain> brains = new ArrayList<>();

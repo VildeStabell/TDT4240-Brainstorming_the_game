@@ -21,6 +21,7 @@ public class Brainstorming extends Game {
 	@Override
 	public void create () {
 		gsm = GameScreenManager.getInstance();
+		gsm.initGameScreens();
 		gsm.setGame(this);
 		controller = Controller.getInstance();
 		controller.setFb(_FBIC);

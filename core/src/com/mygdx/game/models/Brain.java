@@ -46,7 +46,7 @@ public class Brain {
     public String toString() {
         String brainString = "";
         for (Idea idea : ideas){
-            brainString += idea.getIdea() + "-" +idea.getPlayer().getUsername() +"\n";
+            brainString += idea.getIdea() + " - " +idea.getPlayer().getUsername() +"\n";
         }
         return brainString;
     }

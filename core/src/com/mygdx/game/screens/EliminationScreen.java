@@ -184,6 +184,7 @@ public class EliminationScreen extends GameScreen {
     @Override
     public void render(float delta) {
         super.render(delta);
+        stage.draw();
         if (playerDone){
             // Show "Waiting for players" text
             setActorOnTable(table, continueButton, false);
@@ -200,27 +201,28 @@ public class EliminationScreen extends GameScreen {
                 }
             }
         }
-        stage.draw();
-        currentBrainLabel.setText(getEliminationBrains().get(currentBrain).toString());
-        brainCounterLabel.setText(getBrainCounterLabel());
-        selectedBrainsLabel.setText(getSelectedBrainsText());
+        else {
+            currentBrainLabel.setText(getEliminationBrains().get(currentBrain).toString());
+            brainCounterLabel.setText(getBrainCounterLabel());
+            selectedBrainsLabel.setText(getSelectedBrainsText());
 
-        if(currentBrain == 0){
-            prevArrow.setDisabled(true);
-            stage.cancelTouchFocus(prevArrow);
-        }else if(currentBrain == getTotalBrains() -1){
-            nextArrow.setDisabled(true);
-            stage.cancelTouchFocus(nextArrow);
+            if (currentBrain == 0) {
+                prevArrow.setDisabled(true);
+                stage.cancelTouchFocus(prevArrow);
+            } else if (currentBrain == getTotalBrains() - 1) {
+                nextArrow.setDisabled(true);
+                stage.cancelTouchFocus(nextArrow);
 
-        }else{
-            nextArrow.setDisabled(false);
-            prevArrow.setDisabled(false);
-        }
+            } else {
+                nextArrow.setDisabled(false);
+                prevArrow.setDisabled(false);
+            }
 
-        if(Controller.getInstance().checkBrainSelected(currentBrain)){
-            checkBox.setChecked(true);
-        }else{
-            checkBox.setChecked(false);
+            if (Controller.getInstance().checkBrainSelected(currentBrain)) {
+                checkBox.setChecked(true);
+            } else {
+                checkBox.setChecked(false);
+            }
         }
 
     }

@@ -147,7 +147,6 @@ public class AndroidInterfaceClass implements FirebaseInterface {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 ArrayList<String> players = new ArrayList<>();
                 for (DataSnapshot playersSnapshot : snapshot.getChildren()) {
-                    System.out.println(playersSnapshot.getKey());
                     players.add(playersSnapshot.getKey());
                 }
                 Controller.getInstance().setPlayers(players);
@@ -383,7 +382,6 @@ public class AndroidInterfaceClass implements FirebaseInterface {
                         for (DataSnapshot brain2Snapshot : brainSnapshot.getChildren()){
                             if (!(brain2Snapshot.getValue() instanceof String) && !(brain2Snapshot.getValue() instanceof Boolean)){
                                 Brain brain = brain2Snapshot.getValue(Brain.class);
-                                System.out.println(brain);
                                 brains.add(brain);
                             }
                         }

@@ -23,4 +23,5 @@ public interface FirebaseInterface {
     void setStartGame();
     void setStartGameChangedListener();
     void initializeGameRoom();
+    void setAllBrainsChangedListener();
 }

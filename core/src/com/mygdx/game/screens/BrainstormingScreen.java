@@ -105,12 +105,12 @@ public class BrainstormingScreen extends BaseScreen {
         super(gsm, imagePath);
         // TODO: replace with controller
         ideaText = "";
-        ArrayList<Brain> brains = new ArrayList<>();
+       /* ArrayList<Brain> brains = new ArrayList<>();
         int maxHitPoints = 1;
         int brainDamage = 1;
         int maxSelectedBrains = 3;
         Player player = new Player("Mai");
-        round = new Round(player, brains, maxHitPoints, brainDamage, maxSelectedBrains);
+        round = new Round(player, brains, maxHitPoints, brainDamage, maxSelectedBrains);*/
     }
 
     /**

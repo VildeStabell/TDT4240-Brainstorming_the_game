@@ -51,6 +51,11 @@ public class DesktopInterfaceClass implements FirebaseInterface {
     }
 
     @Override
+    public void setAllBrainsChangedListener() {
+
+    }
+
+    @Override
     public String getGameCodeRef() { return null; }
 
     @Override

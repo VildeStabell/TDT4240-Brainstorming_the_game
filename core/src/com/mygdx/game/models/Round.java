@@ -96,6 +96,7 @@ public class Round {
      * Creates new eliminationPhases for each player
      * */
     public void startEliminationPhase(ArrayList<Brain> brains){
+        System.out.println("Started EliminationPhase");
         if(isWallStanding()){
             throw new IllegalStateException("Can't start eliminationPhase when wall is still standing");
         }

@@ -1,12 +1,10 @@
 package com.mygdx.game;
 
 import com.mygdx.game.models.Brain;
-import com.mygdx.game.models.EliminationPhase;
 import com.mygdx.game.models.Player;
 import com.mygdx.game.models.Session;
 import com.mygdx.game.screens.BrainstormingScreen;
 import com.mygdx.game.screens.EliminationScreen;
-import com.mygdx.game.screens.GameScreen;
 import com.mygdx.game.screens.GameScreenManager;
 import com.mygdx.game.screens.LobbyScreen;
 
@@ -44,7 +42,7 @@ public class Controller {
     private int gameCode;
     private Random random = new Random();
 
-    private ArrayList<Brain> brains = new ArrayList<>();
+    private ArrayList<Brain> firebaseBrains = new ArrayList<>();
     private ArrayList<String> players = new ArrayList<>();
 
     /**
@@ -100,8 +98,8 @@ public class Controller {
     /**
      * Sets an arraylist of brains to a given list
      * */
-    public void setBrains(ArrayList<Brain> brains){
-        this.brains = brains;
+    public void setFirebaseBrains(ArrayList<Brain> firebaseBrains){
+        this.firebaseBrains = firebaseBrains;
     }
 
 
@@ -208,7 +206,7 @@ public class Controller {
         sleep(1);
         fb.setPlayerDoneBrainstorming(player, false);
         sleep(5);
-        session.getCurrentRound().startEliminationPhase(brains);
+        session.getCurrentRound().startEliminationPhase(firebaseBrains);
         EliminationScreen eliminationScreen = (EliminationScreen) gsm.getGameScreens().get(GameScreenManager.ScreenEnum.ELIMINATION_PHASE);
         eliminationScreen.resetEliminating();
         BrainstormingScreen brainstormingScreen = (BrainstormingScreen) gsm.getGameScreens().get(GameScreenManager.ScreenEnum.GAME_PHASE);
@@ -229,13 +227,14 @@ public class Controller {
         if (session.endRound()){
             EliminationScreen eliminationScreen = (EliminationScreen) GameScreenManager.getInstance().getGameScreens().get(GameScreenManager.ScreenEnum.ELIMINATION_PHASE);
             eliminationScreen.setGameDone();
+            eliminationScreen.setAllPlayersDone();
             return;
         }
         BrainstormingScreen brainstormingScreen = (BrainstormingScreen) gsm.getGameScreens().get(GameScreenManager.ScreenEnum.GAME_PHASE);
         brainstormingScreen.resetBrainstorming();
         EliminationScreen eliminationScreen = (EliminationScreen) GameScreenManager.getInstance().getGameScreens().get(GameScreenManager.ScreenEnum.ELIMINATION_PHASE);
         eliminationScreen.setAllPlayersDone();
-        session.startNewRound(brains);
+        session.startNewRound(firebaseBrains);
     }
 
     /**
@@ -274,7 +273,7 @@ public class Controller {
      * Returns the current rounds eliminationphase brains
      * */
     public ArrayList<Brain> getEliminatingBrains() {
-        return session.getCurrentRound().getBrainstormingBrains();
+        return session.getCurrentRound().getEliminationBrains();
     }
 
     /**

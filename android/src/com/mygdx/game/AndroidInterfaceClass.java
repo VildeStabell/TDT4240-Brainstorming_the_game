@@ -383,12 +383,13 @@ public class AndroidInterfaceClass implements FirebaseInterface {
                         for (DataSnapshot brain2Snapshot : brainSnapshot.getChildren()){
                             if (!(brain2Snapshot.getValue() instanceof String) && !(brain2Snapshot.getValue() instanceof Boolean)){
                                 Brain brain = brain2Snapshot.getValue(Brain.class);
+                                System.out.println(brain);
                                 brains.add(brain);
                             }
                         }
                     }
                 }
-                Controller.getInstance().setBrains(brains);
+                Controller.getInstance().setFirebaseBrains(brains);
             }
 
             @Override

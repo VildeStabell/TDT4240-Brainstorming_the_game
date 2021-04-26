@@ -24,8 +24,8 @@ public class JoiningScreen extends BaseScreen {
     private TextButton submitCode;
 
 
-    public JoiningScreen(GameScreenManager gsm){
-        super(gsm, "textures/backgrounds/standardBackground.png");
+    public JoiningScreen(){
+        super("textures/backgrounds/standardBackground.png");
     }
 
     @Override

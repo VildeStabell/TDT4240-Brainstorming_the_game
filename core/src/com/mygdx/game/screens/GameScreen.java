@@ -12,8 +12,8 @@ package com.mygdx.game.screens;
 
 public class GameScreen extends BaseScreen {
 
-    public GameScreen(GameScreenManager gsm, String imagePath){
-        super(gsm, imagePath);
+    public GameScreen(String imagePath){
+        super(imagePath);
     }
 
     @Override

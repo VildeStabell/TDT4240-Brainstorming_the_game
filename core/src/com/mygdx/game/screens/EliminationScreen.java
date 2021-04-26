@@ -12,6 +12,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
+import com.mygdx.game.Controller;
+import com.mygdx.game.models.Brain;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -54,7 +57,7 @@ public class EliminationScreen extends GameScreen {
     private int currentBrain = 0;
 
     // TODO: temporary values
-    private int totalBrains = eliminationBrains.size();
+    //private int getTotalBrains = eliminationBrains.size();
 
 
 
@@ -72,7 +75,7 @@ public class EliminationScreen extends GameScreen {
         super.show();
         brainTexture = new Texture("textures/brains/ideaBrain.png");
         title = new Label("CHOOSE YOUR FAVORITES", skin);
-        totalBrainsLabel = new Label(String.format("TOTAL BRAINS: %s", totalBrains), skin);
+        totalBrainsLabel = new Label(String.format("TOTAL BRAINS: %s", getTotalBrains()), skin);
         nextArrow = new Button(skin, "next");
         prevArrow = new Button(skin, "back");
         checkBox = new CheckBox("", skin, "elimnationCheck");
@@ -135,7 +138,7 @@ public class EliminationScreen extends GameScreen {
         nextArrow.addListener(new ClickListener(){
            @Override
            public void clicked(InputEvent event, float x, float y){
-               if(currentBrain < totalBrains){
+               if(currentBrain < getTotalBrains()){
                    currentBrain++;
                }
            }
@@ -152,12 +155,13 @@ public class EliminationScreen extends GameScreen {
         checkBox.addListener(new ClickListener(){
            @Override
            public void clicked(InputEvent event, float x, float y){
-               if(!selectedBrains.contains(eliminationBrains.get(currentBrain))){
-                   selectedBrains.add(eliminationBrains.get(currentBrain));
+               Controller.getInstance().toggleBrain(currentBrain);
+               /*if(!getSelectedBrains().contains(getEliminationBrains().get(currentBrain))){
+                   Controller.getInstance().toggleBrain(currentBrain);
                }
                if(!checkBox.isChecked()){
-                   selectedBrains.remove(eliminationBrains.get(currentBrain));
-               }
+                   Controller.getInstance().toggleBrain(currentBrain);
+               }*/
            }
         });
         table.add(continueButton);
@@ -169,14 +173,14 @@ public class EliminationScreen extends GameScreen {
     public void render(float delta) {
         super.render(delta);
         stage.draw();
-        currentBrainLabel.setText(eliminationBrains.get(currentBrain));
+        currentBrainLabel.setText(getEliminationBrains().get(currentBrain).toString());
         brainCounterLabel.setText(getBrainCounterLabel());
         selectedBrainsLabel.setText(getSelectedBrainsText());
 
         if(currentBrain == 0){
             prevArrow.setDisabled(true);
             stage.cancelTouchFocus(prevArrow);
-        }else if(currentBrain == totalBrains-1){
+        }else if(currentBrain == getTotalBrains() -1){
             nextArrow.setDisabled(true);
             stage.cancelTouchFocus(nextArrow);
 
@@ -185,7 +189,7 @@ public class EliminationScreen extends GameScreen {
             prevArrow.setDisabled(false);
         }
 
-        if(selectedBrains.contains(eliminationBrains.get(currentBrain))){
+        if(Controller.getInstance().checkBrainSelected(currentBrain)){
             checkBox.setChecked(true);
         }else{
             checkBox.setChecked(false);
@@ -200,8 +204,20 @@ public class EliminationScreen extends GameScreen {
         super.dispose();
     }
 
+    private int getTotalBrains(){
+        return Controller.getInstance().getEliminatingBrains().size();
+    }
+
+    private ArrayList<Brain> getSelectedBrains(){
+        return Controller.getInstance().getSelectedBrains();
+    }
+
+    private ArrayList<Brain> getEliminationBrains(){
+        return Controller.getInstance().getEliminatingBrains();
+    }
+
     private String getSelectedBrainsText(){
-        return String.format("Selected brains: %s/%s", selectedBrains.size(), totalBrains);
+        return String.format("Selected brains: %s/%s", getSelectedBrains().size(), getTotalBrains());
     }
 
     private String getBrainCounterLabel(){

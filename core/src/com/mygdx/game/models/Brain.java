@@ -44,6 +44,10 @@ public class Brain {
 
     @Override
     public String toString() {
-        return String.format("Brain{ideas=%s}", ideas);
+        String brainString = "";
+        for (Idea idea : ideas){
+            brainString += idea.getIdea() + "-" +idea.getPlayer().getUsername() +"\n";
+        }
+        return brainString;
     }
 }

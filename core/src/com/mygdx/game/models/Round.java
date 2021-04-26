@@ -28,6 +28,7 @@ public class Round {
     private int currentBrainNumber;
     private int maxSelectedBrains;
     private boolean inEliminationPhase = false;
+    private ArrayList<Brain> eliminationBrains;
 
 
     /**
@@ -96,11 +97,12 @@ public class Round {
      * Creates new eliminationPhases for each player
      * */
     public void startEliminationPhase(ArrayList<Brain> brains){
-        System.out.println("Started EliminationPhase");
+        System.out.println("Started EliminationPhase"); //TODO:Remove debug
         if(isWallStanding()){
             throw new IllegalStateException("Can't start eliminationPhase when wall is still standing");
         }
         inEliminationPhase = true;
+        eliminationBrains = brains;
         eliminationPhase = new EliminationPhase(brains, maxSelectedBrains);
     }
 
@@ -114,16 +116,20 @@ public class Round {
 
     /**
      * Calls on the toggleBrain function of the eliminationPhase for a player
-     * @param brain: the brain that's being toggled
+     * brain: the brain that's being toggled
      * */
-    public void toggleBrain(Brain brain){
+    public void toggleBrain(int brainNumber){
         if(!inEliminationPhase){
             throw new IllegalStateException("Can't toggle a brain when not in eliminationPhase");
         }
-        eliminationPhase.toggleBrain(brain);
+        eliminationPhase.toggleBrain(eliminationBrains.get(brainNumber));
     }
 
     public int brainsLeft(){
         return brains.size() - brainstormingPhase.getBrains().size();
+    }
+
+    public boolean checkBrainSelected(int brainNumber){
+       return eliminationPhase.checkBrainSelected(eliminationBrains.get(brainNumber));
     }
 }

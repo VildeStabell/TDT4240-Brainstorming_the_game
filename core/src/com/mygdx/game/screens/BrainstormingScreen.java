@@ -94,6 +94,7 @@ public class BrainstormingScreen extends BaseScreen {
     private static final float ideaInputPosY = Gdx.graphics.getHeight()/2f;
 
     private boolean wallFallen = false;
+    private boolean allPlayersCompleted = false;
 
     /**
      * Init the game phase
@@ -234,9 +235,9 @@ public class BrainstormingScreen extends BaseScreen {
                 stage.addActor(roundOverTable);
                 // TODO: check if all players have completed
                 if(allPlayersCompleted){
-                    // TODO: Start elimination round
                     setActorOnTable(roundOverTable, waitingForPlayers, false);
                     setActorOnTable(roundOverTable, continueButton, true);
+                    gsm.setScreen(GameScreenManager.ScreenEnum.ELIMINATION_PHASE);
 
                 }else{
                     // Waiting for players
@@ -249,7 +250,7 @@ public class BrainstormingScreen extends BaseScreen {
 
     @Override
     public void pause() {
-        System.out.println("Show menu options");
+        System.out.println("Show menu options"); //TODO:Remove debug
     }
 
     @Override
@@ -263,7 +264,6 @@ public class BrainstormingScreen extends BaseScreen {
         atlas.dispose();
         ideaBrainTexture.dispose();
         font.dispose();
-        // TODO: Remove when replacing with controller
         super.dispose();
     }
 
@@ -288,7 +288,7 @@ public class BrainstormingScreen extends BaseScreen {
             @Override
             public void clicked(InputEvent event, float x, float y){
                 if(ideaCheck.isDisabled()){
-                    System.out.println(String.format("Submit idea to brain: %s", getIdeaText()));
+                    System.out.println(String.format("Submit idea to brain: %s", getIdeaText())); //TODO:Remove debug
                     submitIdea();
                 }
             }
@@ -367,4 +367,6 @@ public class BrainstormingScreen extends BaseScreen {
     public void setWallFallen(){
         wallFallen = true;
     }
+
+    public void setAllPlayersCompleted() {allPlayersCompleted = true;}
 }

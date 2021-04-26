@@ -113,8 +113,13 @@ public abstract class BaseScreen implements Screen {
         if(background != null){
             background.dispose();
         }
-        skin.dispose();
-        stage.dispose();
+        if (skin != null){
+            skin.dispose();
+        }
+        if (stage != null) {
+            stage.dispose();
+        }
+
     }
 
 }

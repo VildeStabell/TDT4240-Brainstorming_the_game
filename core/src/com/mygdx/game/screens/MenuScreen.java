@@ -44,15 +44,15 @@ public class MenuScreen extends BaseScreen {
         newGameButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                Controller.getInstance().startSingleplayerSession();
-                //resume();
+                Controller.getInstance().startMultiplayerGameRoom();
+                gsm.setScreen(GameScreenManager.ScreenEnum.LOBBY);
             }
         });
 
         joinGameButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                // Redirect to a screen for sign in other games with a digit code
+                gsm.setScreen(GameScreenManager.ScreenEnum.JOINING);
                 Gdx.app.exit();
             }
         });

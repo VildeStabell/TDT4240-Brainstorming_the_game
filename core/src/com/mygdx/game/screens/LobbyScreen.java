@@ -8,9 +8,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.StringBuilder;
+import com.mygdx.game.Controller;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Displaying the lobby view before starting the game.
@@ -31,11 +31,12 @@ public class LobbyScreen extends BaseScreen {
     private TextButton startGame;
     private Label digitCodeLabel;
     private List<String> activePlayers;
+    private String gameCode;
 
 
     // TODO: DUMMY values, remove
-    ArrayList<String> waitingPlayers = new ArrayList<>(Arrays.asList("Maisergodt", "VforVigor", "sigtheidiot", "sofuslofus", "emma123"));
-    private int numberOfPlayers = waitingPlayers.size();
+    //ArrayList<String> waitingPlayers;
+    private int numberOfPlayers;
 
     public LobbyScreen(GameScreenManager gsm){
         super(gsm, "textures/backgrounds/standardBackground.png");
@@ -58,16 +59,13 @@ public class LobbyScreen extends BaseScreen {
         startGame.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
-                // To simulate when a player join a session
-                waitingPlayers.add("New plaer");
-//                if(!activePlayers.isEmpty()){
-//                    // TODO: Start game
-//                }
+                Controller.getInstance().pressStartFirstRound();
+                gsm.setScreen(GameScreenManager.ScreenEnum.GAME_PHASE);
             }
         });
 
         activePlayers.setAlignment(Align.center);
-        activePlayers.setItems(getPlayerListAsString(waitingPlayers));
+        //activePlayers.setItems(getPlayerListAsString(waitingPlayers));
         table.row();
         table.add(digitCodeLabel);
         table.row();
@@ -83,15 +81,13 @@ public class LobbyScreen extends BaseScreen {
         super.render(delta);
         stage.draw();
         // TODO: check if a waiting player has been added to active list of players
-        if(waitingPlayers.size() > numberOfPlayers){
+        /*if(waitingPlayers.size() > numberOfPlayers){
             numberOfPlayers = waitingPlayers.size();
             activePlayers.setItems(getPlayerListAsString(waitingPlayers));
-        }
+        }*/
 
         // TODO: show only digit code for host
-//        if(isHosting){
-//            digitCodeLabel.setText(getDigitCodeLabel());
-//        }
+        digitCodeLabel.setText(getGameCodeLabel());
 
     }
 
@@ -106,10 +102,12 @@ public class LobbyScreen extends BaseScreen {
         super.dispose();
     }
 
-    private String getDigitCodeLabel(){
-        // TODO: digit code
-        String digitCode = "1234";
-        return String.format("Digit code: %s", digitCode);
+    private String getGameCodeLabel(){
+        return String.format("Digit code: %s", gameCode);
+    }
+
+    public void setGameCode(String gameCode){
+        this.gameCode = gameCode;
     }
 
 

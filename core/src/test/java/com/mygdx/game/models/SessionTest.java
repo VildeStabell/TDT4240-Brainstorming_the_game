@@ -135,9 +135,9 @@ public class SessionTest {
         ArrayList<Brain> roundBrains = currentRound.getBrainstormingBrains();
         bBrains.addAll(roundBrains);
         ArrayList<Brain> actualSBrains = new ArrayList<>();
-        currentRound.toggleBrain(roundBrains.get(0));
+        currentRound.toggleBrain(0);
         actualSBrains.add(roundBrains.get(0));
-        currentRound.toggleBrain(roundBrains.get(1));
+        currentRound.toggleBrain(1);
         actualSBrains.add(roundBrains.get(1));
         return new ArrayList[]{bBrains, actualSBrains};
     }

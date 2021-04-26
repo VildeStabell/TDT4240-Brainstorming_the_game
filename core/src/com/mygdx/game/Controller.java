@@ -6,6 +6,7 @@ import com.mygdx.game.models.Session;
 import com.mygdx.game.screens.BrainstormingScreen;
 import com.mygdx.game.screens.GameScreen;
 import com.mygdx.game.screens.GameScreenManager;
+import com.mygdx.game.screens.LobbyScreen;
 
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
@@ -93,6 +94,8 @@ public class Controller {
         fb.setStartGameChangedListener();
         fb.setAllBrainsChangedListener();
         fb.writeNewPlayer(player);
+        LobbyScreen lobby = (LobbyScreen) gsm.getGameScreens().get(GameScreenManager.ScreenEnum.LOBBY);
+        lobby.setGameCode(String.valueOf(gameCode));
     }
 
     /**
@@ -101,6 +104,8 @@ public class Controller {
      * @param gameCode: GameCode from the user interface
      * */
     public void joinMultiplayerGameRoom(String gameCode){
+        LobbyScreen lobby = (LobbyScreen) gsm.getGameScreens().get(GameScreenManager.ScreenEnum.LOBBY);
+        lobby.setGameCode(gameCode);
         fb.setGameCodeRef(gameCode);
         fb.setNrPlayersChangedListener();
         fb.setAllDoneBrainstormingChangedListener();
@@ -108,6 +113,7 @@ public class Controller {
         fb.setAllBrainsChangedListener();
         fb.setStartGameChangedListener();
         fb.writeNewPlayer(player);
+
     }
 
     public void startSingleplayerSession(){
@@ -136,8 +142,6 @@ public class Controller {
     public void startGameChangedToTrue(){
         session = new Session(maxHitPoints, brainDamage, maxSelectedBrains, maxRound, player, gameCode);
         session.startNewRound(new ArrayList<>());
-        GameScreenManager.getInstance().setScreen(GameScreenManager.ScreenEnum.GAME_PHASE);
-        //GameScreenManager.getInstance().getGameScreens().get(GameScreenManager.ScreenEnum.MENU).resume();
     }
 
 
@@ -154,7 +158,6 @@ public class Controller {
             fb.setPlayerDoneBrainstorming(player, true);
             BrainstormingScreen brainstormingScreen = (BrainstormingScreen) gsm.getGameScreens().get(GameScreenManager.ScreenEnum.GAME_PHASE);
             brainstormingScreen.setWallFallen();
-            //gsm.waitingForOtherPlayers();
         }
     }
 
@@ -172,11 +175,10 @@ public class Controller {
 
     /**
      * Toggles a brain in the eliminating phase
-     * @param brain: the brain thats being toggled TODO: Change this to not-brain (Int)
+     * @param currentBrain: the brain thats being toggled
      * */
-    public void toggleBrain(Brain brain) {
-        session.getCurrentRound().toggleBrain(brain);
-        //gsm.toggleBrain(brain);
+    public void toggleBrain(int currentBrain) {
+        session.getCurrentRound().toggleBrain(currentBrain);
     }
 
     /**
@@ -186,10 +188,10 @@ public class Controller {
      * */
     public void allPlayersDoneBrainstorming(){
         sleep(1);
-        System.out.println("Brains: " + brains);
         fb.setPlayerDoneBrainstorming(player, false);
         session.getCurrentRound().startEliminationPhase(brains);
-        //gsm.setScreen(elimination);
+        BrainstormingScreen brainstormingScreen = (BrainstormingScreen) gsm.getGameScreens().get(GameScreenManager.ScreenEnum.GAME_PHASE);
+        brainstormingScreen.setAllPlayersCompleted();
     }
 
 
@@ -234,5 +236,17 @@ public class Controller {
 
     public int getBrainsLeft() {
         return session.getCurrentRound().brainsLeft();
+    }
+
+    public ArrayList<Brain> getEliminatingBrains() {
+        return session.getCurrentRound().getBrainstormingBrains();
+    }
+
+    public ArrayList<Brain> getSelectedBrains() {
+        return session.getCurrentRound().getSelectedBrains();
+    }
+
+    public boolean checkBrainSelected(int brainNumber){
+        return session.getCurrentRound().checkBrainSelected(brainNumber);
     }
 }

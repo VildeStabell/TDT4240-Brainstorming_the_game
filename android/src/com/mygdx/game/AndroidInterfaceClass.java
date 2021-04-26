@@ -327,12 +327,10 @@ public class AndroidInterfaceClass implements FirebaseInterface {
      * */
     @Override
     public void getAllBrains(Dataholder dataholder) {
-        System.out.println("Er inne i GetAllBrains");
         database.getReference(gameCodeRef).child("Players").addListenerForSingleValueEvent(new ValueEventListener()
         {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                System.out.println("Inne i OnDataChange");
                 ArrayList<Brain> brains = new ArrayList<>();
                 for (DataSnapshot playersSnapshot : snapshot.getChildren()) {
                     for (DataSnapshot brainSnapshot : playersSnapshot.getChildren()) {
@@ -340,7 +338,6 @@ public class AndroidInterfaceClass implements FirebaseInterface {
                             if (!(brain2Snapshot.getValue() instanceof String) && !(brain2Snapshot.getValue() instanceof Boolean)){
                                 Brain brain = brain2Snapshot.getValue(Brain.class);
                                 brains.add(brain);
-                                System.out.println("Brain: " + brain);
                             }
                         }
                     }
@@ -360,7 +357,6 @@ public class AndroidInterfaceClass implements FirebaseInterface {
         database.getReference(gameCodeRef).child("Players").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                System.out.println("Inne i OnDataChange");
                 ArrayList<Brain> brains = new ArrayList<>();
                 for (DataSnapshot playersSnapshot : snapshot.getChildren()) {
                     for (DataSnapshot brainSnapshot : playersSnapshot.getChildren()) {
@@ -368,7 +364,6 @@ public class AndroidInterfaceClass implements FirebaseInterface {
                             if (!(brain2Snapshot.getValue() instanceof String) && !(brain2Snapshot.getValue() instanceof Boolean)){
                                 Brain brain = brain2Snapshot.getValue(Brain.class);
                                 brains.add(brain);
-                                System.out.println("Brain: " + brain);
                             }
                         }
                     }

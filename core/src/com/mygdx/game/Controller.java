@@ -9,6 +9,7 @@ import com.mygdx.game.screens.GameScreenManager;
 import com.mygdx.game.screens.LobbyScreen;
 
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 
@@ -39,6 +40,7 @@ public class Controller {
     private Session session;
     private Player player;
     private int gameCode;
+    private Random random = new Random();
 
     private ArrayList<Brain> brains = new ArrayList<>();
 
@@ -71,7 +73,25 @@ public class Controller {
      * */
     public void setUsername(String username){
         this.player = new Player(username);
-        //gsm next screen
+        System.out.println(player.getUsername());
+    }
+
+    /**
+     * Generates a random username
+     * @return the generated username
+     */
+    public String generateUsername() {
+        int MIN = 1000;
+        int MAX = 9999;
+        String username = "User" + (random.nextInt(MAX - MIN) + MIN);
+        this.player = new Player(username);
+        return username;
+    }
+
+    public String getUsername() {
+        if(player == null)
+            generateUsername();
+        return player.getUsername();
     }
 
     public void setBrains(ArrayList<Brain> brains){

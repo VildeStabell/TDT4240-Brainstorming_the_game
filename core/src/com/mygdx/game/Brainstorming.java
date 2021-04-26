@@ -26,7 +26,7 @@ public class Brainstorming extends Game {
 		controller = Controller.getInstance();
 		controller.setFb(_FBIC);
 		controller.setGSM(gsm);
-		controller.setUsername("Sigrid");
+		controller.generateUsername();
 		//controller.startSingleplayerSession();
 		gsm.setScreen(GameScreenManager.ScreenEnum.MENU);
 

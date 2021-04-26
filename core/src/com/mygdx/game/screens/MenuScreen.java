@@ -2,8 +2,11 @@ package com.mygdx.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Align;
 import com.mygdx.game.Controller;
 
 /**
@@ -11,9 +14,13 @@ import com.mygdx.game.Controller;
  */
 
 public class MenuScreen extends BaseScreen {
+    private Label title;
+    private TextField usernameField;
+    private String username;
 
     public MenuScreen(String imagePath){
         super(imagePath);
+        username = Controller.getInstance().getUsername();
     }
 
     /**
@@ -23,6 +30,10 @@ public class MenuScreen extends BaseScreen {
     @Override
     public void show() {
         super.show();
+        title = new Label("Hello " + username + "!", skin);
+        title.setFontScale(5);
+        table.add(title).space(title.getHeight() + 70);
+        table.row();
         initButtons();
     }
 
@@ -38,8 +49,20 @@ public class MenuScreen extends BaseScreen {
      *
      */
     private void initButtons(){
+        usernameField = new TextField(username, skin);
+        usernameField.setAlignment(Align.center);
         TextButton newGameButton = new TextButton("START NEW GAME", skin);
         TextButton joinGameButton = new TextButton("JOIN EXISTING GAME", skin);
+        TextButton changeUsernameButton = new TextButton("SUBMIT NEW USERNAME", skin);
+
+        changeUsernameButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                Controller.getInstance().setUsername(usernameField.getText());
+                username = usernameField.getText();
+                title.setText("Hello " + username + "!");
+            }
+        });
 
         newGameButton.addListener(new ChangeListener() {
             @Override
@@ -56,6 +79,11 @@ public class MenuScreen extends BaseScreen {
 
             }
         });
+
+        table.add(usernameField);
+        table.row();
+        table.add(changeUsernameButton).spaceBottom(100);
+        table.row();
         table.add(newGameButton);
         table.row();
         table.add(joinGameButton);

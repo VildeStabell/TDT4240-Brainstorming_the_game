@@ -88,6 +88,10 @@ public class EliminationPhase {
         brains.put(brain, !previousValue);
     }
 
+    /**
+     * Checks if a brain is selected, returns true if its selected
+     * @param brain: The brain is checked
+     * */
     public boolean checkBrainSelected(Brain brain){
         return brains.get(brain);
     }

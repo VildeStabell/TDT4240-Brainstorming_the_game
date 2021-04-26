@@ -125,10 +125,16 @@ public class Round {
         eliminationPhase.toggleBrain(eliminationBrains.get(brainNumber));
     }
 
+    /**
+     * Returns how many brains are left
+     * */
     public int brainsLeft(){
         return brains.size() - brainstormingPhase.getBrains().size();
     }
 
+    /**
+     * Checks if a brain is selected, and returns true if it's selected
+     * */
     public boolean checkBrainSelected(int brainNumber){
        return eliminationPhase.checkBrainSelected(eliminationBrains.get(brainNumber));
     }

@@ -16,8 +16,8 @@ public class FinishingScreen extends BaseScreen {
     private List<String> selectedBrainsList, eliminatedBrainsList;
 
     // TODO: controller
-    public FinishingScreen(GameScreenManager gsm){
-        super(gsm, "textures/backgrounds/standardBackground.png");
+    public FinishingScreen(){
+        super("textures/backgrounds/standardBackground.png");
     }
 
     @Override

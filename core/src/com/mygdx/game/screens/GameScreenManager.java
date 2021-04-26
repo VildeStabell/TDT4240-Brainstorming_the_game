@@ -27,6 +27,7 @@ public class GameScreenManager {
         ELIMINATION_PHASE,
         LOBBY,
         JOINING,
+        FINISH,
       }
 
     /**
@@ -50,6 +51,7 @@ public class GameScreenManager {
         this.gameScreens.put(ScreenEnum.ELIMINATION_PHASE, new EliminationScreen(this));
         this.gameScreens.put(ScreenEnum.LOBBY, new LobbyScreen(this));
         this.gameScreens.put(ScreenEnum.JOINING, new JoiningScreen(this));
+        this.gameScreens.put(ScreenEnum.FINISH, new FinishingScreen(this));
     }
 
     public void setScreen(ScreenEnum nextScreen){

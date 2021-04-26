@@ -38,8 +38,8 @@ public class LobbyScreen extends BaseScreen {
     //ArrayList<String> waitingPlayers;
     private int numberOfPlayers;
 
-    public LobbyScreen(GameScreenManager gsm){
-        super(gsm, "textures/backgrounds/standardBackground.png");
+    public LobbyScreen(){
+        super("textures/backgrounds/standardBackground.png");
     }
 
     @Override

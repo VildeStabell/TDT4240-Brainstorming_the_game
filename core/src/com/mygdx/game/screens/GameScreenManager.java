@@ -38,9 +38,7 @@ public class GameScreenManager {
      * Setting the menu screen as start screen
      *
      */
-    private GameScreenManager(){
-        initGameScreens();
-    }
+    private GameScreenManager(){ }
 
     public static GameScreenManager getInstance(){
         if (INSTANCE == null){
@@ -49,22 +47,22 @@ public class GameScreenManager {
         return INSTANCE;
     }
 
-    public void setGame(Brainstorming game){
-        this.game = game;
+    public void setGame(Brainstorming newGame){
+        game = newGame;
     }
 
-    private void initGameScreens(){
+    public void initGameScreens(){
         this.gameScreens = new HashMap<>();
-        this.gameScreens.put(ScreenEnum.MENU, new MenuScreen(this, "textures/backgrounds/standardBackground.png"));
-        this.gameScreens.put(ScreenEnum.GAME, new GameScreen(this,"textures/backgrounds/standardBackground.png"));
-        this.gameScreens.put(ScreenEnum.GAME_PHASE, new BrainstormingScreen(this,"textures/backgrounds/standardBackground.png"));
-        this.gameScreens.put(ScreenEnum.ELIMINATION_PHASE, new EliminationScreen(this));
-        this.gameScreens.put(ScreenEnum.LOBBY, new LobbyScreen(this));
-        this.gameScreens.put(ScreenEnum.JOINING, new JoiningScreen(this));
-        this.gameScreens.put(ScreenEnum.FINISH, new FinishingScreen(this));
+        this.gameScreens.put(ScreenEnum.MENU, new MenuScreen("textures/backgrounds/standardBackground.png"));
+        this.gameScreens.put(ScreenEnum.GAME, new GameScreen("textures/backgrounds/standardBackground.png"));
+        this.gameScreens.put(ScreenEnum.GAME_PHASE, new BrainstormingScreen("textures/backgrounds/standardBackground.png"));
+        this.gameScreens.put(ScreenEnum.ELIMINATION_PHASE, new EliminationScreen());
+        this.gameScreens.put(ScreenEnum.LOBBY, new LobbyScreen());
+        this.gameScreens.put(ScreenEnum.JOINING, new JoiningScreen());
+        this.gameScreens.put(ScreenEnum.FINISH, new FinishingScreen());
     }
 
-    public void setScreen(ScreenEnum nextScreen){
+    public void setScreen(ScreenEnum nextScreen) {
         game.setScreen(gameScreens.get(nextScreen));
     }
 

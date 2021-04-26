@@ -164,18 +164,30 @@ public class Session {
         return tempAllBrains;
     }
 
+    /**
+     * @return a list of rounds
+     * */
     public ArrayList<Round> getRounds() {
         return rounds;
     }
 
+    /**
+     * @return number of rounds
+     * */
     public int getNumOfRounds() {
         return rounds.size();
     }
 
+    /**
+     * @return the current round
+     * */
     public Round getCurrentRound() {
         return rounds.get(rounds.size() - 1);
     }
 
+    /**
+     * @return the sessionCode
+     * */
     public int getSessionCode() {
         return sessionCode;
     }

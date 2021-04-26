@@ -11,6 +11,7 @@ import com.mygdx.game.screens.GameScreenManager;
 import com.mygdx.game.screens.LobbyScreen;
 
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 
@@ -41,6 +42,7 @@ public class Controller {
     private Session session;
     private Player player;
     private int gameCode;
+    private Random random = new Random();
 
     private ArrayList<Brain> brains = new ArrayList<>();
     private ArrayList<String> players = new ArrayList<>();
@@ -74,9 +76,30 @@ public class Controller {
      * */
     public void setUsername(String username){
         this.player = new Player(username);
-        //gsm next screen
+        System.out.println(player.getUsername());
     }
 
+    /**
+     * Generates a random username
+     * @return the generated username
+     */
+    public String generateUsername() {
+        int MIN = 1000;
+        int MAX = 9999;
+        String username = "User" + (random.nextInt(MAX - MIN) + MIN);
+        this.player = new Player(username);
+        return username;
+    }
+
+    public String getUsername() {
+        if(player == null)
+            generateUsername();
+        return player.getUsername();
+    }
+
+    /**
+     * Sets an arraylist of brains to a given list
+     * */
     public void setBrains(ArrayList<Brain> brains){
         this.brains = brains;
     }
@@ -121,19 +144,6 @@ public class Controller {
 
     }
 
-    public void startSingleplayerSession(){
-        gameCode = Session.generateSessionCode();
-        fb.setGameCodeRef(String.valueOf(gameCode));
-        fb.initializeGameRoom();
-        fb.setNrPlayersChangedListener();
-        fb.setAllDoneBrainstormingChangedListener();
-        fb.setAllDoneEliminatingChangedListener();
-        fb.setAllBrainsChangedListener();
-        fb.setStartGameChangedListener();
-        fb.writeNewPlayer(player);
-        fb.setStartGame();
-    }
-
     /**
      * Calls on the firebase interface to update the StartGame variable
      * */
@@ -144,7 +154,7 @@ public class Controller {
     /**
      * Starts a new session
      * */
-    public void startGameChangedToTrue(){
+    public void startGameChangedToTrue() {
         session = new Session(maxHitPoints, brainDamage, maxSelectedBrains, maxRound, player, gameCode);
         session.startNewRound(new ArrayList<>());
     }
@@ -210,10 +220,7 @@ public class Controller {
      * The sleep function is added because of delays when dealing with retrieving data from firebase
      * */
     public void allPlayersDoneEliminating(){
-        Dataholder dataholder = new Dataholder();
-        fb.getAllBrains(dataholder);
         sleep(1);
-        ArrayList<Brain> brains = dataholder.getBrains();
         fb.setPlayerDoneEliminating(player, false);
         if (session.endRound()){
             GameScreenManager.getInstance().getGameScreens().get(GameScreenManager.ScreenEnum.ELIMINATION_PHASE); //ADD SET GAMEDONE = TRUE
@@ -235,34 +242,58 @@ public class Controller {
         }
     }
 
+    /**
+     * Returns the current wall's hitpoints
+     * */
     public int getHitPoints() {
         return session.getCurrentRound().getWall().getHitPoints();
     }
 
+    /**
+     * Returns the current wall's max hitpoints
+     * */
     public int getMaxHitPoints() {
         return session.getCurrentRound().getWall().getMaxHitPoints();
     }
 
+    /**
+     * Returns the brains left in the current round
+     * */
     public int getBrainsLeft() {
         return session.getCurrentRound().brainsLeft();
     }
 
+    /**
+     * Returns the current rounds eliminationphase brains
+     * */
     public ArrayList<Brain> getEliminatingBrains() {
         return session.getCurrentRound().getBrainstormingBrains();
     }
 
+    /**
+     * Returns the current rounds selected brains in eliminationphase
+     * */
     public ArrayList<Brain> getSelectedBrains() {
         return session.getCurrentRound().getSelectedBrains();
     }
 
+    /**
+     * Returns true if the brain at a given nr is selected in elimination phase
+     * */
     public boolean checkBrainSelected(int brainNumber){
         return session.getCurrentRound().checkBrainSelected(brainNumber);
     }
 
+    /**
+     * Sets an arraylist of usernames for the current players
+     * */
     public void setPlayers(ArrayList<String> players) {
         this.players = players;
     }
 
+    /**
+     * Returns an arraylist of usernames for the current players
+     * */
     public ArrayList<String> getPlayers(){
         return players;
     }

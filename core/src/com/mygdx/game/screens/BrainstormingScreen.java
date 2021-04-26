@@ -369,4 +369,9 @@ public class BrainstormingScreen extends BaseScreen {
     }
 
     public void setAllPlayersCompleted() {allPlayersCompleted = true;}
+
+    public void resetBrainstorming(){
+        wallFallen = false;
+        allPlayersCompleted = false;
+    }
 }

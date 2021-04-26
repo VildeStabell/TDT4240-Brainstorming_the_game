@@ -49,12 +49,11 @@ public class EliminationScreen extends GameScreen {
     private TextButton continueButton;
     private Image brainImg;
 
-
-    // TODO: change to Brains, consider brains from previous round?
-    private ArrayList<String> eliminationBrains = new ArrayList<>(Arrays.asList("software", "architecture", "mvc"));
-    private ArrayList<String> selectedBrains = new ArrayList<>();
     private CheckBox checkBox;
     private int currentBrain = 0;
+    private boolean playerDone = false;
+    private boolean allPlayersDone = false;
+    private boolean gameDone = false;
 
     // TODO: temporary values
     //private int getTotalBrains = eliminationBrains.size();
@@ -147,8 +146,7 @@ public class EliminationScreen extends GameScreen {
         continueButton.addListener(new ClickListener(){
            @Override
            public void clicked(InputEvent event, float x, float y){
-               // TODO: next stage/finish screen
-               // gsm.setScreen(GameScreenManager.ScreenEnum.FINISH);
+               Controller.getInstance().playerDoneEliminating();
            }
         });
 
@@ -195,6 +193,17 @@ public class EliminationScreen extends GameScreen {
             checkBox.setChecked(false);
         }
 
+        if (playerDone){
+            if (allPlayersDone){
+                if (gameDone){
+                    gsm.setScreen(GameScreenManager.ScreenEnum.FINISH);
+                }
+                else {
+                    gsm.setScreen(GameScreenManager.ScreenEnum.GAME_PHASE);
+                }
+            }
+        }
+
 
     }
 
@@ -222,6 +231,20 @@ public class EliminationScreen extends GameScreen {
 
     private String getBrainCounterLabel(){
         return String.format("Brain number %s", currentBrain+1);
+    }
+
+    public void setAllPlayersDone(){
+        allPlayersDone = true;
+    }
+
+    public void setGameDone(){
+        gameDone = true;
+    }
+
+    public void resetEliminating(){
+        playerDone = false;
+        allPlayersDone = false;
+        gameDone = false;
     }
 
 }

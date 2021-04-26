@@ -1,9 +1,11 @@
 package com.mygdx.game;
 
 import com.mygdx.game.models.Brain;
+import com.mygdx.game.models.EliminationPhase;
 import com.mygdx.game.models.Player;
 import com.mygdx.game.models.Session;
 import com.mygdx.game.screens.BrainstormingScreen;
+import com.mygdx.game.screens.EliminationScreen;
 import com.mygdx.game.screens.GameScreen;
 import com.mygdx.game.screens.GameScreenManager;
 import com.mygdx.game.screens.LobbyScreen;
@@ -193,8 +195,11 @@ public class Controller {
         sleep(1);
         fb.setPlayerDoneBrainstorming(player, false);
         session.getCurrentRound().startEliminationPhase(brains);
+        EliminationScreen eliminationScreen = (EliminationScreen) gsm.getGameScreens().get(GameScreenManager.ScreenEnum.ELIMINATION_PHASE);
+        eliminationScreen.resetEliminating();
         BrainstormingScreen brainstormingScreen = (BrainstormingScreen) gsm.getGameScreens().get(GameScreenManager.ScreenEnum.GAME_PHASE);
         brainstormingScreen.setAllPlayersCompleted();
+
     }
 
 
@@ -211,11 +216,12 @@ public class Controller {
         ArrayList<Brain> brains = dataholder.getBrains();
         fb.setPlayerDoneEliminating(player, false);
         if (session.endRound()){
-            //gsm.endGame()
+            GameScreenManager.getInstance().getGameScreens().get(GameScreenManager.ScreenEnum.ELIMINATION_PHASE); //ADD SET GAMEDONE = TRUE
             return;
         }
+        BrainstormingScreen brainstormingScreen = (BrainstormingScreen) gsm.getGameScreens().get(GameScreenManager.ScreenEnum.GAME_PHASE);
+        brainstormingScreen.resetBrainstorming();
         session.startNewRound(brains);
-        //gsm.setScreen(brainstorming);
     }
 
     /**

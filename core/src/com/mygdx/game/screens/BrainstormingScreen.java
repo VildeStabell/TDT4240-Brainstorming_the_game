@@ -23,6 +23,9 @@ import com.badlogic.gdx.utils.Align;
 import com.mygdx.game.Controller;
 
 /**
+ * The Brainstorming screen lets players write ideas onto brains, to destroy a castle.
+ * If this is not the first round, the brains contain the selected ideas from last round.
+ *
  * statetime: accumulated delta time for each frame, used in animation
  * toggleSubmitField: boolean value for toggling the text field
  * ideaText: input text from the user
@@ -49,7 +52,6 @@ public class BrainstormingScreen extends BaseScreen {
     private boolean toggleSubmitIdeaField;
     private String ideaText;
 
-
     private TextField ideaInputField;
     private Button ideaCheck;
     private ImageButton brainButton;
@@ -66,7 +68,6 @@ public class BrainstormingScreen extends BaseScreen {
     private Table roundOverTable;
     private TextButton continueButton;
 
-    // TODO: Ratios according to screen size, temporary variables
     private static final float wallWidth = Gdx.graphics.getHeight()/2.5f; // Find ratio of grass
     private static final float wallHeight = Gdx.graphics.getHeight()/3f;
 
@@ -105,14 +106,7 @@ public class BrainstormingScreen extends BaseScreen {
 
     public BrainstormingScreen() {
         super("textures/backgrounds/standardBackground.png");
-        // TODO: replace with controller
         ideaText = "";
-       /* ArrayList<Brain> brains = new ArrayList<>();
-        int maxHitPoints = 1;
-        int brainDamage = 1;
-        int maxSelectedBrains = 3;
-        Player player = new Player("Mai");
-        round = new Round(player, brains, maxHitPoints, brainDamage, maxSelectedBrains);*/
     }
 
     /**

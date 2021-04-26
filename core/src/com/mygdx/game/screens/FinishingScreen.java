@@ -43,8 +43,8 @@ public class FinishingScreen extends BaseScreen {
         table.add(totalSelectedBrains).expandX().top();
         table.add(eliminatedBrains).expandX().top();
         table.row();
-        table.add(selectedBrainsList).expandX();
-        table.add(eliminatedBrainsList).expandX();
+        table.add(selectedBrainsList).expandX().height(Gdx.graphics.getHeight()/1.2f);
+        table.add(eliminatedBrainsList).expandX().height(Gdx.graphics.getHeight()/1.2f);
         table.debugTable();
 
     }

@@ -7,6 +7,7 @@ import com.mygdx.game.screens.BrainstormingScreen;
 import com.mygdx.game.screens.EliminationScreen;
 import com.mygdx.game.screens.GameScreenManager;
 import com.mygdx.game.screens.LobbyScreen;
+import com.sun.org.apache.bcel.internal.generic.BREAKPOINT;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -302,5 +303,21 @@ public class Controller {
      * */
     public ArrayList<String> getPlayers(){
         return players;
+    }
+
+    public ArrayList<String> getFinalBrains() {
+        ArrayList<String> finalBrains = new ArrayList<>();
+        for (Brain brain : firebaseBrains){
+            finalBrains.add(brain.toString());
+        }
+        return finalBrains;
+    }
+
+    public ArrayList<String> getPlayersBrains() {
+        ArrayList<String> playerBrains = new ArrayList<>();
+        for (Brain brain : session.getAllBrains()){
+            playerBrains.add(brain.toString());
+        }
+        return playerBrains;
     }
 }

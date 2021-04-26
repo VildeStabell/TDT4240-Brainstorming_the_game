@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.utils.Align;
+import com.mygdx.game.Controller;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,7 +13,6 @@ import java.util.Arrays;
 public class FinishingScreen extends BaseScreen {
 
     private Label totalSelectedBrains, eliminatedBrains;
-    // TODO: change to type brains/ideas?
     private List<String> selectedBrainsList, eliminatedBrainsList;
 
     // TODO: controller
@@ -23,16 +23,16 @@ public class FinishingScreen extends BaseScreen {
     @Override
     public void show(){
         super.show();
-        totalSelectedBrains = new Label("Selected brains", skin);
-        eliminatedBrains = new Label("Eliminated brains", skin);
+        totalSelectedBrains = new Label("Selected brains", skin); //Change to final brains
+        eliminatedBrains = new Label("Eliminated brains", skin); //Change to your brains
         selectedBrainsList = new List<String>(skin);
         eliminatedBrainsList = new List<String>(skin);
         selectedBrainsList.setAlignment(Align.center);
         eliminatedBrainsList.setAlignment(Align.center);
 
         // TODO: get selected brains as list
-        //selectedBrainsList.setItems(getIdeasAsString(selectedBrainIdeas));
-        //eliminatedBrainsList.setItems(getIdeasAsString(eliminatedBrainsIdeas));
+        selectedBrainsList.setItems(getIdeasAsString(Controller.getInstance().getFinalBrains()));
+        eliminatedBrainsList.setItems(getIdeasAsString(Controller.getInstance().getPlayersBrains()));
 
         table.setBounds(
                 Gdx.graphics.getWidth()/4f,

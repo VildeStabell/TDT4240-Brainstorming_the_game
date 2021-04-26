@@ -20,6 +20,8 @@ import com.mygdx.game.models.Brain;
 import java.util.ArrayList;
 
 /**
+ * The Elimination screen lets players chose to keep some of the brains displayed.
+ *
  * brainTexture: texture of the brain
  * title: Description of the brainstorming phase
  * totalBrainsLabel: label of total brains
@@ -29,9 +31,9 @@ import java.util.ArrayList;
  * nextArrow: shows next brain
  * prevArrow: show previous brain
  * eliminationBrains: containing brains from Brainstorming Phase
- * selecteedBrains: storing selected brains from player
+ * selectedBrains: storing selected brains from player
  * checkBox: selecting a brain
- * currentBrain: keeping track of current brain in eliminiationBrains
+ * currentBrain: keeping track of current brain in eliminationBrains
  * totalBrains: total brains in eliminationBrains
  *
  * Implementing MVC pattern.
@@ -57,8 +59,6 @@ public class EliminationScreen extends BaseScreen {
 
 
 
-
-    // TODO: init controller
     public EliminationScreen() {
         super("textures/backgrounds/standardBackground.png");
         brains = new ArrayList<>();
@@ -162,12 +162,6 @@ public class EliminationScreen extends BaseScreen {
            @Override
            public void clicked(InputEvent event, float x, float y){
                Controller.getInstance().toggleBrain(currentBrain);
-               /*if(!getSelectedBrains().contains(getEliminationBrains().get(currentBrain))){
-                   Controller.getInstance().toggleBrain(currentBrain);
-               }
-               if(!checkBox.isChecked()){
-                   Controller.getInstance().toggleBrain(currentBrain);
-               }*/
            }
         });
         stage.addActor(nextArrow);
@@ -217,7 +211,6 @@ public class EliminationScreen extends BaseScreen {
                 checkBox.setChecked(false);
             }
         }
-
     }
 
     @Override
@@ -274,5 +267,4 @@ public class EliminationScreen extends BaseScreen {
         gameDone = false;
         currentBrain = 0;
     }
-
 }

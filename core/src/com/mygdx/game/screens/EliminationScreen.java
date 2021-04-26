@@ -105,13 +105,13 @@ public class EliminationScreen extends GameScreen {
                 Gdx.graphics.getWidth()/2f,
                 Gdx.graphics.getHeight()/2f
         );
-        table.add(title).top();
+        table.add(title).top().align(Align.center);
         table.row();
-        table.add(totalBrainsLabel).top().center();
+        table.add(totalBrainsLabel).top().center().align(Align.center);
         table.row();
-        table.add(overlay).size(brainSize, brainSize).expandY().colspan(2);
+        table.add(overlay).size(brainSize, brainSize).align(Align.center);
         table.row();
-        table.add(checkBox);
+        table.add(checkBox).align(Align.center);
         table.row();
         table.add(selectedBrainsLabel);
         table.row();
@@ -176,7 +176,6 @@ public class EliminationScreen extends GameScreen {
                }*/
            }
         });
-        table.add(continueButton);
         stage.addActor(nextArrow);
         stage.addActor(prevArrow);
     }

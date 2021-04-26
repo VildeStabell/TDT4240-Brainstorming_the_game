@@ -153,8 +153,8 @@ public class Controller {
     /**
      * Fires a brain, and checks if the wall has fallen.
      * If the wall has fallen, the firebase interface updates the DoneBrainstorming field for
-     * the player to true, and updates the list of brains for the player in the database.
-     * Then sets the gsm to a waiting screen.
+     * the player to true, and updates the player's list of brains in the database,
+     * then sets the gsm to a waiting screen.
      * */
     public void pressFireBrain(String idea) {
         boolean wallFallen = session.getCurrentRound().addBrainInBrainstormingPhase(idea);
@@ -179,46 +179,50 @@ public class Controller {
 
     /**
      * Toggles a brain in the eliminating phase
-     * @param currentBrain: the brain thats being toggled
+     * @param currentBrain: the brain that's being toggled
      * */
     public void toggleBrain(int currentBrain) {
         session.getCurrentRound().toggleBrain(currentBrain);
     }
 
     /**
-     * Gets all the brains from every player in the firebase, and
-     * starts the elimination round. Resets the "DoneBrainstorming" field in the database.
-     * The sleep function is added because of delays when dealing with retrieving data from firebase
+     * Gets all the brains from every player in the firebase, and starts the elimination round.
+     * Resets the "DoneBrainstorming" field in the database.
+     * The sleep function is added because of delays when retrieving data from firebase.
      * */
     public void allPlayersDoneBrainstorming(){
         sleep(1);
         fb.setPlayerDoneBrainstorming(player, false);
         sleep(5);
         session.getCurrentRound().startEliminationPhase(firebaseBrains);
-        EliminationScreen eliminationScreen = (EliminationScreen) gsm.getGameScreens().get(GameScreenManager.ScreenEnum.ELIMINATION_PHASE);
+        EliminationScreen eliminationScreen = (EliminationScreen) gsm.getGameScreens()
+                .get(GameScreenManager.ScreenEnum.ELIMINATION_PHASE);
         eliminationScreen.resetEliminating();
-        BrainstormingScreen brainstormingScreen = (BrainstormingScreen) gsm.getGameScreens().get(GameScreenManager.ScreenEnum.GAME_PHASE);
+        BrainstormingScreen brainstormingScreen = (BrainstormingScreen) gsm.getGameScreens()
+                .get(GameScreenManager.ScreenEnum.GAME_PHASE);
         brainstormingScreen.setAllPlayersCompleted();
 
     }
 
 
     /**
-     * Gets all the brains from every player in the firebase, and
-     * starts either a new Round or ends the game.
+     * Gets all the brains from every player in the firebase,
+     * and either starts a new Round or ends the game.
      * Resets the "DoneEliminating" field in the database.
-     * The sleep function is added because of delays when dealing with retrieving data from firebase
+     * The sleep function is added because of delays when retrieving data from firebase.
      * */
     public void allPlayersDoneEliminating(){
         sleep(1);
         fb.setPlayerDoneEliminating(player, false);
         if (session.endRound()){
-            EliminationScreen eliminationScreen = (EliminationScreen) GameScreenManager.getInstance().getGameScreens().get(GameScreenManager.ScreenEnum.ELIMINATION_PHASE);
+            EliminationScreen eliminationScreen = (EliminationScreen) GameScreenManager.getInstance()
+                    .getGameScreens().get(GameScreenManager.ScreenEnum.ELIMINATION_PHASE);
             eliminationScreen.setGameDone();
             eliminationScreen.setAllPlayersDone();
             return;
         }
-        BrainstormingScreen brainstormingScreen = (BrainstormingScreen) gsm.getGameScreens().get(GameScreenManager.ScreenEnum.GAME_PHASE);
+        BrainstormingScreen brainstormingScreen = (BrainstormingScreen) gsm.getGameScreens()
+                .get(GameScreenManager.ScreenEnum.GAME_PHASE);
         brainstormingScreen.resetBrainstorming();
         EliminationScreen eliminationScreen = (EliminationScreen) GameScreenManager.getInstance().getGameScreens().get(GameScreenManager.ScreenEnum.ELIMINATION_PHASE);
         eliminationScreen.setAllPlayersDone();
@@ -227,6 +231,7 @@ public class Controller {
 
     /**
      * A helper function to delay the code with a specified number of seconds.
+     * Used to stop the program from running too fast for firebase.
      * */
     private void sleep(int seconds){
         try {
@@ -258,35 +263,36 @@ public class Controller {
     }
 
     /**
-     * Returns the current rounds eliminationphase brains
+     * Returns the current round's eliminationpPhase brains
      * */
     public ArrayList<Brain> getEliminatingBrains() {
         return session.getCurrentRound().getEliminationBrains();
     }
 
     /**
-     * Returns the current rounds selected brains in eliminationphase
+     * Returns the current round's selected brains in eliminationPhase
      * */
     public ArrayList<Brain> getSelectedBrains() {
         return session.getCurrentRound().getSelectedBrains();
     }
 
     /**
-     * Returns true if the brain at a given nr is selected in elimination phase
+     * Returns true if the brain at a given index is selected in elimination phase.
+     * @param brainNumber: The index of the brain in question.
      * */
     public boolean checkBrainSelected(int brainNumber){
         return session.getCurrentRound().checkBrainSelected(brainNumber);
     }
 
     /**
-     * Sets an arraylist of usernames for the current players
+     * Sets the arraylist of usernames for the current players
      * */
     public void setPlayers(ArrayList<String> players) {
         this.players = players;
     }
 
     /**
-     * Returns an arraylist of usernames for the current players
+     * Returns the arraylist of usernames for the current players
      * */
     public ArrayList<String> getPlayers(){
         return players;

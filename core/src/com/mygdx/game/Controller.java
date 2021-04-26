@@ -189,7 +189,6 @@ public class Controller {
         ArrayList<Brain> selectedBrains = session.getCurrentRound().getSelectedBrains();
         fb.setPlayerBrainList(player, selectedBrains);
         fb.setPlayerDoneEliminating(player, true);
-        //gsm.waitingForOtherPlayers();
     }
 
     /**
@@ -228,11 +227,14 @@ public class Controller {
         sleep(1);
         fb.setPlayerDoneEliminating(player, false);
         if (session.endRound()){
-            GameScreenManager.getInstance().getGameScreens().get(GameScreenManager.ScreenEnum.ELIMINATION_PHASE); //ADD SET GAMEDONE = TRUE
+            EliminationScreen eliminationScreen = (EliminationScreen) GameScreenManager.getInstance().getGameScreens().get(GameScreenManager.ScreenEnum.ELIMINATION_PHASE);
+            eliminationScreen.setGameDone();
             return;
         }
         BrainstormingScreen brainstormingScreen = (BrainstormingScreen) gsm.getGameScreens().get(GameScreenManager.ScreenEnum.GAME_PHASE);
         brainstormingScreen.resetBrainstorming();
+        EliminationScreen eliminationScreen = (EliminationScreen) GameScreenManager.getInstance().getGameScreens().get(GameScreenManager.ScreenEnum.ELIMINATION_PHASE);
+        eliminationScreen.setAllPlayersDone();
         session.startNewRound(brains);
     }
 

@@ -14,14 +14,13 @@ import java.util.concurrent.TimeUnit;
 
 
 /**
- * Controller
  * This controller connects the models, views and firebase interface.
  *
- *  INSTANCE: the instance of the controller
- *  fb: The firebase interface used to connect to the firebase database
- *  gsm: the GameScreenManager used to update the views
- *  session: the current session
- *  player: this games Player
+ * INSTANCE: the instance of the controller
+ * fb: The firebase interface used to connect to the firebase database
+ * gsm: the GameScreenManager used to update the views
+ * session: the current session
+ * player: this game's Player
  *
  * This class implements the Singleton pattern, Observer pattern and the MVC pattern.
  * */
@@ -46,7 +45,8 @@ public class Controller {
     private ArrayList<String> players = new ArrayList<>();
 
     /**
-     * Checks if there is an instance of the controller, if not it creates an instance
+     * Checks if there is an instance of the controller, if not it creates a new instance.
+     * This ensures that the Controller is a singleton.
      * */
     public static Controller getInstance() {
         if (INSTANCE == null){
@@ -55,37 +55,33 @@ public class Controller {
         return INSTANCE;
     }
 
-    /**
-     * Setter for the firebase interface
-     * */
     public void setFb(FirebaseInterface fb){
         this.fb = fb;
     }
 
-    /**
-     * Setter for the GameScreenManager
-     * */
     public void setGSM(GameScreenManager gsm){
         this.gsm = gsm;
     }
 
     /**
-     * Gets the username from the userinterface and creates a new mainPlayer
+     * Gets the username from the userinterface and creates a new player
      * */
     public void setUsername(String username){
-        this.player = new Player(username);
-        System.out.println(player.getUsername());
+        if(player == null)
+            this.player = new Player(username);
+        else
+            this.player.setUsername(username);
     }
 
     /**
-     * Generates a random username
+     * Generates a random username, and updates the player with said username
      * @return the generated username
      */
     public String generateUsername() {
         int MIN = 1000;
         int MAX = 9999;
         String username = "User" + (random.nextInt(MAX - MIN) + MIN);
-        this.player = new Player(username);
+        setUsername(username);
         return username;
     }
 

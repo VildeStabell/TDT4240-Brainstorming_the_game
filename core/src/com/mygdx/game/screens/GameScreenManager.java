@@ -55,9 +55,9 @@ public class GameScreenManager {
         gameScreens.put(ScreenEnum.MENU, new MenuScreen("textures/backgrounds/standardBackground.png"));
         gameScreens.put(ScreenEnum.GAME, new GameScreen("textures/backgrounds/standardBackground.png"));
         gameScreens.put(ScreenEnum.GAME_PHASE, new BrainstormingScreen("textures/backgrounds/standardBackground.png"));
-        this.gameScreens.put(ScreenEnum.ELIMINATION_PHASE, new EliminationScreen(this));
-        this.gameScreens.put(ScreenEnum.LOBBY, new LobbyScreen(this));
-        this.gameScreens.put(ScreenEnum.JOINING, new JoiningScreen(this));
+        this.gameScreens.put(ScreenEnum.ELIMINATION_PHASE, new EliminationScreen());
+        this.gameScreens.put(ScreenEnum.LOBBY, new LobbyScreen());
+        this.gameScreens.put(ScreenEnum.JOINING, new JoiningScreen());
     }
 
     public void setScreen(ScreenEnum nextScreen) {

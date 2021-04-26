@@ -62,8 +62,8 @@ public class EliminationScreen extends GameScreen {
 
 
     // TODO: init controller
-    public EliminationScreen(GameScreenManager gsm) {
-        super(gsm, "textures/backgrounds/eliminationBackground.png");
+    public EliminationScreen() {
+        super("textures/backgrounds/eliminationBackground.png");
         brains = new ArrayList<>();
         // this.controller = controller;
         // render(0); //Consider removing

@@ -2,12 +2,14 @@ package com.mygdx.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -43,7 +45,7 @@ public class EliminationScreen extends GameScreen {
     private ArrayList<ImageButton> brains;
 
     private Texture brainTexture;
-    private Label title, totalBrainsLabel, selectedBrainsLabel, currentBrainLabel, brainCounterLabel;
+    private Label title, totalBrainsLabel, selectedBrainsLabel, currentBrainLabel, brainCounterLabel, waitingForPlayers;
     private Button nextArrow;
     private Button prevArrow;
     private TextButton continueButton;
@@ -79,6 +81,7 @@ public class EliminationScreen extends GameScreen {
         prevArrow = new Button(skin, "back");
         checkBox = new CheckBox("", skin, "elimnationCheck");
         selectedBrainsLabel = new Label(getSelectedBrainsText(), skin);
+        waitingForPlayers = new Label("You have to wait for other players ...", skin);
         currentBrainLabel = new Label("", skin);
         brainCounterLabel = new Label(getBrainCounterLabel(), skin);
         continueButton = new TextButton("Continue", skin);
@@ -96,7 +99,12 @@ public class EliminationScreen extends GameScreen {
 
         overlay.addActor(currentBrainLabel);
 
-        table.setBounds(Gdx.graphics.getWidth()/4f, Gdx.graphics.getHeight()/4f, Gdx.graphics.getWidth()/2f,Gdx.graphics.getHeight()/2f);
+        table.setBounds(
+                Gdx.graphics.getWidth()/4f,
+                Gdx.graphics.getHeight()/4f,
+                Gdx.graphics.getWidth()/2f,
+                Gdx.graphics.getHeight()/2f
+        );
         table.add(title).top();
         table.row();
         table.add(totalBrainsLabel).top().center();
@@ -109,6 +117,11 @@ public class EliminationScreen extends GameScreen {
         table.row();
         table.add(brainCounterLabel);
         table.row();
+        table.add(continueButton).height(Gdx.graphics.getHeight()/10f);
+        table.row();
+        table.add(waitingForPlayers);
+        setActorOnTable(table, waitingForPlayers, false);
+
         // TODO: remove
 //        table.setDebug(true);
 
@@ -146,6 +159,7 @@ public class EliminationScreen extends GameScreen {
         continueButton.addListener(new ClickListener(){
            @Override
            public void clicked(InputEvent event, float x, float y){
+               // TODO: not sure where to place this
                Controller.getInstance().playerDoneEliminating();
            }
         });
@@ -194,7 +208,13 @@ public class EliminationScreen extends GameScreen {
         }
 
         if (playerDone){
+            // Show "Waiting for players" text
+            setActorOnTable(table, continueButton, false);
+            setActorOnTable(table,waitingForPlayers, true);
             if (allPlayersDone){
+                // Only show the continue button
+                setActorOnTable(table, continueButton, true);
+                setActorOnTable(table, waitingForPlayers, false);
                 if (gameDone){
                     gsm.setScreen(GameScreenManager.ScreenEnum.FINISH);
                 }
@@ -203,14 +223,16 @@ public class EliminationScreen extends GameScreen {
                 }
             }
         }
-
-
     }
 
     @Override
     public void hide(){
         brainTexture.dispose();
         super.dispose();
+    }
+
+    private void setActorOnTable(Table table, Actor actor, boolean visibility){
+        table.getCell(actor).getActor().setVisible(visibility);
     }
 
     private int getTotalBrains(){

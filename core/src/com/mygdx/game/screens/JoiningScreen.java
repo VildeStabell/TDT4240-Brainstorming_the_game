@@ -47,7 +47,6 @@ public class JoiningScreen extends BaseScreen {
         table.row();
         table.add(submitCode);
 
-        table.setDebug(true);
         submitCode.addListener(new ClickListener(){
            @Override
            public void clicked(InputEvent event, float x, float y){

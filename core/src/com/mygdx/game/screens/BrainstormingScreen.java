@@ -20,14 +20,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.mygdx.game.Controller;
-import com.mygdx.game.models.Brain;
-import com.mygdx.game.models.Player;
-import com.mygdx.game.models.Round;
-import java.util.ArrayList;
-
-import javax.naming.ldap.Control;
 
 /**
+ * The Brainstorming screen lets players write ideas onto brains, to destroy a castle.
+ * If this is not the first round, the brains contain the selected ideas from last round.
+ *
  * statetime: accumulated delta time for each frame, used in animation
  * toggleSubmitField: boolean value for toggling the text field
  * ideaText: input text from the user
@@ -51,9 +48,6 @@ public class BrainstormingScreen extends BaseScreen {
     private float stateTime;
     private boolean toggleSubmitIdeaField;
     private String ideaText;
-
-    // TODO: replace with controller
-    private Round round;
 
     private TextField ideaInputField;
     private Button ideaCheck;
@@ -102,7 +96,6 @@ public class BrainstormingScreen extends BaseScreen {
      * gsm: GameScreenManager to switch screens
      * @param imagePath: path to background image
      */
-
     public BrainstormingScreen(String imagePath) {
         super(imagePath);
         // TODO: replace with controller
@@ -139,9 +132,6 @@ public class BrainstormingScreen extends BaseScreen {
         table.row();
         table.add(castle).size(wallWidth, wallHeight);
         table.setPosition(Gdx.graphics.getWidth() - Gdx.graphics.getWidth() / 5f, wallHeight);
-        // TODO: remove debug
-//        table.debug();      // Turn on all debug lines (table, cell, and widget).
-//        table.debugTable(); // Turn on only table lines.
     }
 
     /**

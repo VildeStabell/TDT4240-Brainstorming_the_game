@@ -51,7 +51,7 @@ public class JoiningScreen extends BaseScreen {
         submitCode.addListener(new ClickListener(){
            @Override
            public void clicked(InputEvent event, float x, float y){
-               Controller.getInstance().joinMultiplayerGameRoom((String) submitCode.getText());
+               Controller.getInstance().joinMultiplayerGameRoom(digitCodeField.getText());
                gsm.setScreen(GameScreenManager.ScreenEnum.LOBBY);
            }
         });

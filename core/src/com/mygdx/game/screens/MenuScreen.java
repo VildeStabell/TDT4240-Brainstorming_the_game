@@ -53,7 +53,7 @@ public class MenuScreen extends BaseScreen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 gsm.setScreen(GameScreenManager.ScreenEnum.JOINING);
-                Gdx.app.exit();
+
             }
         });
         table.add(newGameButton);

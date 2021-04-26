@@ -53,6 +53,11 @@ public class CoreInterfaceClass implements FirebaseInterface {
     }
 
     @Override
+    public void setUserAddedChanged() {
+
+    }
+
+    @Override
     public String getGameCodeRef() { return null; }
 
     @Override

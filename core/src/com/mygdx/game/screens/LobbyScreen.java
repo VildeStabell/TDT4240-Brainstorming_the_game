@@ -65,7 +65,7 @@ public class LobbyScreen extends BaseScreen {
         });
 
         activePlayers.setAlignment(Align.center);
-        //activePlayers.setItems(getPlayerListAsString(waitingPlayers));
+        activePlayers.setItems(getPlayerListAsString(Controller.getInstance().getPlayers()));
         table.row();
         table.add(digitCodeLabel);
         table.row();
@@ -80,13 +80,7 @@ public class LobbyScreen extends BaseScreen {
     public void render(float delta){
         super.render(delta);
         stage.draw();
-        // TODO: check if a waiting player has been added to active list of players
-        /*if(waitingPlayers.size() > numberOfPlayers){
-            numberOfPlayers = waitingPlayers.size();
-            activePlayers.setItems(getPlayerListAsString(waitingPlayers));
-        }*/
-
-        // TODO: show only digit code for host
+        activePlayers.setItems(getPlayerListAsString(Controller.getInstance().getPlayers()));
         digitCodeLabel.setText(getGameCodeLabel());
 
     }

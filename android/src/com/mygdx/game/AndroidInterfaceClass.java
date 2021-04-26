@@ -140,6 +140,26 @@ public class AndroidInterfaceClass implements FirebaseInterface {
         });
     }
 
+    @Override
+    public void setUserAddedChanged(){
+        database.getReference(gameCodeRef).child("Players").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ArrayList<String> players = new ArrayList<>();
+                for (DataSnapshot playersSnapshot : snapshot.getChildren()) {
+                    System.out.println(playersSnapshot.getKey());
+                    players.add(playersSnapshot.getKey());
+                }
+                Controller.getInstance().setPlayers(players);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.w(TAG, "Failed to read value.", error.toException());
+            }
+        });
+    }
+
 
     /**
      * Adds a new player to the database, and increases the number of players

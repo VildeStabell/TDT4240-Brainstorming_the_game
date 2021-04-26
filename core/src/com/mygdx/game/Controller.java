@@ -41,6 +41,7 @@ public class Controller {
     private int gameCode;
 
     private ArrayList<Brain> brains = new ArrayList<>();
+    private ArrayList<String> players = new ArrayList<>();
 
     /**
      * Checks if there is an instance of the controller, if not it creates an instance
@@ -93,6 +94,7 @@ public class Controller {
         fb.setAllDoneEliminatingChangedListener();
         fb.setStartGameChangedListener();
         fb.setAllBrainsChangedListener();
+        fb.setUserAddedChanged();
         fb.writeNewPlayer(player);
         LobbyScreen lobby = (LobbyScreen) gsm.getGameScreens().get(GameScreenManager.ScreenEnum.LOBBY);
         lobby.setGameCode(String.valueOf(gameCode));
@@ -112,6 +114,7 @@ public class Controller {
         fb.setAllDoneEliminatingChangedListener();
         fb.setAllBrainsChangedListener();
         fb.setStartGameChangedListener();
+        fb.setUserAddedChanged();
         fb.writeNewPlayer(player);
 
     }
@@ -248,5 +251,13 @@ public class Controller {
 
     public boolean checkBrainSelected(int brainNumber){
         return session.getCurrentRound().checkBrainSelected(brainNumber);
+    }
+
+    public void setPlayers(ArrayList<String> players) {
+        this.players = players;
+    }
+
+    public ArrayList<String> getPlayers(){
+        return players;
     }
 }

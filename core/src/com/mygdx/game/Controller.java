@@ -165,7 +165,8 @@ public class Controller {
         if (wallFallen){
             fb.setPlayerBrainList(player, session.getCurrentRound().getBrainstormingBrains());
             fb.setPlayerDoneBrainstorming(player, true);
-            BrainstormingScreen brainstormingScreen = (BrainstormingScreen) gsm.getGameScreens().get(GameScreenManager.ScreenEnum.GAME_PHASE);
+            BrainstormingScreen brainstormingScreen = (BrainstormingScreen) gsm.getGameScreens()
+                    .get(GameScreenManager.ScreenEnum.GAME_PHASE);
             brainstormingScreen.setWallFallen();
         }
     }
@@ -228,7 +229,8 @@ public class Controller {
         BrainstormingScreen brainstormingScreen = (BrainstormingScreen) gsm.getGameScreens()
                 .get(GameScreenManager.ScreenEnum.GAME_PHASE);
         brainstormingScreen.resetBrainstorming();
-        EliminationScreen eliminationScreen = (EliminationScreen) GameScreenManager.getInstance().getGameScreens().get(GameScreenManager.ScreenEnum.ELIMINATION_PHASE);
+        EliminationScreen eliminationScreen = (EliminationScreen) GameScreenManager.getInstance()
+                .getGameScreens().get(GameScreenManager.ScreenEnum.ELIMINATION_PHASE);
         eliminationScreen.setAllPlayersDone();
         session.startNewRound(firebaseBrains);
     }

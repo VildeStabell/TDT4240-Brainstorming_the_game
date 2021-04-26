@@ -7,7 +7,6 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -18,9 +17,10 @@ import com.mygdx.game.Controller;
 import com.mygdx.game.models.Brain;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
+ * The Elimination screen lets players chose to keep some of the brains displayed.
+ *
  * brainTexture: texture of the brain
  * title: Description of the brainstorming phase
  * totalBrainsLabel: label of total brains
@@ -30,19 +30,15 @@ import java.util.Arrays;
  * nextArrow: shows next brain
  * prevArrow: show previous brain
  * eliminationBrains: containing brains from Brainstorming Phase
- * selecteedBrains: storing selected brains from player
+ * selectedBrains: storing selected brains from player
  * checkBox: selecting a brain
- * currentBrain: keeping track of current brain in eliminiationBrains
+ * currentBrain: keeping track of current brain in eliminationBrains
  * totalBrains: total brains in eliminationBrains
  *
  * Implementing MVC pattern.
  */
 
 public class EliminationScreen extends GameScreen {
-
-    // TODO: controller
-    // private Controller controller;
-    private ArrayList<ImageButton> brains;
 
     private Texture brainTexture;
     private Label title, totalBrainsLabel, selectedBrainsLabel, currentBrainLabel, brainCounterLabel, waitingForPlayers;
@@ -57,20 +53,12 @@ public class EliminationScreen extends GameScreen {
     private boolean allPlayersDone = false;
     private boolean gameDone = false;
 
-    // TODO: temporary values
-    //private int getTotalBrains = eliminationBrains.size();
 
-
-
-    // TODO: init controller
     public EliminationScreen() {
         super("textures/backgrounds/eliminationBackground.png");
-        brains = new ArrayList<>();
-        // this.controller = controller;
-        // render(0); //Consider removing
     }
 
-
+    //TODO: Please add a documentation string and/or comments that explain stuff
     @Override
     public void show() {
         super.show();
@@ -122,9 +110,6 @@ public class EliminationScreen extends GameScreen {
         table.add(waitingForPlayers);
         setActorOnTable(table, waitingForPlayers, false);
 
-        // TODO: remove
-//        table.setDebug(true);
-
         float arrowSize = checkBox.getWidth();
         float arrowHeight = overlay.getParent().getY() + brainSize/2f - arrowSize/2f;
         prevArrow.setBounds(
@@ -169,18 +154,13 @@ public class EliminationScreen extends GameScreen {
            @Override
            public void clicked(InputEvent event, float x, float y){
                Controller.getInstance().toggleBrain(currentBrain);
-               /*if(!getSelectedBrains().contains(getEliminationBrains().get(currentBrain))){
-                   Controller.getInstance().toggleBrain(currentBrain);
-               }
-               if(!checkBox.isChecked()){
-                   Controller.getInstance().toggleBrain(currentBrain);
-               }*/
            }
         });
         stage.addActor(nextArrow);
         stage.addActor(prevArrow);
     }
 
+    //TODO: Please add a documentation string and/or comments that explain stuff
     @Override
     public void render(float delta) {
         super.render(delta);
@@ -224,7 +204,6 @@ public class EliminationScreen extends GameScreen {
                 checkBox.setChecked(false);
             }
         }
-
     }
 
     @Override
@@ -270,5 +249,4 @@ public class EliminationScreen extends GameScreen {
         allPlayersDone = false;
         gameDone = false;
     }
-
 }

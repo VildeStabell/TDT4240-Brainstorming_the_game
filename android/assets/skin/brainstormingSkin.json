@@ -96,7 +96,7 @@
 "com.badlogic.gdx.scenes.scene2d.ui.List$ListStyle": {
 	"default": {
 		"font": "myriad-pro-font",
-		"fontColorSelected": "orange",
+		"fontColorSelected": "RGBA_77_77_77_255",
 		"fontColorUnselected": "RGBA_77_77_77_255",
 		"selection": "white",
 		"background": "blank"

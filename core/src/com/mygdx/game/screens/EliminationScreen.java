@@ -161,6 +161,7 @@ public class EliminationScreen extends GameScreen {
            public void clicked(InputEvent event, float x, float y){
                // TODO: not sure where to place this
                Controller.getInstance().playerDoneEliminating();
+               playerDone = true;
            }
         });
 

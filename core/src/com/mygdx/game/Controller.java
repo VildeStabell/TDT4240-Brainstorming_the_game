@@ -133,6 +133,7 @@ public class Controller {
     public void joinMultiplayerGameRoom(String gameCode){
         LobbyScreen lobby = (LobbyScreen) gsm.getGameScreens().get(GameScreenManager.ScreenEnum.LOBBY);
         lobby.setGameCode(gameCode);
+        this.gameCode = Integer.parseInt(gameCode);
         fb.setGameCodeRef(gameCode);
         fb.setNrPlayersChangedListener();
         fb.setAllDoneBrainstormingChangedListener();
@@ -157,6 +158,9 @@ public class Controller {
     public void startGameChangedToTrue() {
         session = new Session(maxHitPoints, brainDamage, maxSelectedBrains, maxRound, player, gameCode);
         session.startNewRound(new ArrayList<>());
+        LobbyScreen lobby = (LobbyScreen) gsm.getGameScreens().get(GameScreenManager.ScreenEnum.LOBBY);
+        lobby.setGameStarted();
+
     }
 
 

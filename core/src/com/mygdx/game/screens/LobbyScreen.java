@@ -34,9 +34,9 @@ public class LobbyScreen extends BaseScreen {
     private String gameCode;
 
 
-    // TODO: DUMMY values, remove
-    //ArrayList<String> waitingPlayers;
-    private int numberOfPlayers;
+    private boolean isHost = false;
+    private boolean gameStarted = false;
+
 
     public LobbyScreen(){
         super("textures/backgrounds/standardBackground.png");
@@ -82,7 +82,14 @@ public class LobbyScreen extends BaseScreen {
         stage.draw();
         activePlayers.setItems(getPlayerListAsString(Controller.getInstance().getPlayers()));
         digitCodeLabel.setText(getGameCodeLabel());
+        if (gameStarted){
+            gsm.setScreen(GameScreenManager.ScreenEnum.GAME_PHASE);
+        }
 
+    }
+
+    public void setGameStarted(){
+        this.gameStarted = true;
     }
 
     @Override

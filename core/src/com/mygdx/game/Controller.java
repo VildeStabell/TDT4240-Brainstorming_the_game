@@ -64,7 +64,7 @@ public class Controller {
     }
 
     /**
-     * Gets the username from the userinterface and creates a new player
+     * Gets the username from the user interface or generateUsername and creates a new player
      * */
     public void setUsername(String username){
         if(player == null)
@@ -91,13 +91,9 @@ public class Controller {
         return player.getUsername();
     }
 
-    /**
-     * Sets an arraylist of brains to a given list
-     * */
     public void setFirebaseBrains(ArrayList<Brain> firebaseBrains){
         this.firebaseBrains = firebaseBrains;
     }
-
 
     /**
      * Starts a new Multiplayer GameRoom, generates a session code, updates the firebase interface
@@ -171,8 +167,8 @@ public class Controller {
     }
 
     /**
-     * The firebase interface updates the DoneEliminating field for
-     * the player to true, and updates the list of brains for the player in the database.
+     * The firebase interface updates the DoneEliminating field for the player to true,
+     * and updates the player's list of brains in the database.
      * Then sets the gsm to a waiting screen.
      * */
     public void playerDoneEliminating(){

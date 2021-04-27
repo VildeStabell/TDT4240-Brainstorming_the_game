@@ -1,14 +1,12 @@
 package com.mygdx.game;
 
 import com.mygdx.game.models.Brain;
-import com.mygdx.game.models.BrainstormingPhase;
 import com.mygdx.game.models.Player;
 import com.mygdx.game.models.Session;
 import com.mygdx.game.screens.BrainstormingScreen;
 import com.mygdx.game.screens.EliminationScreen;
 import com.mygdx.game.screens.GameScreenManager;
 import com.mygdx.game.screens.LobbyScreen;
-import com.sun.org.apache.bcel.internal.generic.BREAKPOINT;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -121,8 +119,6 @@ public class Controller {
         fb.setAllBrainsChangedListener();
         fb.setUserAddedChanged();
         fb.writeNewPlayer(player);
-        LobbyScreen lobby = (LobbyScreen) gsm.getGameScreens().get(GameScreenManager.ScreenEnum.LOBBY);
-        lobby.setGameCode(String.valueOf(gameCode));
     }
 
     /**
@@ -131,8 +127,6 @@ public class Controller {
      * @param gameCode: GameCode from the user interface
      * */
     public void joinMultiplayerGameRoom(String gameCode){
-        LobbyScreen lobby = (LobbyScreen) gsm.getGameScreens().get(GameScreenManager.ScreenEnum.LOBBY);
-        lobby.setGameCode(gameCode);
         this.gameCode = Integer.parseInt(gameCode);
         fb.setGameCodeRef(gameCode);
         fb.setNrPlayersChangedListener();
@@ -328,5 +322,9 @@ public class Controller {
 
     public String getCurrentBrainIdeas() {
         return session.getCurrentRound().getBrains().get(session.getCurrentRound().getCurrentBrain()).toString();
+    }
+
+    public String getGameCode(){
+        return String.valueOf(gameCode);
     }
 }

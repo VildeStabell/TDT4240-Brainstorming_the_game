@@ -31,7 +31,6 @@ public class LobbyScreen extends BaseScreen {
     private TextButton startGame;
     private Label digitCodeLabel;
     private List<String> activePlayers;
-    private String gameCode;
 
 
     private boolean isHost = false;
@@ -104,11 +103,7 @@ public class LobbyScreen extends BaseScreen {
     }
 
     private String getGameCodeLabel(){
-        return String.format("Digit code: %s", gameCode);
-    }
-
-    public void setGameCode(String gameCode){
-        this.gameCode = gameCode;
+        return String.format("Digit code: %s", Controller.getInstance().getGameCode());
     }
 
 

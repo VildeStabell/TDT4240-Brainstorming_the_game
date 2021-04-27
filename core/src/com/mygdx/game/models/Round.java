@@ -61,7 +61,7 @@ public class Round {
      * Checks if the wall is still standing
      * @return True if the wall is standing, false if not
      * */
-    public Boolean isWallStanding(){
+    public boolean isWallStanding(){
         return brainstormingPhase.getWall().isStanding();
     }
 
@@ -140,5 +140,13 @@ public class Round {
 
     public ArrayList<Brain> getEliminationBrains(){
         return eliminationBrains;
+    }
+
+    public int getCurrentBrain() {
+        return Math.min(currentBrainNumber, brains.size()-1);
+    }
+
+    public ArrayList<Brain> getBrains(){
+        return brains;
     }
 }

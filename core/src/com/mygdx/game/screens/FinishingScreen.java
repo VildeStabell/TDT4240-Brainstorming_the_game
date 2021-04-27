@@ -23,8 +23,8 @@ public class FinishingScreen extends BaseScreen {
     @Override
     public void show(){
         super.show();
-        totalSelectedBrains = new Label("Selected brains", skin); //Change to final brains
-        eliminatedBrains = new Label("Eliminated brains", skin); //Change to your brains
+        totalSelectedBrains = new Label("Final brains", skin); //Change to final brains
+        eliminatedBrains = new Label("Your brains", skin); //Change to your brains
         selectedBrainsList = new List<String>(skin);
         eliminatedBrainsList = new List<String>(skin);
         selectedBrainsList.setAlignment(Align.center);
@@ -45,7 +45,6 @@ public class FinishingScreen extends BaseScreen {
         table.row();
         table.add(selectedBrainsList).expandX().height(Gdx.graphics.getHeight()/1.2f);
         table.add(eliminatedBrainsList).expandX().height(Gdx.graphics.getHeight()/1.2f);
-        table.debugTable();
 
     }
 

@@ -1,6 +1,7 @@
 package com.mygdx.game;
 
 import com.mygdx.game.models.Brain;
+import com.mygdx.game.models.BrainstormingPhase;
 import com.mygdx.game.models.Player;
 import com.mygdx.game.models.Session;
 import com.mygdx.game.screens.BrainstormingScreen;
@@ -319,5 +320,13 @@ public class Controller {
             playerBrains.add(brain.toString());
         }
         return playerBrains;
+    }
+
+    public int getMaxNrBrains() {
+        return Math.min(maxSelectedBrains, session.getCurrentRound().getEliminationBrains().size());
+    }
+
+    public String getCurrentBrainIdeas() {
+        return session.getCurrentRound().getBrains().get(session.getCurrentRound().getCurrentBrain()).toString();
     }
 }

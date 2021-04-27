@@ -71,8 +71,6 @@ public class LobbyScreen extends BaseScreen {
         table.add(activePlayers);
         table.row();
         table.add(startGame);
-        // TODO: remove
-        // table.setDebug(true);
     }
 
     @Override

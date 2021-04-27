@@ -77,7 +77,6 @@ public class EliminationPhase {
             throw new IllegalArgumentException("Must provide a brain that is already in the list");
 
         boolean previousValue = brains.get(brain);
-        System.out.println(brain + "PrevValue: " + previousValue); //TODO:Remove debug
         if(!previousValue && numSelected >= maxSelected && maxSelected != 0)
             throw new IllegalArgumentException("Max number of brains have already been selected");
 

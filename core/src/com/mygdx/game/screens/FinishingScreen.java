@@ -35,14 +35,12 @@ public class FinishingScreen extends BaseScreen {
         selectedBrainsList.setAlignment(Align.center);
         eliminatedBrainsList.setAlignment(Align.center);
 
-        // TODO: get selected brains as list
         selectedBrainsList.setItems(getIdeasAsString(Controller.getInstance().getFinalBrains()));
         eliminatedBrainsList.setItems(getIdeasAsString(Controller.getInstance().getPlayersBrains()));
 
         returnButton.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
-                // TODO: return to menuscreen
                 gsm.setScreen(GameScreenManager.ScreenEnum.MENU);
             }
         });
@@ -63,7 +61,6 @@ public class FinishingScreen extends BaseScreen {
         table.add(selectedBrainsList).expandX().height(Gdx.graphics.getHeight()/1.2f);
         table.add(eliminatedBrainsList).expandX().height(Gdx.graphics.getHeight()/1.2f);
         table.row();
-        table.setDebug(true);
 
     }
 

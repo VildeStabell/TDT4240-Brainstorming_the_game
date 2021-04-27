@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
@@ -31,6 +32,8 @@ import com.mygdx.game.Controller;
  * brainButton: clickable brain to toggle the text field
  * castle: the castle to attack
  * healthLabel: displaying the remaining HP
+ * waitingForPlayer: display text while waiting for the next round
+ * ideaPastIdeas: UI element to contain past ideas
  * ideaBrainTexture: background of the toggling text field
  * ideaBrainImg: the image of the ideaBrainTexture in order to add it as an actor to stage
  * atlas: generated drawable texture regions for animation purposes
@@ -52,7 +55,7 @@ public class BrainstormingScreen extends BaseScreen {
     private ImageButton brainButton;
     private Image castle;
     private Label healthLabel, waitingForPlayers;
-    private Label ideaPastIdeas;
+    private List<String> ideaPastIdeas;
 
     private Texture ideaBrainTexture;
     private Image ideaBrainImg;
@@ -86,10 +89,10 @@ public class BrainstormingScreen extends BaseScreen {
     private static final float ideaInputPosX = Gdx.graphics.getWidth()/2f - ideaTextWidth/2f;
     private static final float ideaInputPosY = Gdx.graphics.getHeight()/2f;
 
-    private static final float pastIdeasWidth = Gdx.graphics.getWidth() / 3f;
-    private static final float pastIdeasHeight = Gdx.graphics.getHeight() / 5f;
-    private static final float pastIdeasPosx = Gdx.graphics.getWidth()/2f - pastIdeasWidth / 2f;
-    private static final float pastIdeasPosY = Gdx.graphics.getHeight() - pastIdeasHeight;
+    private static final float pastIdeasWidth = Gdx.graphics.getWidth() / 5f;
+    private static final float pastIdeasHeight = Gdx.graphics.getHeight()/2.3f;
+    private static final float pastIdeasPosX = brainPosOffset/2f;
+    private static final float pastIdeasPosY = Gdx.graphics.getHeight()/2.5f;
 
     private boolean wallFallen = false;
     private boolean allPlayersCompleted = false;
@@ -173,7 +176,7 @@ public class BrainstormingScreen extends BaseScreen {
         ideaCheck = new Button(skin, "ideaCheck");
         ideaInputField = new TextField("Write an idea", skin);
         ideaInputField.setAlignment(Align.center);
-        ideaPastIdeas = new Label(getPastIdeas(), skin);
+        ideaPastIdeas = new List<>(skin);
 
 
         ideaBrainImg.setBounds(
@@ -192,7 +195,7 @@ public class BrainstormingScreen extends BaseScreen {
                 ideaTextWidth,
                 ideaInputHeight);
         ideaPastIdeas.setBounds(
-                pastIdeasPosx,
+                pastIdeasPosX,
                 pastIdeasPosY,
                 pastIdeasWidth,
                 pastIdeasHeight);
@@ -275,7 +278,8 @@ public class BrainstormingScreen extends BaseScreen {
         stage.addActor(ideaBrainImg);
         stage.addActor(ideaCheck);
         stage.addActor(ideaInputField);
-        ideaPastIdeas.setText(getPastIdeas());
+
+        ideaPastIdeas.setItems(getPastIdeas());
         stage.addActor(ideaPastIdeas);
 
 
@@ -363,7 +367,7 @@ public class BrainstormingScreen extends BaseScreen {
         if (pastIdeas.equals(" ")){
             return "Other ideas on this brain: \n"+ pastIdeas;
         }
-        return "";
+        return "Empty brain";
     }
 
 

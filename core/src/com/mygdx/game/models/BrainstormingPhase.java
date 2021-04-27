@@ -60,4 +60,5 @@ public class BrainstormingPhase {
         brains.add(brain);
         return wall.takeDmg(BRAIN_DAMAGE);
     }
+
 }

@@ -20,12 +20,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.mygdx.game.Controller;
-import com.mygdx.game.models.Brain;
-import com.mygdx.game.models.Player;
-import com.mygdx.game.models.Round;
-import java.util.ArrayList;
-
-import javax.naming.ldap.Control;
 
 /**
  * statetime: accumulated delta time for each frame, used in animation
@@ -52,14 +46,13 @@ public class BrainstormingScreen extends BaseScreen {
     private boolean toggleSubmitIdeaField;
     private String ideaText;
 
-    // TODO: replace with controller
-    private Round round;
 
     private TextField ideaInputField;
     private Button ideaCheck;
     private ImageButton brainButton;
     private Image castle;
     private Label healthLabel, waitingForPlayers;
+    private Label ideaPastIdeas;
 
     private Texture ideaBrainTexture;
     private Image ideaBrainImg;
@@ -92,6 +85,11 @@ public class BrainstormingScreen extends BaseScreen {
     private static final float ideaInputHeight = Gdx.graphics.getHeight() / 10f;
     private static final float ideaInputPosX = Gdx.graphics.getWidth()/2f - ideaTextWidth/2f;
     private static final float ideaInputPosY = Gdx.graphics.getHeight()/2f;
+
+    private static final float pastIdeasWidth = Gdx.graphics.getWidth() / 3f;
+    private static final float pastIdeasHeight = Gdx.graphics.getHeight() / 5f;
+    private static final float pastIdeasPosx = Gdx.graphics.getWidth()/2f - pastIdeasWidth / 2f;
+    private static final float pastIdeasPosY = Gdx.graphics.getHeight() - pastIdeasHeight;
 
     private boolean wallFallen = false;
     private boolean allPlayersCompleted = false;
@@ -138,9 +136,6 @@ public class BrainstormingScreen extends BaseScreen {
         table.row();
         table.add(castle).size(wallWidth, wallHeight);
         table.setPosition(Gdx.graphics.getWidth() - Gdx.graphics.getWidth() / 5f, wallHeight);
-        // TODO: remove debug
-//        table.debug();      // Turn on all debug lines (table, cell, and widget).
-//        table.debugTable(); // Turn on only table lines.
     }
 
     /**
@@ -178,6 +173,8 @@ public class BrainstormingScreen extends BaseScreen {
         ideaCheck = new Button(skin, "ideaCheck");
         ideaInputField = new TextField("Write an idea", skin);
         ideaInputField.setAlignment(Align.center);
+        ideaPastIdeas = new Label(getPastIdeas(), skin);
+
 
         ideaBrainImg.setBounds(
                 widthCenter,
@@ -194,7 +191,13 @@ public class BrainstormingScreen extends BaseScreen {
                 ideaInputPosY,
                 ideaTextWidth,
                 ideaInputHeight);
+        ideaPastIdeas.setBounds(
+                pastIdeasPosx,
+                pastIdeasPosY,
+                pastIdeasWidth,
+                pastIdeasHeight);
     }
+
 
     /**
      * Drawing everything that has been put to the stage (i.e table and widgets)
@@ -232,7 +235,6 @@ public class BrainstormingScreen extends BaseScreen {
             wallFallingAnimation(delta);
             if (castleAnimation.isAnimationFinished(stateTime)){
                 stage.addActor(roundOverTable);
-                // TODO: check if all players have completed
                 if(allPlayersCompleted){
                     setActorOnTable(roundOverTable, waitingForPlayers, false);
                     setActorOnTable(roundOverTable, continueButton, true);
@@ -273,6 +275,8 @@ public class BrainstormingScreen extends BaseScreen {
         stage.addActor(ideaBrainImg);
         stage.addActor(ideaCheck);
         stage.addActor(ideaInputField);
+        ideaPastIdeas.setText(getPastIdeas());
+        stage.addActor(ideaPastIdeas);
 
 
         ideaInputField.addListener(new ChangeListener() {
@@ -308,6 +312,7 @@ public class BrainstormingScreen extends BaseScreen {
         ideaBrainImg.remove();
         ideaInputField.remove();
         ideaCheck.remove();
+        ideaPastIdeas.remove();
     }
 
     /**
@@ -351,6 +356,14 @@ public class BrainstormingScreen extends BaseScreen {
         stage.getBatch().draw(currentFrame, castleWidthCenter, castleHeightCenter, wallWidth, wallHeight);
 
         stage.getBatch().end();
+    }
+
+    private String getPastIdeas() {
+        String pastIdeas = Controller.getInstance().getCurrentBrainIdeas();
+        if (pastIdeas.equals(" ")){
+            return "Other ideas on this brain: \n"+ pastIdeas;
+        }
+        return "";
     }
 
 

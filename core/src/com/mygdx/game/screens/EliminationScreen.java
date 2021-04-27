@@ -18,7 +18,6 @@ import com.mygdx.game.Controller;
 import com.mygdx.game.models.Brain;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * brainTexture: texture of the brain
@@ -40,8 +39,7 @@ import java.util.Arrays;
 
 public class EliminationScreen extends BaseScreen {
 
-    // TODO: controller
-    // private Controller controller;
+
     private ArrayList<ImageButton> brains;
 
     private Texture brainTexture;
@@ -57,8 +55,6 @@ public class EliminationScreen extends BaseScreen {
     private boolean allPlayersDone = false;
     private boolean gameDone = false;
 
-    // TODO: temporary values
-    //private int getTotalBrains = eliminationBrains.size();
 
 
 
@@ -66,7 +62,6 @@ public class EliminationScreen extends BaseScreen {
     public EliminationScreen() {
         super("textures/backgrounds/standardBackground.png");
         brains = new ArrayList<>();
-        // this.controller = controller;
         // render(0); //Consider removing
     }
 
@@ -76,7 +71,7 @@ public class EliminationScreen extends BaseScreen {
         super.show();
         brainTexture = new Texture("textures/brains/ideaBrain.png");
         title = new Label("CHOOSE YOUR FAVORITES", skin);
-        totalBrainsLabel = new Label(String.format("TOTAL BRAINS: %s", getTotalBrains()), skin);
+        totalBrainsLabel = new Label(String.format("TOTAL BRAINS: %s", getMaxNrBrains()), skin);
         nextArrow = new Button(skin, "next");
         prevArrow = new Button(skin, "back");
         checkBox = new CheckBox("", skin, "elimnationCheck");
@@ -150,7 +145,7 @@ public class EliminationScreen extends BaseScreen {
         nextArrow.addListener(new ClickListener(){
            @Override
            public void clicked(InputEvent event, float x, float y){
-               if(currentBrain < getTotalBrains()){
+               if(currentBrain < getMaxNrBrains()){
                    currentBrain++;
                }
            }
@@ -209,7 +204,7 @@ public class EliminationScreen extends BaseScreen {
             if (currentBrain == 0) {
                 prevArrow.setDisabled(true);
                 stage.cancelTouchFocus(prevArrow);
-            } else if (currentBrain == getTotalBrains() - 1) {
+            } else if (currentBrain == getMaxNrBrains() - 1) {
                 nextArrow.setDisabled(true);
                 stage.cancelTouchFocus(nextArrow);
 
@@ -247,8 +242,8 @@ public class EliminationScreen extends BaseScreen {
         table.getCell(actor).getActor().setVisible(visibility);
     }
 
-    private int getTotalBrains(){
-        return Controller.getInstance().getEliminatingBrains().size();
+    private int getMaxNrBrains(){
+        return Controller.getInstance().getMaxNrBrains();
     }
 
     private ArrayList<Brain> getSelectedBrains(){
@@ -260,7 +255,7 @@ public class EliminationScreen extends BaseScreen {
     }
 
     private String getSelectedBrainsText(){
-        return String.format("Selected brains: %s/%s", getSelectedBrains().size(), getTotalBrains());
+        return String.format("Selected brains: %s/%s", getSelectedBrains().size(), getMaxNrBrains());
     }
 
     private String getBrainCounterLabel(){
@@ -279,6 +274,7 @@ public class EliminationScreen extends BaseScreen {
         playerDone = false;
         allPlayersDone = false;
         gameDone = false;
+        currentBrain = 0;
     }
 
 }

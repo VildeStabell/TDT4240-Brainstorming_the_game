@@ -12,8 +12,8 @@ package com.mygdx.game.screens;
 
 public class GameScreen extends BaseScreen {
 
-    public GameScreen(String imagePath){
-        super(imagePath);
+    public GameScreen(){
+        super("textures/backgrounds/standardBackground.png");
     }
 
     @Override

@@ -18,8 +18,8 @@ public class MenuScreen extends BaseScreen {
     private TextField usernameField;
     private String username;
 
-    public MenuScreen(String imagePath){
-        super(imagePath);
+    public MenuScreen(){
+        super("textures/backgrounds/standardBackground.png");
         username = Controller.getInstance().getUsername();
     }
 

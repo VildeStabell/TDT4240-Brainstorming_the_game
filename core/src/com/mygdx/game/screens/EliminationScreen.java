@@ -38,7 +38,7 @@ import java.util.Arrays;
  * Implementing MVC pattern.
  */
 
-public class EliminationScreen extends GameScreen {
+public class EliminationScreen extends BaseScreen {
 
     // TODO: controller
     // private Controller controller;
@@ -64,7 +64,7 @@ public class EliminationScreen extends GameScreen {
 
     // TODO: init controller
     public EliminationScreen() {
-        super("textures/backgrounds/eliminationBackground.png");
+        super("textures/backgrounds/standardBackground.png");
         brains = new ArrayList<>();
         // this.controller = controller;
         // render(0); //Consider removing
@@ -224,6 +224,16 @@ public class EliminationScreen extends GameScreen {
                 checkBox.setChecked(false);
             }
         }
+
+    }
+
+    @Override
+    public void pause() {
+
+    }
+
+    @Override
+    public void resume() {
 
     }
 

@@ -71,7 +71,7 @@ public class EliminationScreen extends BaseScreen {
         super.show();
         brainTexture = new Texture("textures/brains/ideaBrain.png");
         title = new Label("CHOOSE YOUR FAVORITES", skin);
-        totalBrainsLabel = new Label(String.format("TOTAL BRAINS: %s", getMaxNrBrains()), skin);
+        totalBrainsLabel = new Label(String.format("TOTAL BRAINS: %s", getNrEliminiationBrains()), skin);
         nextArrow = new Button(skin, "next");
         prevArrow = new Button(skin, "back");
         checkBox = new CheckBox("", skin, "elimnationCheck");
@@ -143,7 +143,7 @@ public class EliminationScreen extends BaseScreen {
         nextArrow.addListener(new ClickListener(){
            @Override
            public void clicked(InputEvent event, float x, float y){
-               if(currentBrain < getMaxNrBrains()){
+               if(currentBrain < getNrEliminiationBrains()){
                    currentBrain++;
                }
            }
@@ -161,13 +161,9 @@ public class EliminationScreen extends BaseScreen {
         checkBox.addListener(new ClickListener(){
            @Override
            public void clicked(InputEvent event, float x, float y){
-               Controller.getInstance().toggleBrain(currentBrain);
-               /*if(!getSelectedBrains().contains(getEliminationBrains().get(currentBrain))){
+               if (getSelectedBrains().size() != getMaxNrBrains()){
                    Controller.getInstance().toggleBrain(currentBrain);
                }
-               if(!checkBox.isChecked()){
-                   Controller.getInstance().toggleBrain(currentBrain);
-               }*/
            }
         });
         stage.addActor(nextArrow);
@@ -202,7 +198,7 @@ public class EliminationScreen extends BaseScreen {
             if (currentBrain == 0) {
                 prevArrow.setDisabled(true);
                 stage.cancelTouchFocus(prevArrow);
-            } else if (currentBrain == getMaxNrBrains() - 1) {
+            } else if (currentBrain == getNrEliminiationBrains() - 1) {
                 nextArrow.setDisabled(true);
                 stage.cancelTouchFocus(nextArrow);
 
@@ -242,6 +238,10 @@ public class EliminationScreen extends BaseScreen {
 
     private int getMaxNrBrains(){
         return Controller.getInstance().getMaxNrBrains();
+    }
+
+    private int getNrEliminiationBrains(){
+        return Controller.getInstance().getNrEliminationBrains();
     }
 
     private ArrayList<Brain> getSelectedBrains(){

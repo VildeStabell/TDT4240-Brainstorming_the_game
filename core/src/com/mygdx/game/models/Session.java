@@ -113,7 +113,8 @@ public class Session {
             brains.add(newBrain);
         }
 
-        Round newRound = new Round(player, brains, maxHitPoints, brainDamage, maxSelectedBrains);
+        Round newRound = new Round(player, brains, Math.max(maxHitPoints, brains.size()*brainDamage),
+                brainDamage, maxSelectedBrains);
         rounds.add(newRound);
 
         activeRound = true;

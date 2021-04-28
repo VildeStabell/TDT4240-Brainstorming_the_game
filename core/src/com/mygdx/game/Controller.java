@@ -320,6 +320,10 @@ public class Controller {
         return Math.min(maxSelectedBrains, session.getCurrentRound().getEliminationBrains().size());
     }
 
+    public int getNrEliminationBrains(){
+        return session.getCurrentRound().getEliminationBrains().size();
+    }
+
     public String getCurrentBrainIdeas() {
         return session.getCurrentRound().getBrains().get(session.getCurrentRound().getCurrentBrain()).toString();
     }

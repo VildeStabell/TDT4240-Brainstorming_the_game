@@ -143,7 +143,7 @@ public class EliminationScreen extends BaseScreen {
         nextArrow.addListener(new ClickListener(){
            @Override
            public void clicked(InputEvent event, float x, float y){
-               if(currentBrain < getMaxNrBrains()){
+               if(currentBrain < getNrEliminiationBrains()){
                    currentBrain++;
                }
            }
@@ -242,6 +242,10 @@ public class EliminationScreen extends BaseScreen {
 
     private int getMaxNrBrains(){
         return Controller.getInstance().getMaxNrBrains();
+    }
+
+    private int getNrEliminiationBrains(){
+        return Controller.getInstance().getNrEliminationBrains();
     }
 
     private ArrayList<Brain> getSelectedBrains(){

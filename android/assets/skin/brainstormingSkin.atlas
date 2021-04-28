@@ -1,0 +1,174 @@
+
+brainstormingSkin.png
+size: 1024,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+myriad-pro-font
+  rotate: false
+  xy: 1, 910
+  size: 506, 77
+  orig: 506, 77
+  offset: 0, 0
+  index: -1
+black
+  rotate: false
+  xy: 228, 14
+  size: 1, 59
+  orig: 1, 59
+  offset: 0, 0
+  index: -1
+blank
+  rotate: false
+  xy: 1, 525
+  size: 270, 302
+  orig: 270, 302
+  offset: 0, 0
+  index: -1
+gray
+  rotate: false
+  xy: 988, 928
+  size: 1, 59
+  orig: 1, 59
+  offset: 0, 0
+  index: -1
+texfield-pressed
+  rotate: false
+  xy: 1, 4
+  size: 225, 69
+  orig: 225, 69
+  offset: 0, 0
+  index: -1
+textfield
+  rotate: false
+  xy: 761, 918
+  size: 225, 69
+  orig: 225, 69
+  offset: 0, 0
+  index: -1
+white
+  rotate: false
+  xy: 965, 857
+  size: 1, 59
+  orig: 1, 59
+  offset: 0, 0
+  index: -1
+brainHover
+  rotate: false
+  xy: 1, 75
+  size: 250, 223
+  orig: 250, 223
+  offset: 0, 0
+  index: -1
+brainResize
+  rotate: false
+  xy: 1, 300
+  size: 250, 223
+  orig: 250, 223
+  offset: 0, 0
+  index: -1
+brainSelect
+  rotate: false
+  xy: 509, 764
+  size: 250, 223
+  orig: 250, 223
+  offset: 0, 0
+  index: -1
+back
+  rotate: false
+  xy: 303, 832
+  size: 100, 76
+  orig: 100, 76
+  offset: 0, 0
+  index: -1
+backDisable
+  rotate: false
+  xy: 273, 751
+  size: 100, 76
+  orig: 100, 76
+  offset: 0, 0
+  index: -1
+backHover
+  rotate: false
+  xy: 761, 840
+  size: 100, 76
+  orig: 100, 76
+  offset: 0, 0
+  index: -1
+backInactive
+  rotate: false
+  xy: 405, 832
+  size: 100, 76
+  orig: 100, 76
+  offset: 0, 0
+  index: -1
+checkBoxDown
+  rotate: false
+  xy: 273, 519
+  size: 75, 75
+  orig: 75, 75
+  offset: 0, 0
+  index: -1
+checkBoxElimination
+  rotate: false
+  xy: 375, 755
+  size: 75, 75
+  orig: 75, 75
+  offset: 0, 0
+  index: -1
+checkbox
+  rotate: false
+  xy: 273, 596
+  size: 75, 75
+  orig: 75, 75
+  offset: 0, 0
+  index: -1
+checkboxHover
+  rotate: false
+  xy: 375, 678
+  size: 75, 75
+  orig: 75, 75
+  offset: 0, 0
+  index: -1
+checkboxInactive
+  rotate: false
+  xy: 253, 442
+  size: 75, 75
+  orig: 75, 75
+  offset: 0, 0
+  index: -1
+next
+  rotate: false
+  xy: 863, 840
+  size: 100, 76
+  orig: 100, 76
+  offset: 0, 0
+  index: -1
+nextDisable
+  rotate: false
+  xy: 273, 673
+  size: 100, 76
+  orig: 100, 76
+  offset: 0, 0
+  index: -1
+nextHover
+  rotate: false
+  xy: 761, 762
+  size: 100, 76
+  orig: 100, 76
+  offset: 0, 0
+  index: -1
+nextInactive
+  rotate: false
+  xy: 863, 762
+  size: 100, 76
+  orig: 100, 76
+  offset: 0, 0
+  index: -1
+textButton
+  rotate: false
+  xy: 1, 829
+  size: 300, 79
+  orig: 300, 79
+  offset: 0, 0
+  index: -1

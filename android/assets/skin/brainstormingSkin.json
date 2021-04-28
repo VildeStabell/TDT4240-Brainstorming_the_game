@@ -1,0 +1,135 @@
+{
+"com.badlogic.gdx.graphics.g2d.BitmapFont": {
+	"myriad-pro-font": {
+		"file": "myriad-pro-font.fnt"
+	}
+},
+"com.badlogic.gdx.graphics.Color": {
+	"grey": {
+		"r": 0.88666666,
+		"g": 0.8571111,
+		"b": 0.8571111,
+		"a": 1
+	},
+	"lime": {
+		"r": 0.4908355,
+		"g": 1,
+		"b": 0.44333327,
+		"a": 1
+	},
+	"orange": {
+		"r": 1,
+		"g": 0.7429333,
+		"b": 0.3599999,
+		"a": 1
+	},
+	"purple": {
+		"r": 0.82333344,
+		"g": 0.17564446,
+		"b": 0.7677403,
+		"a": 1
+	},
+	"RGBA_77_77_77_255": {
+		"r": 0,
+		"g": 0,
+		"b": 0,
+		"a": 1
+	},
+	"white": {
+		"r": 1,
+		"g": 1,
+		"b": 1,
+		"a": 1
+	}
+},
+"com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle": {
+	"default": {
+		"up": "back"
+	},
+	"back": {
+		"up": "backInactive",
+		"down": "back",
+		"over": "backHover",
+		"disabled": "backDisable"
+	},
+	"next": {
+		"up": "nextInactive",
+		"down": "next",
+		"over": "nextHover",
+		"disabled": "nextDisable"
+	},
+	"ideaCheck": {
+		"up": "checkboxInactive",
+		"disabled": "checkBoxDown"
+	}
+},
+"com.badlogic.gdx.scenes.scene2d.ui.CheckBox$CheckBoxStyle": {
+	"default": {
+		"checkboxOn": "checkBoxDown",
+		"checkboxOff": "checkbox",
+		"font": "myriad-pro-font"
+	},
+	"elimnationCheck": {
+		"checkboxOn": "checkBoxElimination",
+		"checkboxOff": "checkbox",
+		"font": "myriad-pro-font"
+	}
+},
+"com.badlogic.gdx.scenes.scene2d.ui.ImageButton$ImageButtonStyle": {
+	"default": {
+		"imageUp": "brainResize",
+		"imageDown": "brainSelect",
+		"imageOver": "brainHover",
+		"imageDisabled": "brainSelect"
+	}
+},
+"com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle": {
+	"default": {
+		"font": "myriad-pro-font",
+		"fontColor": "RGBA_77_77_77_255"
+	},
+	"health": {
+		"font": "myriad-pro-font",
+		"fontColor": "lime"
+	}
+},
+"com.badlogic.gdx.scenes.scene2d.ui.List$ListStyle": {
+	"default": {
+		"font": "myriad-pro-font",
+		"fontColorSelected": "RGBA_77_77_77_255",
+		"fontColorUnselected": "RGBA_77_77_77_255",
+		"selection": "white",
+		"background": "blank"
+	}
+},
+"com.badlogic.gdx.scenes.scene2d.ui.ScrollPane$ScrollPaneStyle": {
+	"default": {
+		"background": "blank"
+	}
+},
+"com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle": {
+	"default": {
+		"font": "myriad-pro-font",
+		"fontColor": "white",
+		"downFontColor": "RGBA_77_77_77_255",
+		"overFontColor": "grey",
+		"up": "textButton"
+	}
+},
+"com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle": {
+	"default": {
+		"font": "myriad-pro-font",
+		"fontColor": "white",
+		"focusedFontColor": "RGBA_77_77_77_255",
+		"background": "textfield",
+		"focusedBackground": "texfield-pressed",
+		"cursor": "black",
+		"selection": "gray"
+	}
+},
+"com.badlogic.gdx.scenes.scene2d.ui.TextTooltip$TextTooltipStyle": {
+	"default": {
+		"label": "default"
+	}
+}
+}

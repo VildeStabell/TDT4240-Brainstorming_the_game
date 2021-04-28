@@ -14,3 +14,31 @@ When you're done with an issue, open a pull request and ask someone to merge it.
 
 Never merge your own pull request! 
 Never merge directly to main, merge to the development branch first!
+
+## Testing
+When setting up JUnit with libGDX we've followed [this guide](http://techduke.io/junit-testing-of-libgdx-game-in-android-studio/). 
+
+### Running tests
+To run all tests in a test folder: Right click on the folder and select `Run 'Tests in '<folder name>''`.
+
+To run a single test-file: Right click on the file and select `Run '<file name>'`.
+
+To run a single test: Left click on the green checkmark next to the name of the test in the code, and select `Run '<test name>'`.
+
+### Writing a new test
+To write a new unit test:
+- Open the class you want to test
+- Click on the file and press `Ctrl + Shift + T`
+- When the 'Create Test' dialog comes up, click 'Create New Test...'
+- Make sure the Testing library is set to 'JUnit4'
+- Click 'Fix' link if it pops up
+- Select appropriate checkboxes on what test to Generate
+- Click 'OK'
+
+The tests can be found in core/src/test/java. 
+The IDE may display them under core/src/java, or core/java/java.
+
+## Attribution
+Images retrieved from Vecteezy
+- <a href="https://www.vecteezy.com/free-vector/cloud">Menu screen</a>
+- <a href="https://www.vecteezy.com/free-vector/landscape">Game screen</a>

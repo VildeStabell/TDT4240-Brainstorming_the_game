@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "650684454180",
+    "project_id": "brainstorming-1fa06",
+    "storage_bucket": "brainstorming-1fa06.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:650684454180:android:20b53821f7ad7c00244fb1",
+        "android_client_info": {
+          "package_name": "com.mygdx.game"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "650684454180-k5816vc9blr5pdpthqqskgq8eajhlsdp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB185fJ2yxkidJCVHtTBH335hEyzXO7ofE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "650684454180-k5816vc9blr5pdpthqqskgq8eajhlsdp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

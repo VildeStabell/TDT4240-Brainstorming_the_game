@@ -7,7 +7,7 @@
 - Make sure the build and gradle files are synced
 - Run the Android emulator
 
-##Structure of the code
+## Structure of the code
 The main game is written in the core folder, where models and screens have their own subfolder. The AndroidFirebase interface can be found in the Android folder.
 
 ## Naming conventions

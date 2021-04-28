@@ -107,8 +107,6 @@ public class MenuScreen extends BaseScreen {
 
     @Override
     public void resume() {
-        // TODO: Maybe: temporary, need to redirect to a lobby while waiting for others to join?
-        // TODO: Only accepting players that have typed username in text field
         gsm.setScreen(GameScreenManager.ScreenEnum.GAME_PHASE);
     }
 

@@ -45,7 +45,8 @@ public class EliminationScreen extends BaseScreen {
     private ArrayList<ImageButton> brains;
 
     private Texture brainTexture;
-    private Label title, totalBrainsLabel, selectedBrainsLabel, currentBrainLabel, brainCounterLabel, waitingForPlayers;
+    private Label title, totalBrainsLabel, selectedBrainsLabel, currentBrainLabel, brainCounterLabel,
+            waitingForPlayers;
     private Button nextArrow;
     private Button prevArrow;
     private TextButton continueButton;
@@ -152,7 +153,6 @@ public class EliminationScreen extends BaseScreen {
         continueButton.addListener(new ClickListener(){
            @Override
            public void clicked(InputEvent event, float x, float y){
-               // TODO: not sure where to place this
                Controller.getInstance().playerDoneEliminating();
                playerDone = true;
            }
@@ -205,11 +205,7 @@ public class EliminationScreen extends BaseScreen {
                 prevArrow.setDisabled(false);
             }
 
-            if (Controller.getInstance().checkBrainSelected(currentBrain)) {
-                checkBox.setChecked(true);
-            } else {
-                checkBox.setChecked(false);
-            }
+            checkBox.setChecked(Controller.getInstance().checkBrainSelected(currentBrain));
         }
     }
 

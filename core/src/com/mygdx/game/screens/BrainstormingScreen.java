@@ -162,7 +162,8 @@ public class BrainstormingScreen extends BaseScreen {
         castle = new Image(new Texture("textures/walls/castle_0.png"));
         healthLabel = new Label(getCurrentHealth(), skin);
         atlas = new TextureAtlas(Gdx.files.internal("textures/walls/castle.atlas"));
-        castleAnimation = new Animation<>(1/2f, atlas.findRegions("castle"), Animation.PlayMode.NORMAL);
+        castleAnimation = new Animation<>(1/2f, atlas.findRegions("castle"),
+                Animation.PlayMode.NORMAL);
 
         // Idea brain field
         ideaBrainTexture = new Texture("textures/brains/ideaBrain.png");
@@ -364,7 +365,8 @@ public class BrainstormingScreen extends BaseScreen {
 
 
     public String getCurrentHealth(){
-        return String.format("HEALTH: %s/%s", Controller.getInstance().getHitPoints(), Controller.getInstance().getMaxHitPoints());
+        return String.format("HEALTH: %s/%s", Controller.getInstance().getHitPoints(),
+                Controller.getInstance().getMaxHitPoints());
     }
 
 

@@ -38,24 +38,23 @@ public abstract class BaseScreen implements Screen {
 
     /**
      * Default constructor
-     * @param gsm: game screen manager to control the screens
+     * gsm: game screen manager to control the screens
      */
 
-    public BaseScreen(GameScreenManager gsm){
-        this.gsm = gsm;
+    public BaseScreen(){
+        this.gsm = GameScreenManager.getInstance();
     }
 
     /**
      * Alternatively providing a background image to seamlessly scale the image to fit the screen size.
      * Especially important to call the super method of render() when providing a background image.
-     * @param gsm: game screen manager to control the screens
+     * gsm: game screen manager to control the screens
      * @param imagePath: a path to the background image as a string
      */
 
-    public BaseScreen(GameScreenManager gsm, String imagePath){
-        this.gsm = gsm;
+    public BaseScreen(String imagePath){
+        this.gsm = GameScreenManager.getInstance();
         this.background = new Texture(imagePath);
-
     }
 
     @Override
@@ -113,8 +112,13 @@ public abstract class BaseScreen implements Screen {
         if(background != null){
             background.dispose();
         }
-        skin.dispose();
-        stage.dispose();
+        if (skin != null){
+            skin.dispose();
+        }
+        if (stage != null) {
+            stage.dispose();
+        }
+
     }
 
 }

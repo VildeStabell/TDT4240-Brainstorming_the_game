@@ -1,5 +1,7 @@
 package com.mygdx.game.models;
 
+import com.mygdx.game.Brainstorming;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -70,11 +72,11 @@ public class EliminationPhase {
      * @param brain: The brain that should be toggled.
      */
     public void toggleBrain(Brain brain) {
+
         if(!brains.containsKey(brain))
             throw new IllegalArgumentException("Must provide a brain that is already in the list");
 
         boolean previousValue = brains.get(brain);
-
         if(!previousValue && numSelected >= maxSelected && maxSelected != 0)
             throw new IllegalArgumentException("Max number of brains have already been selected");
 
@@ -84,4 +86,13 @@ public class EliminationPhase {
             numSelected--;
         brains.put(brain, !previousValue);
     }
+
+    /**
+     * Checks if a brain is selected, returns true if its selected
+     * @param brain: The brain is checked
+     * */
+    public boolean checkBrainSelected(Brain brain){
+        return brains.get(brain);
+    }
+
 }

@@ -71,16 +71,16 @@ public class AndroidInterfaceClass implements FirebaseInterface {
 
     /**
      * Initializes the values in the database
-     * @param gameCode: the current gameCodeReference
      * */
-    public void initializeGameRoom(String gameCode) {
-        DatabaseReference game = database.getReference(gameCode);
+    public void initializeGameRoom() {
+        DatabaseReference game = database.getReference(gameCodeRef);
         game.child("NumberOfPlayers").setValue(0);
         game.child("PlayersDoneBrainstorming").setValue(0);
         game.child("PlayersDoneEliminating").setValue(0);
         game.child("AllDoneBrainstorming").setValue(false);
         game.child("AllDoneEliminating").setValue(false);
         game.child("StartGame").setValue(false);
+
     }
 
     /**
@@ -131,6 +131,25 @@ public class AndroidInterfaceClass implements FirebaseInterface {
                 if (!value.equals(null) && !value.equals("null")) {
                     setNrPlayers(Integer.parseInt(value));
                 }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.w(TAG, "Failed to read value.", error.toException());
+            }
+        });
+    }
+
+    @Override
+    public void setUserAddedChanged(){
+        database.getReference(gameCodeRef).child("Players").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ArrayList<String> players = new ArrayList<>();
+                for (DataSnapshot playersSnapshot : snapshot.getChildren()) {
+                    players.add(playersSnapshot.getKey());
+                }
+                Controller.getInstance().setPlayers(players);
             }
 
             @Override
@@ -260,7 +279,7 @@ public class AndroidInterfaceClass implements FirebaseInterface {
 
     /**
      * Listener for allDoneBrainstorming
-     * TODO: Should call on the controller to start elimination round
+     * Informs the controller that everyone is done brainstorming
      * */
     @Override
     public void setAllDoneBrainstormingChangedListener() {
@@ -271,7 +290,7 @@ public class AndroidInterfaceClass implements FirebaseInterface {
                 if (!stringValue.equals(null) && !stringValue.equals("null")){
                     Boolean value = (Boolean) snapshot.getValue();
                     if (value){
-                        //TODO: Should call on the controller to start elimination round
+                        Controller.getInstance().allPlayersDoneBrainstorming();
                     }
                 }
 
@@ -287,7 +306,7 @@ public class AndroidInterfaceClass implements FirebaseInterface {
 
     /**
      * Listener for AllDoneEliminating
-     * TODO: Should call on the controller to start a new round or end the game
+     * Informs the controller that the players are done eliminating
      * */
     @Override
     public void setAllDoneEliminatingChangedListener() {
@@ -298,7 +317,7 @@ public class AndroidInterfaceClass implements FirebaseInterface {
                 if (!stringValue.equals(null) && !stringValue.equals("null")){
                     Boolean value = (Boolean) snapshot.getValue();
                     if (value){
-                        //TODO: Should call on the controller to start new round or end the game
+                        Controller.getInstance().allPlayersDoneEliminating();
                     }
                 }
             }
@@ -353,6 +372,32 @@ public class AndroidInterfaceClass implements FirebaseInterface {
         });
     }
 
+    public void setAllBrainsChangedListener(){
+        database.getReference(gameCodeRef).child("Players").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ArrayList<Brain> brains = new ArrayList<>();
+                for (DataSnapshot playersSnapshot : snapshot.getChildren()) {
+                    for (DataSnapshot brainSnapshot : playersSnapshot.getChildren()) {
+                        for (DataSnapshot brain2Snapshot : brainSnapshot.getChildren()){
+                            if (!(brain2Snapshot.getValue() instanceof String) && !(brain2Snapshot.getValue() instanceof Boolean)){
+                                Brain brain = brain2Snapshot.getValue(Brain.class);
+                                brains.add(brain);
+                            }
+                        }
+                    }
+                }
+                Controller.getInstance().setFirebaseBrains(brains);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.w(TAG, "Failed to read value.", error.toException());
+            }
+        });
+
+    }
+
     /**
      *Sets the variable "StartGame" to true
      * */
@@ -363,7 +408,6 @@ public class AndroidInterfaceClass implements FirebaseInterface {
 
     /**
      * Sets a listener for the variable "StartGame" and notifies the controller when its set to true.
-     * TODO: Should call on the controller to start the game
      */
     @Override
     public void setStartGameChangedListener() {
@@ -374,7 +418,7 @@ public class AndroidInterfaceClass implements FirebaseInterface {
                 if (!stringValue.equals(null) && !stringValue.equals("null")){
                     Boolean value = (Boolean) snapshot.getValue();
                     if (value){
-                        //TODO: Should call on the controller to start the game
+                        Controller.getInstance().startGameChangedToTrue();
                     }
                 }
             }

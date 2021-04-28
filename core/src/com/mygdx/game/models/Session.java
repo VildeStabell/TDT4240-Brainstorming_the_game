@@ -86,7 +86,7 @@ public class Session {
     /**
      * Starts a new round and adds it to the rounds list.
      */
-    public void startNewRound() {
+    public void startNewRound(ArrayList<Brain> selectedBrains) {
         if (getNumOfRounds() >= maxRounds)
             throw new IllegalStateException("Cannot start another round since the max number of " +
                     "rounds has been reached.");
@@ -94,8 +94,20 @@ public class Session {
         if (activeRound)
             throw new IllegalStateException("Cannot start a new round while another is in progress");
 
+        this.selectedBrains = new ArrayList<>();
+        for (Brain brain : selectedBrains) {
+            boolean inSelectedBrains = false;
+            for(Brain oldBrain : this.selectedBrains) {
+                if (brain.toString().equals(oldBrain.toString())) {
+                    inSelectedBrains = true;
+                }
+            }
+            if(!inSelectedBrains)
+                this.selectedBrains.add(brain);
+        }
+
         int brainsNeeded = (int) Math.ceil((double) maxHitPoints / brainDamage);
-        ArrayList<Brain> brains = new ArrayList<>(selectedBrains);
+        ArrayList<Brain> brains = new ArrayList<>(this.selectedBrains);
         while(brains.size() < brainsNeeded) {
             Brain newBrain = new Brain();
             brains.add(newBrain);
@@ -116,18 +128,10 @@ public class Session {
             throw new IllegalStateException("Cannot end a round, because no rounds are " +
                     "currently active");
 
-        selectedBrains = new ArrayList<>();
-
         Round currentRound = getCurrentRound();
         if (!currentRound.isInEliminationPhase())
             throw new IllegalStateException("The round is in the brainstormingPhase, " +
                     "and can therefore not be ended");
-
-        for (Brain brain : currentRound.getSelectedBrains()) {
-            if (!selectedBrains.contains(brain)) {
-                selectedBrains.add(brain);
-            }
-        }
 
         for(Brain newBrain : currentRound.getBrainstormingBrains()) {
             boolean inAllBrains = false;
@@ -160,18 +164,30 @@ public class Session {
         return tempAllBrains;
     }
 
+    /**
+     * @return a list of rounds
+     * */
     public ArrayList<Round> getRounds() {
         return rounds;
     }
 
+    /**
+     * @return number of rounds
+     * */
     public int getNumOfRounds() {
         return rounds.size();
     }
 
+    /**
+     * @return the current round
+     * */
     public Round getCurrentRound() {
         return rounds.get(rounds.size() - 1);
     }
 
+    /**
+     * @return the sessionCode
+     * */
     public int getSessionCode() {
         return sessionCode;
     }

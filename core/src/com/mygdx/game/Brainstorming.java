@@ -7,11 +7,12 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.screens.GameScreenManager;
-//import com.mygdx.game.screens.MenuScreen;
+
 
 public class Brainstorming extends Game {
-	GameScreenManager gsm;
+	private GameScreenManager gsm;
 	private final FirebaseInterface _FBIC;
+	private Controller controller;
 
 	public Brainstorming(FirebaseInterface fbic){
 		_FBIC = fbic;
@@ -19,7 +20,14 @@ public class Brainstorming extends Game {
 	
 	@Override
 	public void create () {
-		gsm = new GameScreenManager(this);
+		gsm = GameScreenManager.getInstance();
+		gsm.initGameScreens();
+		gsm.setGame(this);
+		controller = Controller.getInstance();
+		controller.setFb(_FBIC);
+		controller.setGSM(gsm);
+		gsm.setScreen(GameScreenManager.ScreenEnum.MENU);
+
 	}
 
 	@Override

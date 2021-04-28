@@ -95,7 +95,7 @@ public class RoundTest {
         ArrayList<Brain> brainstormingBrains = round.getBrainstormingBrains();
         round.startEliminationPhase(brainstormingBrains);
         Brain brainstormingBrain1 = brainstormingBrains.get(0);
-        round.toggleBrain(brainstormingBrain1);
+        round.toggleBrain(0);
         assertTrue(String.format("Expected list with %s but was %s",
                 brainstormingBrain1, round.getSelectedBrains()),
                 round.getSelectedBrains().size()==1 &&

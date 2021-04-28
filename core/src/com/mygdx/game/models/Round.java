@@ -28,6 +28,7 @@ public class Round {
     private int currentBrainNumber;
     private int maxSelectedBrains;
     private boolean inEliminationPhase = false;
+    private ArrayList<Brain> eliminationBrains;
 
 
     /**
@@ -60,7 +61,7 @@ public class Round {
      * Checks if the wall is still standing
      * @return True if the wall is standing, false if not
      * */
-    public Boolean isWallStanding(){
+    public boolean isWallStanding(){
         return brainstormingPhase.getWall().isStanding();
     }
 
@@ -100,6 +101,7 @@ public class Round {
             throw new IllegalStateException("Can't start eliminationPhase when wall is still standing");
         }
         inEliminationPhase = true;
+        eliminationBrains = brains;
         eliminationPhase = new EliminationPhase(brains, maxSelectedBrains);
     }
 
@@ -113,12 +115,38 @@ public class Round {
 
     /**
      * Calls on the toggleBrain function of the eliminationPhase for a player
-     * @param brain: the brain that's being toggled
+     * brain: the brain that's being toggled
      * */
-    public void toggleBrain(Brain brain){
+    public void toggleBrain(int brainNumber){
         if(!inEliminationPhase){
             throw new IllegalStateException("Can't toggle a brain when not in eliminationPhase");
         }
-        eliminationPhase.toggleBrain(brain);
+        eliminationPhase.toggleBrain(eliminationBrains.get(brainNumber));
+    }
+
+    /**
+     * Returns how many brains are left
+     * */
+    public int brainsLeft(){
+        return brains.size() - brainstormingPhase.getBrains().size();
+    }
+
+    /**
+     * Checks if a brain is selected, and returns true if it's selected
+     * */
+    public boolean checkBrainSelected(int brainNumber){
+       return eliminationPhase.checkBrainSelected(eliminationBrains.get(brainNumber));
+    }
+
+    public ArrayList<Brain> getEliminationBrains(){
+        return eliminationBrains;
+    }
+
+    public int getCurrentBrain() {
+        return Math.min(currentBrainNumber, brains.size()-1);
+    }
+
+    public ArrayList<Brain> getBrains(){
+        return brains;
     }
 }

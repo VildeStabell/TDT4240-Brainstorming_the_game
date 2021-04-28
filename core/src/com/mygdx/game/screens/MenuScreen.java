@@ -2,18 +2,25 @@ package com.mygdx.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Align;
+import com.mygdx.game.Controller;
 
 /**
  * Menu screen containing different options for the game
  */
 
 public class MenuScreen extends BaseScreen {
+    private Label title;
+    private TextField usernameField;
+    private String username;
 
-    public MenuScreen(GameScreenManager gsm, String imagePath){
-        super(gsm, imagePath);
+    public MenuScreen(){
+        super("textures/backgrounds/standardBackground.png");
+        username = Controller.getInstance().getUsername();
     }
 
     /**
@@ -23,6 +30,10 @@ public class MenuScreen extends BaseScreen {
     @Override
     public void show() {
         super.show();
+        title = new Label("Hello " + username + "!", skin);
+        title.setFontScale(5);
+        table.add(title).space(title.getHeight() + 70);
+        table.row();
         initButtons();
     }
 
@@ -38,23 +49,41 @@ public class MenuScreen extends BaseScreen {
      *
      */
     private void initButtons(){
+        usernameField = new TextField(username, skin);
+        usernameField.setAlignment(Align.center);
         TextButton newGameButton = new TextButton("START NEW GAME", skin);
         TextButton joinGameButton = new TextButton("JOIN EXISTING GAME", skin);
+        TextButton changeUsernameButton = new TextButton("SUBMIT NEW USERNAME", skin);
+
+        changeUsernameButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                Controller.getInstance().setUsername(usernameField.getText());
+                username = usernameField.getText();
+                title.setText("Hello " + username + "!");
+            }
+        });
 
         newGameButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                resume();
+                Controller.getInstance().startMultiplayerGameRoom();
+                gsm.setScreen(GameScreenManager.ScreenEnum.LOBBY);
             }
         });
 
         joinGameButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                // Redirect to a screen for sign in other games with a digit code
-                Gdx.app.exit();
+                gsm.setScreen(GameScreenManager.ScreenEnum.JOINING);
+
             }
         });
+
+        table.add(usernameField);
+        table.row();
+        table.add(changeUsernameButton).spaceBottom(100);
+        table.row();
         table.add(newGameButton);
         table.row();
         table.add(joinGameButton);
@@ -78,8 +107,9 @@ public class MenuScreen extends BaseScreen {
 
     @Override
     public void resume() {
-        // temporary, need to redirecet to a lobby while waitng for others to join
-        gsm.setScreen(GameScreenManager.ScreenEnum.GAME);
+        // TODO: Maybe: temporary, need to redirect to a lobby while waiting for others to join?
+        // TODO: Only accepting players that have typed username in text field
+        gsm.setScreen(GameScreenManager.ScreenEnum.GAME_PHASE);
     }
 
     @Override

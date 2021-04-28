@@ -22,6 +22,7 @@ public class JoiningScreen extends BaseScreen {
     private Label title;
     private TextField digitCodeField;
     private TextButton submitCode;
+    private TextButton returnButton;
 
 
     public JoiningScreen(){
@@ -34,6 +35,7 @@ public class JoiningScreen extends BaseScreen {
         digitCodeField = new TextField("", skin);
         submitCode = new TextButton("Submit code", skin);
         title = new Label("Please type the received code below", skin);
+        returnButton = new TextButton("Return to menu", skin);
 
         table.setPosition(
                 Gdx.graphics.getWidth()/2f,
@@ -54,6 +56,18 @@ public class JoiningScreen extends BaseScreen {
                gsm.setScreen(GameScreenManager.ScreenEnum.LOBBY);
            }
         });
+
+        returnButton.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                gsm.setScreen(GameScreenManager.ScreenEnum.MENU);
+            }
+        });
+        returnButton.setPosition(
+                Gdx.graphics.getWidth()/2f-returnButton.getWidth()/2f,
+                returnButton.getHeight()
+        );
+        stage.addActor(returnButton);
 
     }
 

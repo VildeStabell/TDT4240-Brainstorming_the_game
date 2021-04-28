@@ -254,12 +254,11 @@ public class BrainstormingScreen extends BaseScreen {
 
     @Override
     public void pause() {
-        System.out.println("Show menu options"); //TODO:Remove debug
+
     }
 
     @Override
     public void resume() {
-        // TODO: Temporary empty
         gsm.setScreen(GameScreenManager.ScreenEnum.ELIMINATION_PHASE);
     }
 
@@ -295,7 +294,6 @@ public class BrainstormingScreen extends BaseScreen {
             @Override
             public void clicked(InputEvent event, float x, float y){
                 if(ideaCheck.isDisabled()){
-                    System.out.println(String.format("Submit idea to brain: %s", getIdeaText())); //TODO:Remove debug
                     submitIdea();
                 }
             }
@@ -364,7 +362,7 @@ public class BrainstormingScreen extends BaseScreen {
 
     private String getPastIdeas() {
         String pastIdeas = Controller.getInstance().getCurrentBrainIdeas();
-        if (pastIdeas.equals(" ")){
+        if (!pastIdeas.equals("")){
             return "Other ideas on this brain: \n"+ pastIdeas;
         }
         return "Empty brain";

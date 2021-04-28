@@ -117,8 +117,6 @@ public class EliminationScreen extends BaseScreen {
         table.add(waitingForPlayers);
         setActorOnTable(table, waitingForPlayers, false);
 
-        // TODO: remove
-//        table.setDebug(true);
 
         float arrowSize = checkBox.getWidth();
         float arrowHeight = overlay.getParent().getY() + brainSize/2f - arrowSize/2f;

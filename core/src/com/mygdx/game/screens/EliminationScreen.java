@@ -202,7 +202,7 @@ public class EliminationScreen extends BaseScreen {
             if (currentBrain == 0) {
                 prevArrow.setDisabled(true);
                 stage.cancelTouchFocus(prevArrow);
-            } else if (currentBrain == getMaxNrBrains() - 1) {
+            } else if (currentBrain == getNrEliminiationBrains() - 1) {
                 nextArrow.setDisabled(true);
                 stage.cancelTouchFocus(nextArrow);
 

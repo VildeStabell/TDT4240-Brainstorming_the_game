@@ -1,5 +1,12 @@
 # TDT4240-Brainstorming_the_game
 
+## How to install, compile and run
+- Download Android Studio and LibGDX 
+- Clone or download the files
+- Import the project on Android Studio
+- Make sure the build and gradle files are synced
+- Run the Android emulator
+
 ## Naming conventions
 - Class names: UpperCamelCase
 - Variable names: lowerCamelCase (Should be descriptive)

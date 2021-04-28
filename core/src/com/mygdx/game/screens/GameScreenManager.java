@@ -54,7 +54,6 @@ public class GameScreenManager {
     public void initGameScreens(){
         this.gameScreens = new HashMap<>();
         this.gameScreens.put(ScreenEnum.MENU, new MenuScreen());
-        this.gameScreens.put(ScreenEnum.GAME, new GameScreen());
         this.gameScreens.put(ScreenEnum.GAME_PHASE, new BrainstormingScreen());
         this.gameScreens.put(ScreenEnum.ELIMINATION_PHASE, new EliminationScreen());
         this.gameScreens.put(ScreenEnum.LOBBY, new LobbyScreen());

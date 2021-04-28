@@ -4,7 +4,9 @@ import java.util.UUID;
 
 /**
  * The Player model represents a player
- * playerId: The players unique id. Cannot be changed UPDATE: Because of our firebase setup this value is no longer in use
+ * playerId: The players unique id. Cannot be changed UPDATE: Because of our firebase setup this
+ * value is no longer in use
+ *
  * username: The username that will be displayed. Can be changed later.
  * This class implements the MVC pattern.
  */
@@ -23,7 +25,7 @@ public class Player {
         if(username == null || username.equals(""))
             throw new IllegalArgumentException("The username cannot be null or an empty string");
 
-        //this.playerId = UUID.randomUUID();
+        //this.playerId = UUID.randomUUID();  //NO LONGER IN USE BECAUSE OF FIREBASE
         this.username = username;
     }
 

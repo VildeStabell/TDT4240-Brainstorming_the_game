@@ -20,6 +20,8 @@ import com.mygdx.game.models.Brain;
 import java.util.ArrayList;
 
 /**
+ * The Elimination screen lets players chose to keep some of the brains displayed.
+ *
  * brainTexture: texture of the brain
  * title: Description of the brainstorming phase
  * totalBrainsLabel: label of total brains
@@ -29,9 +31,9 @@ import java.util.ArrayList;
  * nextArrow: shows next brain
  * prevArrow: show previous brain
  * eliminationBrains: containing brains from Brainstorming Phase
- * selecteedBrains: storing selected brains from player
+ * selectedBrains: storing selected brains from player
  * checkBox: selecting a brain
- * currentBrain: keeping track of current brain in eliminiationBrains
+ * currentBrain: keeping track of current brain in eliminationBrains
  * totalBrains: total brains in eliminationBrains
  *
  * Implementing MVC pattern.
@@ -43,7 +45,8 @@ public class EliminationScreen extends BaseScreen {
     private ArrayList<ImageButton> brains;
 
     private Texture brainTexture;
-    private Label title, totalBrainsLabel, selectedBrainsLabel, currentBrainLabel, brainCounterLabel, waitingForPlayers;
+    private Label title, totalBrainsLabel, selectedBrainsLabel, currentBrainLabel, brainCounterLabel,
+            waitingForPlayers;
     private Button nextArrow;
     private Button prevArrow;
     private TextButton continueButton;
@@ -57,8 +60,6 @@ public class EliminationScreen extends BaseScreen {
 
 
 
-
-    // TODO: init controller
     public EliminationScreen() {
         super("textures/backgrounds/standardBackground.png");
         brains = new ArrayList<>();
@@ -152,7 +153,6 @@ public class EliminationScreen extends BaseScreen {
         continueButton.addListener(new ClickListener(){
            @Override
            public void clicked(InputEvent event, float x, float y){
-               // TODO: not sure where to place this
                Controller.getInstance().playerDoneEliminating();
                playerDone = true;
            }
@@ -207,13 +207,8 @@ public class EliminationScreen extends BaseScreen {
                 prevArrow.setDisabled(false);
             }
 
-            if (Controller.getInstance().checkBrainSelected(currentBrain)) {
-                checkBox.setChecked(true);
-            } else {
-                checkBox.setChecked(false);
-            }
+            checkBox.setChecked(Controller.getInstance().checkBrainSelected(currentBrain));
         }
-
     }
 
     @Override
@@ -274,5 +269,4 @@ public class EliminationScreen extends BaseScreen {
         gameDone = false;
         currentBrain = 0;
     }
-
 }

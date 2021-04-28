@@ -39,7 +39,8 @@ public class Round {
      * @param BRAIN_DAMAGE: The amount of damage the brain does
      * @param maxSelectedBrains: Max selected brains for the eliminationphase
      * */
-    public Round(Player player, ArrayList<Brain> brains, int maxHitPoints, int BRAIN_DAMAGE, int maxSelectedBrains) {
+    public Round(Player player, ArrayList<Brain> brains, int maxHitPoints, int BRAIN_DAMAGE,
+                 int maxSelectedBrains) {
         this.player = player;
         brainstormingPhase = new BrainstormingPhase(player, maxHitPoints, BRAIN_DAMAGE);
         for (Brain originalBrain : brains){

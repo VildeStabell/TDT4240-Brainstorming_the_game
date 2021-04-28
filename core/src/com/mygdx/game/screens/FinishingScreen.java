@@ -11,7 +11,6 @@ import com.badlogic.gdx.utils.Align;
 import com.mygdx.game.Controller;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class FinishingScreen extends BaseScreen {
 
@@ -29,8 +28,8 @@ public class FinishingScreen extends BaseScreen {
         super.show();
         totalSelectedBrains = new Label("Final brains", skin); //Change to final brains
         eliminatedBrains = new Label("Your brains", skin); //Change to your brains
-        selectedBrainsList = new List<String>(skin);
-        eliminatedBrainsList = new List<String>(skin);
+        selectedBrainsList = new List<>(skin);
+        eliminatedBrainsList = new List<>(skin);
         returnButton = new TextButton("Return to menu", skin);
         selectedBrainsList.setAlignment(Align.center);
         eliminatedBrainsList.setAlignment(Align.center);

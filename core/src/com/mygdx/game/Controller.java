@@ -14,14 +14,13 @@ import java.util.concurrent.TimeUnit;
 
 
 /**
- * Controller
  * This controller connects the models, views and firebase interface.
  *
- *  INSTANCE: the instance of the controller
- *  fb: The firebase interface used to connect to the firebase database
- *  gsm: the GameScreenManager used to update the views
- *  session: the current session
- *  player: this games Player
+ * INSTANCE: the instance of the controller
+ * fb: The firebase interface used to connect to the firebase database
+ * gsm: the GameScreenManager used to update the views
+ * session: the current session
+ * player: this game's Player
  *
  * This class implements the Singleton pattern, Observer pattern and the MVC pattern.
  * */
@@ -46,7 +45,8 @@ public class Controller {
     private ArrayList<String> players = new ArrayList<>();
 
     /**
-     * Checks if there is an instance of the controller, if not it creates an instance
+     * Checks if there is an instance of the controller, if not it creates a new instance.
+     * This ensures that the Controller is a singleton.
      * */
     public static Controller getInstance() {
         if (INSTANCE == null){
@@ -55,37 +55,33 @@ public class Controller {
         return INSTANCE;
     }
 
-    /**
-     * Setter for the firebase interface
-     * */
     public void setFb(FirebaseInterface fb){
         this.fb = fb;
     }
 
-    /**
-     * Setter for the GameScreenManager
-     * */
     public void setGSM(GameScreenManager gsm){
         this.gsm = gsm;
     }
 
     /**
-     * Gets the username from the userinterface and creates a new mainPlayer
+     * Gets the username from the user interface or generateUsername and creates a new player
      * */
     public void setUsername(String username){
-        this.player = new Player(username);
-        System.out.println(player.getUsername());
+        if(player == null)
+            this.player = new Player(username);
+        else
+            this.player.setUsername(username);
     }
 
     /**
-     * Generates a random username
+     * Generates a random username, and updates the player with said username
      * @return the generated username
      */
     public String generateUsername() {
         int MIN = 1000;
         int MAX = 9999;
         String username = "User" + (random.nextInt(MAX - MIN) + MIN);
-        this.player = new Player(username);
+        setUsername(username);
         return username;
     }
 
@@ -95,13 +91,9 @@ public class Controller {
         return player.getUsername();
     }
 
-    /**
-     * Sets an arraylist of brains to a given list
-     * */
     public void setFirebaseBrains(ArrayList<Brain> firebaseBrains){
         this.firebaseBrains = firebaseBrains;
     }
-
 
     /**
      * Starts a new Multiplayer GameRoom, generates a session code, updates the firebase interface
@@ -161,22 +153,23 @@ public class Controller {
     /**
      * Fires a brain, and checks if the wall has fallen.
      * If the wall has fallen, the firebase interface updates the DoneBrainstorming field for
-     * the player to true, and updates the list of brains for the player in the database.
-     * Then sets the gsm to a waiting screen.
+     * the player to true, and updates the player's list of brains in the database,
+     * then sets the gsm to a waiting screen.
      * */
     public void pressFireBrain(String idea) {
         boolean wallFallen = session.getCurrentRound().addBrainInBrainstormingPhase(idea);
         if (wallFallen){
             fb.setPlayerBrainList(player, session.getCurrentRound().getBrainstormingBrains());
             fb.setPlayerDoneBrainstorming(player, true);
-            BrainstormingScreen brainstormingScreen = (BrainstormingScreen) gsm.getGameScreens().get(GameScreenManager.ScreenEnum.GAME_PHASE);
+            BrainstormingScreen brainstormingScreen = (BrainstormingScreen) gsm.getGameScreens()
+                    .get(GameScreenManager.ScreenEnum.GAME_PHASE);
             brainstormingScreen.setWallFallen();
         }
     }
 
     /**
-     * The firebase interface updates the DoneEliminating field for
-     * the player to true, and updates the list of brains for the player in the database.
+     * The firebase interface updates the DoneEliminating field for the player to true,
+     * and updates the player's list of brains in the database.
      * Then sets the gsm to a waiting screen.
      * */
     public void playerDoneEliminating(){
@@ -187,54 +180,60 @@ public class Controller {
 
     /**
      * Toggles a brain in the eliminating phase
-     * @param currentBrain: the brain thats being toggled
+     * @param currentBrain: the brain that's being toggled
      * */
     public void toggleBrain(int currentBrain) {
         session.getCurrentRound().toggleBrain(currentBrain);
     }
 
     /**
-     * Gets all the brains from every player in the firebase, and
-     * starts the elimination round. Resets the "DoneBrainstorming" field in the database.
-     * The sleep function is added because of delays when dealing with retrieving data from firebase
+     * Gets all the brains from every player in the firebase, and starts the elimination round.
+     * Resets the "DoneBrainstorming" field in the database.
+     * The sleep function is added because of delays when retrieving data from firebase.
      * */
     public void allPlayersDoneBrainstorming(){
         sleep(1);
         fb.setPlayerDoneBrainstorming(player, false);
         sleep(5);
         session.getCurrentRound().startEliminationPhase(firebaseBrains);
-        EliminationScreen eliminationScreen = (EliminationScreen) gsm.getGameScreens().get(GameScreenManager.ScreenEnum.ELIMINATION_PHASE);
+        EliminationScreen eliminationScreen = (EliminationScreen) gsm.getGameScreens()
+                .get(GameScreenManager.ScreenEnum.ELIMINATION_PHASE);
         eliminationScreen.resetEliminating();
-        BrainstormingScreen brainstormingScreen = (BrainstormingScreen) gsm.getGameScreens().get(GameScreenManager.ScreenEnum.GAME_PHASE);
+        BrainstormingScreen brainstormingScreen = (BrainstormingScreen) gsm.getGameScreens()
+                .get(GameScreenManager.ScreenEnum.GAME_PHASE);
         brainstormingScreen.setAllPlayersCompleted();
 
     }
 
 
     /**
-     * Gets all the brains from every player in the firebase, and
-     * starts either a new Round or ends the game.
+     * Gets all the brains from every player in the firebase,
+     * and either starts a new Round or ends the game.
      * Resets the "DoneEliminating" field in the database.
-     * The sleep function is added because of delays when dealing with retrieving data from firebase
+     * The sleep function is added because of delays when retrieving data from firebase.
      * */
     public void allPlayersDoneEliminating(){
         sleep(1);
         fb.setPlayerDoneEliminating(player, false);
         if (session.endRound()){
-            EliminationScreen eliminationScreen = (EliminationScreen) GameScreenManager.getInstance().getGameScreens().get(GameScreenManager.ScreenEnum.ELIMINATION_PHASE);
+            EliminationScreen eliminationScreen = (EliminationScreen) GameScreenManager.getInstance()
+                    .getGameScreens().get(GameScreenManager.ScreenEnum.ELIMINATION_PHASE);
             eliminationScreen.setGameDone();
             eliminationScreen.setAllPlayersDone();
             return;
         }
-        BrainstormingScreen brainstormingScreen = (BrainstormingScreen) gsm.getGameScreens().get(GameScreenManager.ScreenEnum.GAME_PHASE);
+        BrainstormingScreen brainstormingScreen = (BrainstormingScreen) gsm.getGameScreens()
+                .get(GameScreenManager.ScreenEnum.GAME_PHASE);
         brainstormingScreen.resetBrainstorming();
-        EliminationScreen eliminationScreen = (EliminationScreen) GameScreenManager.getInstance().getGameScreens().get(GameScreenManager.ScreenEnum.ELIMINATION_PHASE);
+        EliminationScreen eliminationScreen = (EliminationScreen) GameScreenManager.getInstance()
+                .getGameScreens().get(GameScreenManager.ScreenEnum.ELIMINATION_PHASE);
         eliminationScreen.setAllPlayersDone();
         session.startNewRound(firebaseBrains);
     }
 
     /**
      * A helper function to delay the code with a specified number of seconds.
+     * Used to stop the program from running too fast for firebase.
      * */
     private void sleep(int seconds){
         try {
@@ -266,35 +265,36 @@ public class Controller {
     }
 
     /**
-     * Returns the current rounds eliminationphase brains
+     * Returns the current round's eliminationpPhase brains
      * */
     public ArrayList<Brain> getEliminatingBrains() {
         return session.getCurrentRound().getEliminationBrains();
     }
 
     /**
-     * Returns the current rounds selected brains in eliminationphase
+     * Returns the current round's selected brains in eliminationPhase
      * */
     public ArrayList<Brain> getSelectedBrains() {
         return session.getCurrentRound().getSelectedBrains();
     }
 
     /**
-     * Returns true if the brain at a given nr is selected in elimination phase
+     * Returns true if the brain at a given index is selected in elimination phase.
+     * @param brainNumber: The index of the brain in question.
      * */
     public boolean checkBrainSelected(int brainNumber){
         return session.getCurrentRound().checkBrainSelected(brainNumber);
     }
 
     /**
-     * Sets an arraylist of usernames for the current players
+     * Sets the arraylist of usernames for the current players
      * */
     public void setPlayers(ArrayList<String> players) {
         this.players = players;
     }
 
     /**
-     * Returns an arraylist of usernames for the current players
+     * Returns the arraylist of usernames for the current players
      * */
     public ArrayList<String> getPlayers(){
         return players;
